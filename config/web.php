@@ -1,6 +1,14 @@
 <?php
 
-$params = require(__DIR__ . '/params.php');
+$params = yii\helpers\ArrayHelper::merge(
+	require(__DIR__ . '/params.php') ,
+	require(__DIR__ . '/params-local.php')
+);
+
+$db_config = yii\helpers\ArrayHelper::merge(
+	require(__DIR__ . '/db.php') ,
+	require(__DIR__ . '/db-local.php')
+);
 
 $config = [
     'id' => 'basic',
@@ -37,7 +45,7 @@ $config = [
                 ],
             ],
         ],
-        'db' => require(__DIR__ . '/db.php'),
+        'db' => $db_config,
         'urlManager' => require (__DIR__ . '/router.php')
     ],
 	'modules' => [

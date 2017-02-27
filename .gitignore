@@ -4,3 +4,4 @@ nohup.out
 composer.lock
 runtime
 /vendor
+web/assets
