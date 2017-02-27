@@ -7,31 +7,35 @@ var brand_set_ops = {
         $(".wrap_brand_set .save").click( function(){
             var btn_target = $(this);
             if( btn_target.hasClass("disabled") ){
-                alert("正在处理!!请不要重复提交~~");
+                common_ops.alert("正在处理!!请不要重复提交~~");
                 return;
             }
 
-            var name = $(".wrap_brand_set input[name=name]").val();
-            var mobile = $(".wrap_brand_set input[name=mobile]").val();
-            var address = $(".wrap_brand_set input[name=address]").val();
-            var description = $(".wrap_brand_set textarea[name=description]").val();
+            var name_target = $(".wrap_brand_set input[name=name]");
+            var name = name_target.val();
+            var mobile_target = $(".wrap_brand_set input[name=mobile]");
+            var mobile = mobile_target.val();
+            var address_target = $(".wrap_brand_set input[name=address]");
+            var address = address_target.val();
+            var description_target = $(".wrap_brand_set textarea[name=description]");
+            var description = description_target.val();
             if( name.length < 1 ){
-                alert("请输入符合规范的品牌名称~~");
+                common_ops.tip( "请输入符合规范的品牌名称~~" ,name_target );
                 return;
             }
 
             if( mobile.length < 1 ){
-                alert("请输入符合规范的手机号码~~");
+                common_ops.tip("请输入符合规范的手机号码~~",mobile_target);
                 return;
             }
 
             if( address.length < 1  ){
-                alert("请输入符合规范的地址~~");
+                common_ops.tip("请输入符合规范的地址~~",address_target);
                 return;
             }
 
             if( description.length < 1  ){
-                alert("请输入符合规范的品牌介绍~~");
+                common_ops.tip("请输入符合规范的品牌介绍~~",description_target);
                 return;
             }
 

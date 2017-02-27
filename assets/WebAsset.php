@@ -33,6 +33,7 @@ class WebAsset extends AssetBundle
 		$this->js = [
 			UrlService::buildWwwUrl( "/js/web/jquery-2.1.1.js"),
 			UrlService::buildWwwUrl( "/js/web/bootstrap.min.js"),
+			UrlService::buildWwwUrl( "/plugins/layer/layer.js"),
 			UrlService::buildWwwUrl( "/js/web/common.js",[ 'ver' => $release_version ] ),
 		];
 		parent::registerAssetFiles( $view );
