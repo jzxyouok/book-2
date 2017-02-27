@@ -5,3 +5,5 @@ composer.lock
 runtime
 /vendor
 web/assets
+config/db-local.php
+config/params-local.php
