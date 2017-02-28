@@ -87,6 +87,7 @@ use \app\common\services\UrlService;
                             <li>
                                 <div class="dropdown-messages-box">
                                    姓名：<?=$this->params['current_user']["nickname"];?>
+                                    <a href="<?=UrlService::buildWebUrl("/user/edit");?>" class="pull-right">编辑</a>
                                 </div>
                             </li>
                             <li class="divider"></li>
@@ -98,7 +99,10 @@ use \app\common\services\UrlService;
                             <li class="divider"></li>
                             <li>
                                 <div class="link-block text-center">
-                                    <a href="<?=UrlService::buildWebUrl("/user/logout");?>">
+                                    <a class="pull-left" href="<?=UrlService::buildWebUrl("/user/mod-pwd");?>">
+                                        <i class="fa fa-lock"></i> 修改密码
+                                    </a>
+                                    <a class="pull-right" href="<?=UrlService::buildWebUrl("/user/logout");?>">
                                         <i class="fa fa-sign-out"></i> 退出
                                     </a>
                                 </div>

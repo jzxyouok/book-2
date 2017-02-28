@@ -55,10 +55,13 @@ var brand_set_ops = {
                 dataType:'json',
                 success:function(res){
                     btn_target.removeClass("disabled");
-                    alert( res.msg );
+                    var callback = null;
                     if( res.code == 200 ){
-                        window.location.href = common_ops.buildWebUrl("/brand/info");
+                        callback = function(){
+                            window.location.href = common_ops.buildWebUrl("/brand/info");
+                        }
                     }
+                    common_ops.alert( res.msg,callback );
                 }
             });
         });

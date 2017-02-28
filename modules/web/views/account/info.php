@@ -1,5 +1,6 @@
 <?php
 use \app\common\services\UrlService;
+use \app\common\services\UtilService;
 ?>
 <?php echo Yii::$app->view->renderFile("@app/modules/web/views/common/tab_account.php",[ 'current' => 'index' ]);?>
 <div class="row m-t">
@@ -7,7 +8,7 @@ use \app\common\services\UrlService;
         <div class="row">
             <div class="col-lg-12">
                 <div class="m-b-md">
-                    <a class="btn btn-outline btn-primary pull-right">
+                    <a class="btn btn-outline btn-primary pull-right" href="<?=UrlService::buildWebUrl("/account/set",[ 'id' => $info['uid'] ]);?>">
                         <i class="fa fa-pencil"></i>编辑</a>
                     <h2>账户信息</h2>
                 </div>
@@ -18,9 +19,9 @@ use \app\common\services\UrlService;
                 <img class="img-circle circle-border" src="<?=UrlService::buildWwwUrl("/images/common/qrcode.jpg");?>" width="100px" height="100px"/>
             </div>
             <div class="col-lg-10">
-                <p class="m-t">姓名：编程浪子</p>
-                <p>手机：123456789</p>
-                <p>手机：apanly@163.com</p>
+                <p class="m-t">姓名：<?=UtilService::encode( $info['nickname'] ) ;?></p>
+                <p>手机：<?=UtilService::encode( $info['mobile'] ) ;?></p>
+                <p>手机：<?=UtilService::encode( $info['email'] ) ;?></p>
             </div>
         </div>
         <div class="row m-t">

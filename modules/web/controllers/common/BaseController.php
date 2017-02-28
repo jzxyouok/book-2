@@ -5,7 +5,7 @@ use app\common\services\UrlService;
 use app\models\User;
 use yii\web\Controller;
 class BaseController extends Controller {
-
+	protected $page_size = 50;
 	public $enableCsrfValidation = false;
 	protected  $auth_cookie_name = "mooc_book";
 	protected  $salt = "dm3HsNYz3Uy46Rjg";
