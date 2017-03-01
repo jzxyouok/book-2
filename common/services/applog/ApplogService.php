@@ -51,13 +51,15 @@ class ApplogService {
 
 		$target_url = isset($_SERVER['REQUEST_URI'])?$_SERVER['REQUEST_URI']:'';
 
+		$referer = Yii::$app->request->getReferrer();
+		$ua = Yii::$app->request->getUserAgent();
 
 		$access_log = new AppAccessLog();
 		$access_log->uid = $uid;
-		$access_log->referer_url = Yii::$app->request->getReferrer();
+		$access_log->referer_url = $referer?$referer:'';
 		$access_log->target_url = $target_url;
 		$access_log->query_params = json_encode(array_merge($get_params,$post_params));
-		$access_log->ua = Yii::$app->request->getUserAgent();
+		$access_log->ua = $ua?$ua:'';
 		$access_log->ip = UtilService::getIP();
 		$access_log->created_time = date("Y-m-d H:i:s");
 		return $access_log->save(0);
