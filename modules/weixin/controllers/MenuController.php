@@ -1,8 +1,8 @@
 <?php
 namespace app\modules\weixin\controllers;
 
-use common\service\GlobalUrlService;
-use common\service\weixin\RequestService;
+use app\common\services\UrlService;
+use app\common\services\weixin\RequestService;
 
 class MenuController extends BaseController{
 
@@ -10,19 +10,19 @@ class MenuController extends BaseController{
 		$menu  = [
 			"button" => [
 				[
-					"name"       => "域名",
+					"name"       => "商城",
 					"sub_button" => [
 						[
 							"type" => "view",
 							"name" => "新增备案",
-							"url"  => GlobalUrlService::buildMUrl("/beian/index")
+							"url"  => UrlService::buildMUrl("/default/index")
 						]
 					]
 				],
 				[
 					"name" => "我",
 					"type" => "view",
-					"url" => GlobalUrlService::buildMUrl("/user/index")
+					"url" => UrlService::buildMUrl("/user/index")
 				]
 			]
 		];
