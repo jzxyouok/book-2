@@ -10,7 +10,7 @@ class WeixinModule extends \yii\base\Module
     /**
      * @inheritdoc
      */
-    public $controllerNamespace = 'www\modules\weixin\controllers';
+    public $controllerNamespace = 'app\modules\weixin\controllers';
 
     /**
      * @inheritdoc
