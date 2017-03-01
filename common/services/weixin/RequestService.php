@@ -1,8 +1,8 @@
 <?php
-namespace common\service\weixin;
-use common\components\HttpClient;
-use common\models\oauth\OauthAccessToken;
-use common\service\BaseService;
+namespace app\common\services\weixin;
+use app\common\components\HttpClient;
+use app\models\oauth\OauthAccessToken;
+use \app\common\services\BaseService;
 
 class RequestService extends  BaseService {
 	private  static $app_token = "";

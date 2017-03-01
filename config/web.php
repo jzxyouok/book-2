@@ -21,10 +21,7 @@ $config = [
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
-        ],
-        'user' => [
-            'identityClass' => 'app\models\User',
-            'enableAutoLogin' => true,
+			'cachePath' => '@runtime/cache',
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
@@ -54,6 +51,9 @@ $config = [
 		],
 		'm' => [
 			'class' => 'app\modules\m\MModule',
+		],
+		'weixin' => [
+			'class' => 'app\modules\weixin\WeixinModule',
 		]
 	],
     'params' => $params,

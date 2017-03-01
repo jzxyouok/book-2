@@ -1,5 +1,5 @@
 <?php
-namespace common\service\weixin;
+namespace app\common\services\weixin;
 /**
  * 对公众平台发送给公众账号的消息加解密示例代码.
  */
