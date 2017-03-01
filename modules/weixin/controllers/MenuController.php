@@ -11,13 +11,8 @@ class MenuController extends BaseController{
 			"button" => [
 				[
 					"name"       => "商城",
-					"sub_button" => [
-						[
-							"type" => "view",
-							"name" => "新增备案",
-							"url"  => UrlService::buildMUrl("/default/index")
-						]
-					]
+					"type" => "view",
+					"url"  => UrlService::buildMUrl("/default/index")
 				],
 				[
 					"name" => "我",
