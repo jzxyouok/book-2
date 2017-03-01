@@ -63,7 +63,7 @@ use \app\common\services\UrlService;
                 </tr>
                 <?php endforeach;?>
             <?php else:?>
-                <tr><td colspan="4"></td></tr>
+                <tr><td colspan="5">暂无数据</td></tr>
             <?php endif;?>
 			</tbody>
 		</table>
