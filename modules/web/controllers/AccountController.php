@@ -9,13 +9,14 @@ namespace app\modules\web\controllers;
 use app\common\services\ConstantService;
 use app\common\services\UrlService;
 use app\common\services\UtilService;
+use app\models\log\AppAccessLog;
 use app\models\User;
 use app\modules\web\controllers\common\BaseController;
 
 class AccountController extends  BaseController{
 	public function actionIndex(){
 		$mix_kw = trim( $this->get("mix_kw","" ) );
-		$status = intval( $this->get("status",0) );
+		$status = intval( $this->get("status",ConstantService::$status_default ) );
 		$p = intval( $this->get("p",1) );
 		$p = ( $p > 0 )?$p:1;
 
@@ -26,7 +27,7 @@ class AccountController extends  BaseController{
 			$query->andWhere([ 'OR',$where_nickname,$where_mobile ]);
 		}
 
-		if( $status ){
+		if( $status > ConstantService::$status_default ){
 			$query->andWhere([ 'status' => $status ]);
 		}
 
@@ -54,7 +55,7 @@ class AccountController extends  BaseController{
 				'p' => $p,
 				'status' => $status
 			],
-			'status_mapping' => ConstantService::$user_status_mapping
+			'status_mapping' => ConstantService::$status_mapping
 		]);
 	}
 
@@ -98,6 +99,10 @@ class AccountController extends  BaseController{
 			return $this->renderJSON( [] , "请输入符合规范的登录密码~~" ,-1);
 		}
 
+		if( in_array( $login_pwd,ConstantService::$low_password ) ){
+			return $this->renderJSON( [] , "登录密码太简单，请换一个~~" ,-1);
+		}
+
 		$has_in = User::find()->where([ 'login_name' => $login_name ])->andWhere([ '!=','uid',$id ])->count();
 		if( $has_in ){
 			return $this->renderJSON( [] , "该登录名已存在，请换一个试试~~" ,-1);
@@ -139,8 +144,11 @@ class AccountController extends  BaseController{
 			return $this->redirect( $reback_url );
 		}
 
+		$access_list = AppAccessLog::find()->where([ 'uid' => $id ])->orderBy([ 'id' => SORT_DESC ])->limit( 10 )->all();
+
 		return $this->render("info",[
-			'info' => $info
+			'info' => $info,
+			'access_list' => $access_list
 		]);
 	}
 

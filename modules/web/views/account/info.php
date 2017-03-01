@@ -8,8 +8,11 @@ use \app\common\services\UtilService;
         <div class="row">
             <div class="col-lg-12">
                 <div class="m-b-md">
+                    <?php if( $info ):?>
                     <a class="btn btn-outline btn-primary pull-right" href="<?=UrlService::buildWebUrl("/account/set",[ 'id' => $info['uid'] ]);?>">
-                        <i class="fa fa-pencil"></i>编辑</a>
+                        <i class="fa fa-pencil"></i>编辑
+                    </a>
+                    <?php endif;?>
                     <h2>账户信息</h2>
                 </div>
             </div>
@@ -47,22 +50,20 @@ use \app\common\services\UtilService;
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
+                                    <?php if( $access_list ):?>
+                                        <?php foreach( $access_list as $_item ):?>
+                                            <tr>
+                                                <td>
+                                                   <?=$_item['created_time'];?>
+                                                </td>
                                             <td>
-                                                2017-02-25 10:10:01
-                                            </td>
-                                            <td>
-                                                /web/account/index
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                2017-02-25 10:10:01
-                                            </td>
-                                            <td>
-                                                /web/account/index
+												<?=$_item['target_url'];?>
                                             </td>
                                         </tr>
+                                        <?php endforeach;?>
+                                    <?php else:?>
+                                        <tr><td colspan="2">暂无数据</td></tr>
+                                    <?php endif;?>
                                     </tbody>
                                 </table>
 

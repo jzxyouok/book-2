@@ -13,7 +13,7 @@ StaticService::includeAppJsStatic( "/js/web/account/index.js",\app\assets\WebAss
 			<div class="row m-t p-w-m">
                 <div class="form-group">
                     <select name="status" class="form-control inline">
-                        <option value="0">请选择转台</option>
+                        <option value="0">请选择状态</option>
                         <?php foreach( $status_mapping as $_status => $_title ):?>
                             <option value="<?=$_status;?>" <?php if( $search_conditions['status']  == $_status):?> selected <?php endif;?> ><?=$_title;?></option>
                         <?php endforeach;?>
@@ -60,12 +60,12 @@ StaticService::includeAppJsStatic( "/js/web/account/index.js",\app\assets\WebAss
                     <td><?=UtilService::encode( $_item['mobile'] );?></td>
                     <td><?=UtilService::encode( $_item['email'] );?></td>
                     <td>
-                        <a href="<?=UrlService::buildWebUrl("/account/set",[ 'id' => $_item['uid'] ]);?>">
-                            <i class="fa fa-edit fa-lg"></i>
+                        <a  href="<?=UrlService::buildWebUrl("/account/info",[ 'id' => $_item['uid'] ] );?>">
+                            <i class="fa fa-eye fa-lg"></i>
                         </a>
                         <?php if( $_item['status'] ):?>
-                        <a class="m-l" href="<?=UrlService::buildWebUrl("/account/info",[ 'id' => $_item['uid'] ] );?>">
-                            <i class="fa fa-eye fa-lg"></i>
+                        <a class="m-l" href="<?=UrlService::buildWebUrl("/account/set",[ 'id' => $_item['uid'] ]);?>">
+                            <i class="fa fa-edit fa-lg"></i>
                         </a>
 
                         <a class="m-l remove" href="<?=UrlService::buildNull();?>" data="<?=$_item['uid'];?>">

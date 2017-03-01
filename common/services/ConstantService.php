@@ -21,7 +21,9 @@ class ConstantService {
 		"000000","111111","11111111","112233","123123","123321","123456","12345678","654321","666666","888888","abcdef","abcabc","abc123","a1b2c3","aaa111","123qwe","qwerty","qweasd","admin","password","p@ssword","passwd","iloveyou","5201314"
 	];
 
-	public static $user_status_mapping = [
+
+	public static $status_default = -1;
+	public static $status_mapping = [
 		1 => '正常',
 		0 => '已删除'
 	];

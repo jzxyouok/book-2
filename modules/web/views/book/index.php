@@ -67,7 +67,7 @@ use \app\common\services\UrlService;
             </tr>
             </tbody>
         </table>
-		<?php echo \Yii::$app->view->renderFile("@app/modules/web/views/common/pagination.php", [ 'page' => [] ]); ?>
+<!--		--><?php //echo \Yii::$app->view->renderFile("@app/modules/web/views/common/pagination.php", [ 'page' => [] ]); ?>
 
     </div>
 </div>

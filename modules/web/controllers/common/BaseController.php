@@ -2,7 +2,9 @@
 
 namespace app\modules\web\controllers\common;
 use app\common\services\UrlService;
+use app\models\log\AppLog;
 use app\models\User;
+use app\common\services\applog\ApplogService;
 use yii\web\Controller;
 class BaseController extends Controller {
 	protected $page_size = 50;
@@ -37,6 +39,7 @@ class BaseController extends Controller {
 			return false;
 		}
 
+		ApplogService::addAppLog( $this->current_user['uid'] );
 		return true;
 	}
 
