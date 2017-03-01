@@ -15,7 +15,7 @@ var upload = {
         }else{
             $(".upload_pic_wrap").append('<span class="pic-each">'+ html + '</span>');
         }
-        account_set_ops.delete_img();
+        brand_set_ops.delete_img();
     }
 };
 var brand_set_ops = {
