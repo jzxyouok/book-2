@@ -11,7 +11,7 @@ use \app\common\services\UtilService;
 			<dd><?=$info?UtilService::encode( $info['name'] ):'';?></dd>
 			<dt>品牌Logo</dt>
 			<dd>
-				<img class="img-circle circle-border" src="<?=UrlService::buildWwwUrl("/images/common/qrcode.jpg");?>" width="100px" height="100px"/>
+				<img class="img-circle circle-border" src="<?=UrlService::buildPicUrl( "brand",$info['logo'] );?>" style="width: 100px;height: 100px;"/>
 			</dd>
 
 			<dt>联系电话</dt>

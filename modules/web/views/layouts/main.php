@@ -1,6 +1,7 @@
 <?php
 use \app\common\services\UrlService;
 \app\assets\WebAsset::register($this);
+$upload_config = Yii::$app->params['upload'];
 ?>
 <!DOCTYPE html>
 <html>
@@ -10,7 +11,6 @@ use \app\common\services\UrlService;
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>管理后台</title>
 	<?php $this->head() ?>
-
 </head>
 
 <body>
@@ -118,7 +118,9 @@ use \app\common\services\UrlService;
 
 	</div>
 </div>
-
+<div class="hidden_layout_warp hide">
+    <input type="hidden" name="upload_config" value='<?=json_encode( $upload_config );?>'/>
+</div>
 <?php $this->endBody() ?>
 </body>
 </html>

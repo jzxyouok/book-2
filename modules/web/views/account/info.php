@@ -8,7 +8,7 @@ use \app\common\services\UtilService;
         <div class="row">
             <div class="col-lg-12">
                 <div class="m-b-md">
-                    <?php if( $info ):?>
+                    <?php if( $info && $info['status']):?>
                     <a class="btn btn-outline btn-primary pull-right" href="<?=UrlService::buildWebUrl("/account/set",[ 'id' => $info['uid'] ]);?>">
                         <i class="fa fa-pencil"></i>编辑
                     </a>
@@ -24,7 +24,7 @@ use \app\common\services\UtilService;
             <div class="col-lg-10">
                 <p class="m-t">姓名：<?=UtilService::encode( $info['nickname'] ) ;?></p>
                 <p>手机：<?=UtilService::encode( $info['mobile'] ) ;?></p>
-                <p>手机：<?=UtilService::encode( $info['email'] ) ;?></p>
+                <p>邮箱：<?=UtilService::encode( $info['email'] ) ;?></p>
             </div>
         </div>
         <div class="row m-t">

@@ -24,6 +24,7 @@ class BrandController extends BaseController{
 		}
 
 		$name = trim( $this->post("name","") );
+		$logo = trim( $this->post("logo","") );
 		$mobile = trim( $this->post("mobile","") );
 		$address = trim( $this->post("address","") );
 		$description = trim( $this->post("description","") );
@@ -31,6 +32,10 @@ class BrandController extends BaseController{
 
 		if( mb_strlen( $name,"utf-8" ) < 1 ){
 			return $this->renderJSON( [] , "请输入符合规范的品牌名称~~" ,-1);
+		}
+
+		if( mb_strlen( $logo,"utf-8" ) < 1 ){
+			return $this->renderJSON( [] , "请上传品牌Logo~~" ,-1);
 		}
 
 		if( mb_strlen( $mobile,"utf-8" ) < 1 ){
@@ -53,6 +58,7 @@ class BrandController extends BaseController{
 			$model_brand->created_time = $date_now;
 		}
 		$model_brand->name = $name;
+		$model_brand->logo = $logo;
 		$model_brand->mobile = $mobile;
 		$model_brand->address = $address;
 		$model_brand->description = $description;

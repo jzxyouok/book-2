@@ -9,9 +9,9 @@ $tab_list = [
 		'title' => '分类列表',
 		'url' => "/book/cat"
 	],
-	'file' => [
-		'title' => '图片列表',
-		'url' => "/book/file"
+	'images' => [
+		'title' => '图片资源',
+		'url' => "/book/images"
 	]
 ];
 ?>

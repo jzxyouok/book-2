@@ -1,9 +1,11 @@
 ;
+
 var account_set_ops = {
     init:function(){
         this.eventBind();
     },
     eventBind:function(){
+
         $(".wrap_account_set .save").click( function(){
             var btn_target = $(this);
             if( btn_target.hasClass("disabled") ){

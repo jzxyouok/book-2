@@ -19,16 +19,19 @@ StaticService::includeAppJsStatic( "/js/web/brand/set.js",\app\assets\WebAsset::
 			<div class="form-group">
 				<label class="col-lg-2 control-label">品牌Logo:</label>
 				<div class="col-lg-10">
-					<form class="upload_pic_wrap" target="upload_file" enctype="multipart/form-data" method="POST">
-						<div class="upload_wrap pull-left">
-							<i class="fa fa-upload fa-2x"></i>
-							<input type="file" name="pic" accept="image/png, image/jpeg, image/jpg,image/gif">
-						</div>
-						<span class="pic-each">
-							<img src="http://a4.att.hudong.com/41/31/01300000339824126797312048646.jpg" alt="120*200">
-							<span class="fa fa-times-circle del"><i></i></span>
+                    <form class="upload_pic_wrap" target="upload_file" enctype="multipart/form-data" method="POST" action="<?=UrlService::buildWebUrl("/upload/pic");?>">
+                        <div class="upload_wrap pull-left">
+                            <i class="fa fa-upload fa-2x"></i>
+                            <input type="hidden" name="bucket" value="brand" />
+                            <input type="file" name="pic" accept="image/png, image/jpeg, image/jpg,image/gif">
+                        </div>
+						<?php if( $info && $info['logo'] ):?>
+                            <span class="pic-each">
+							<img src="<?=UrlService::buildPicUrl("brand",$info['logo']);?>">
+							<span class="fa fa-times-circle del del_image" data="<?=$info['logo'];?>"><i></i></span>
 						</span>
-					</form>
+						<?php endif;?>
+                    </form>
 				</div>
 			</div>
 			<div class="hr-line-dashed"></div>
@@ -61,3 +64,4 @@ StaticService::includeAppJsStatic( "/js/web/brand/set.js",\app\assets\WebAsset::
 		</div>
 	</div>
 </div>
+<iframe name="upload_file" class="hide"></iframe>

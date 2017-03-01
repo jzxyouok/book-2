@@ -84,6 +84,10 @@ class BaseController extends Controller {
 		return md5( $this->salt."-{$user_info['login_name']}-{$user_info['login_pwd']}-{$user_info['login_salt']}");
 	}
 
+	public function getUid(){
+		return $this->current_user?$this->current_user['uid']:0;
+	}
+
 	protected function geneReqId() {
 		return uniqid();
 	}

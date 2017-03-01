@@ -1,4 +1,5 @@
 <?php
+use \app\common\services\ConstantService;
 use \app\common\services\UrlService;
 use \app\common\services\UtilService;
 use \app\common\services\StaticService;
@@ -13,7 +14,7 @@ StaticService::includeAppJsStatic( "/js/web/account/index.js",\app\assets\WebAss
 			<div class="row m-t p-w-m">
                 <div class="form-group">
                     <select name="status" class="form-control inline">
-                        <option value="0">请选择状态</option>
+                        <option value="<?=ConstantService::$status_default;?>">请选择状态</option>
                         <?php foreach( $status_mapping as $_status => $_title ):?>
                             <option value="<?=$_status;?>" <?php if( $search_conditions['status']  == $_status):?> selected <?php endif;?> ><?=$_title;?></option>
                         <?php endforeach;?>
@@ -69,7 +70,7 @@ StaticService::includeAppJsStatic( "/js/web/account/index.js",\app\assets\WebAss
                         </a>
 
                         <a class="m-l remove" href="<?=UrlService::buildNull();?>" data="<?=$_item['uid'];?>">
-                            <i class="fa fa-remove fa-lg"></i>
+                            <i class="fa fa-trash fa-lg"></i>
                         </a>
                         <?php else:?>
                             <a class="m-l recover" href="<?=UrlService::buildNull();?>" data="<?=$_item['uid'];?>">

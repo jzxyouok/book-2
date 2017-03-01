@@ -7,3 +7,6 @@ runtime
 web/assets
 config/db-local.php
 config/params-local.php
+web/uploads/avatar
+web/uploads/brand
+web/uploads/book

@@ -47,6 +47,9 @@ class ApplogService {
 
 		$get_params = \Yii::$app->request->get();
 		$post_params = \Yii::$app->request->post();
+		if( isset( $post_params['summary'] ) ){
+			unset( $post_params['summary'] );
+		}
 
 
 		$target_url = isset($_SERVER['REQUEST_URI'])?$_SERVER['REQUEST_URI']:'';
