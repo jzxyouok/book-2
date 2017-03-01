@@ -1,7 +1,7 @@
 <?php
 namespace app\modules\weixin\controllers;
 
-use common\service\weixin\RequestService;
+use app\common\services\weixin\RequestService;
 use Yii;
 
 class JssdkController extends \yii\web\Controller {
@@ -17,16 +17,9 @@ class JssdkController extends \yii\web\Controller {
             $jsapiTicket = $this->getJsApiTicket(true);
         }
         $url = trim(Yii::$app->request->get("url"));
-        if(!$url){
-            $url = isset($_SERVER['from'])?$_SERVER['HTTP_REFERER']:'';
-        }else{
-            // $url = urldecode($url);
+        if( !$url ){
+            $url = isset( $_SERVER['HTTP_REFERER'] )?$_SERVER['HTTP_REFERER']:'';
         }
-
-        /*对于有@!@这样的链接无法签字正确*/
-        //if( stripos($url,"referer" ) !== false ){
-        //    $url = mb_substr($url,0,stripos($url,"referer" ) );
-        //}
 
         $timestamp = time();
         $nonceStr = $this->createNonceStr();
@@ -58,7 +51,7 @@ class JssdkController extends \yii\web\Controller {
 		$cache = Yii::$app->cache;
 		$ticket = $cache->get($cache_key);
 
-        if ( !$ticket ) {
+        if ( !$ticket || $force ) {
             $accessToken = RequestService::getAccessToken();
             $url = "ticket/getticket?type=jsapi&access_token=$accessToken";
             $res = RequestService::send($url);
