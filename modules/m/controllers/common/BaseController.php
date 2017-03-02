@@ -128,5 +128,9 @@ class BaseController extends BaseWebController {
 		return $url;
 	}
 
+	public function goHome(){
+		return $this->redirect( UrlService::buildMUrl("/") );
+	}
+
 
 }
