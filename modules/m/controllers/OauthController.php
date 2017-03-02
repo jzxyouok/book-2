@@ -59,8 +59,8 @@ class OauthController extends BaseController {
         $reg_bind = OauthMemberBind::findOne([ "openid" => $openid,'type' => ConstantService::$client_type_wechat ]);
 
         if( $reg_bind ){//如果已经绑定了
-			$user_info = Member::findOne([ 'id' => $reg_bind['member_id'],'status' => 1]);
-			if( !$user_info ){
+			$member_info = Member::findOne([ 'id' => $reg_bind['member_id'],'status' => 1]);
+			if( !$member_info ){
 				$reg_bind->delete();
 				return $this->goHome();
 			}
@@ -74,23 +74,23 @@ class OauthController extends BaseController {
 					}
 
 					//这个时候做登录特殊处理，例如更新用户名和头像等等新
-					if( $user_info->avatar == ConstantService::$default_avatar ){
+					if( $member_info->avatar == ConstantService::$default_avatar ){
 						//需要做一个队列数据库了
 						//$wechat_userinfo['headimgurl']
 						QueueListService::addQueue( "member_avatar",[
-							'uid' => $user_info['uid'],
+							'member_id' => $member_info['id'],
 							'avatar_url' => $wechat_userinfo['headimgurl'],
 						] );
 					}
 
-					if( $user_info->nickname == $user_info->mobile ){
-						$user_info->nickname = $wechat_userinfo['nickname'];
-						$user_info->update(0);
+					if( $member_info->nickname == $member_info->mobile ){
+						$member_info->nickname = $wechat_userinfo['nickname'];
+						$member_info->update(0);
 					}
 				}
 			}
 
-			$this->setLoginStatus($user_info);
+			$this->setLoginStatus( $member_info );
 		}else{
         	$this->removeAuthToken();
 		}
