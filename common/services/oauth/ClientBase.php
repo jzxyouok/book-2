@@ -1,5 +1,5 @@
 <?php
-namespace common\services\oauth;
+namespace app\common\services\oauth;
 
 class ClientBase {
 	protected  $_error_msg = null;

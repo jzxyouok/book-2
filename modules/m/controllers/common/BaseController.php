@@ -15,9 +15,16 @@ class BaseController extends BaseWebController {
 	public function __construct($id, $module, $config = []){
 		parent::__construct($id, $module, $config = []);
 		$this->layout = "main";
+
+		\Yii::$app->view->params['share_info'] = json_encode( [
+			'title' => \Yii::$app->params['title'],
+			'desc' => \Yii::$app->params['title'],
+			'img_url' => UrlService::buildWwwUrl("/images/common/qrcode.jpg"),
+		] );
 	}
 
 	public function beforeAction( $action ){
+
 		return true;
 	}
 

@@ -1,23 +1,23 @@
 <?php
-namespace common\services\oauth;
+namespace app\common\services\oauth;
 
 
-use common\models\OauthToken;
-use common\service\BaseService;
+use app\models\oauth\OauthToken;
+use app\common\services\BaseService;
 
 class ClientService extends  BaseService  {
 	/*
 	 * 获取登录地址
 	 * */
 	public static function goLogin( $type ){
-		$client_name = "common\\service\\oauth\\".ucfirst($type)."Service";
+		$client_name = __NAMESPACE__."\\".ucfirst($type)."Service";
 		$target = new $client_name();
 		$url = $target->Login();
 		return $url;
 	}
 
 	public static function getAccessToken( $type,$params = [] ){
-		$client_name = "common\\service\\oauth\\".ucfirst($type)."Service";
+		$client_name = __NAMESPACE__."\\".ucfirst($type)."Service";
 		$target = new $client_name();
 		$ret = $target->getAccessToken( $params  );
 		if( !$ret ){
@@ -37,7 +37,7 @@ class ClientService extends  BaseService  {
 
 	public static function getUserInfo( $type,$access_token = '',$params = [] ){
 		
-		$client_name = "common\\service\\oauth\\".ucfirst($type)."Service";
+		$client_name = __NAMESPACE__."\\".ucfirst($type)."Service";
 		$target = new $client_name();
 		$ret = $target->getUserInfo( $access_token,$params  );
 		if( !$ret ){

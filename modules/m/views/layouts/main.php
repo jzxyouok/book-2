@@ -21,6 +21,9 @@ use \app\common\services\UrlService;
 	<span><a href="<?=UrlService::buildMUrl("/product/index");?>"><i class="store_icon"></i><b>图书</b></a></span>
 	<span><a href="<?=UrlService::buildMUrl("/user/index");?>"><i class="member_icon"></i><b>我的</b></a></span>
 </div>
+<div class="layout_hide_wrap hidden">
+    <input type="hidden" id="share_info" value='<?=Yii::$app->getView()->params['share_info'];?>'>
+</div>
 <?php $this->endBody() ?>
 </body>
 </html>

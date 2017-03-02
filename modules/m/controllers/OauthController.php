@@ -1,12 +1,12 @@
 <?php
 namespace app\modules\m\controllers;
 use app\common\services\ConstantService;
+use app\common\services\oauth\ClientService;
+use app\common\services\oauth\WeixinService;
 use app\common\services\QueueListService;
 use app\models\member\Member;
 use app\models\oauth\OauthMemberBind;
 use app\modules\m\controllers\common\BaseController;
-use common\service\oauth\ClientService;
-use common\service\oauth\WeixinService;
 use Yii;
 use yii\log\FileTarget;
 

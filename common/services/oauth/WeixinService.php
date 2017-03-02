@@ -1,13 +1,9 @@
 <?php
-
-
-namespace common\services\oauth;
-
-
-use common\components\HttpClient;
+namespace app\common\services\oauth;
+use app\common\components\HttpClient;
 
 class WeixinService extends  ClientBase {
-	public function Login( $scope, $state){
+	public function Login( $scope = '', $state = '' ){
 		$url = "https://open.weixin.qq.com/connect/oauth2/authorize";
 		$config_params = \Yii::$app->params;
 		$params = [
@@ -54,7 +50,7 @@ class WeixinService extends  ClientBase {
 	}
 
 	private  function getCallback(){
-		$domain = \Yii::$app->params['domains']['m'];
+		$domain = \Yii::$app->params['domain']['m'];
 		$callback = '/oauth/callback';
 		return $domain.$callback;
 	}

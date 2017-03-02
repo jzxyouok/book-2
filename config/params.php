@@ -1,7 +1,7 @@
 <?php
 
 return [
-	'copyright' => '编程浪子',
+	'title' => '编程浪子微信图书商城',
 	'domain' => [
 		'www' => 'http://book.imooc.test',
 		'm' => 'http://book.imooc.test/m',
