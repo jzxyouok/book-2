@@ -1,3 +1,3 @@
 #!/bin/bash
-git push origin master:master && git push oschina master:master
+git push oschina master:master && git push origin master:master
 echo 'push over'
