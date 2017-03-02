@@ -8,6 +8,7 @@
 namespace app\assets;
 
 use app\common\services\UrlService;
+use app\common\services\UtilService;
 use yii\web\AssetBundle;
 
 /**
@@ -30,11 +31,23 @@ class MAsset extends AssetBundle
 			UrlService::buildWwwUrl( "/css/m/css_style.css"),
 			UrlService::buildWwwUrl( "/css/m/app.css",[ 'ver' => $release_version ] ),
 		];
-		$this->js = [
-			UrlService::buildWwwUrl( "/plugins/jquery-2.1.1.js"),
-			UrlService::buildWwwUrl( "/js/m/TouchSlide.1.1.js"),
-			UrlService::buildWwwUrl( "/js/m/common.js")
-		];
+
+		if( UtilService::isWechat() ){
+			$this->js = [
+				'https://res.wx.qq.com/open/js/jweixin-1.0.0.js',
+				UrlService::buildWwwUrl( "/plugins/jquery-2.1.1.js"),
+				UrlService::buildWwwUrl( "/js/m/TouchSlide.1.1.js"),
+				UrlService::buildWwwUrl( "/js/m/common.js"),
+				UrlService::buildWwwUrl( "/js/m/weixin.js"),
+			];
+		}else{
+			$this->js = [
+				UrlService::buildWwwUrl( "/plugins/jquery-2.1.1.js"),
+				UrlService::buildWwwUrl( "/js/m/TouchSlide.1.1.js"),
+				UrlService::buildWwwUrl( "/js/m/common.js")
+			];
+		}
+
 		parent::registerAssetFiles( $view );
 	}
 }

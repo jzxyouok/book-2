@@ -57,4 +57,8 @@ class DefaultController extends BaseWebController {
 		}
 		return $this->renderJSON([],"unknown",-1);
 	}
+
+	public function actionError(){
+
+	}
 }
