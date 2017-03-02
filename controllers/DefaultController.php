@@ -9,6 +9,10 @@ use app\common\services\UtilService;
 use app\models\sms\SmsCaptcha;
 
 class DefaultController extends BaseWebController {
+	public function actionIndex(){
+		return $this->render("index");
+	}
+
 	private $captcha_cookie_name = "validate_code";
 
 	public function actionImg_captcha(){
