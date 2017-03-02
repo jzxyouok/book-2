@@ -3,6 +3,8 @@
 namespace app\modules\m\controllers\common;
 use app\common\components\BaseWebController;
 use app\common\services\UrlService;
+use app\common\services\UtilService;
+use app\models\member\Member;
 
 class BaseController extends BaseWebController {
 
@@ -11,6 +13,24 @@ class BaseController extends BaseWebController {
 	protected  $auth_cookie_current_unionid = "sass_idc_m_unionid";
 	protected  $salt = "dm3HsNYz3Uyddd46Rjg";
 	protected $current_user = null;
+
+	/*这部分永远不用登录*/
+	protected $allowAllAction = [
+		'm/oauth/login',
+		'm/oauth/logout',
+		'm/oauth/callback',
+		'm/user/bind',
+		'm/pay/callback',
+	];
+
+	/**
+	 * 以下特殊url
+	 * 如果在微信中,可以不用登录(但是必须要有openid)
+	 * 如果在H5浏览器,可以不用登录
+	 */
+	public $special_AllowAction = [
+		'm/default/index'
+	];
 
 	public function __construct($id, $module, $config = []){
 		parent::__construct($id, $module, $config = []);
@@ -24,7 +44,35 @@ class BaseController extends BaseWebController {
 	}
 
 	public function beforeAction( $action ){
+		$login_status = $this->checkLoginStatus();
 
+		if ( in_array($action->getUniqueId(), $this->allowAllAction ) ) {
+			return true;
+		}
+
+		if( !$login_status ){
+			if( \Yii::$app->request->isAjax ){
+				$this->renderJSON([],"未登录,系统将引导您重新登录!!",-302);
+			}else{
+				$redirect_url = $this->getBindUrl();
+				if( UtilService::isWechat() ){
+					$openid = $this->getCookie($this->auth_cookie_current_openid,"");
+					if( $openid ){
+						if (in_array( $action->getUniqueId(), $this->special_AllowAction ) ){
+							return true;
+						}
+					}else{
+						$redirect_url = $this->getAuthLoginUrl();
+					}
+				}else{
+					if ( in_array( $action->getUniqueId(), $this->special_AllowAction ) ) {
+						return true;
+					}
+				}
+				$this->redirect( $redirect_url );
+			}
+			return false;
+		}
 		return true;
 	}
 
@@ -35,22 +83,22 @@ class BaseController extends BaseWebController {
 		if( !$auth_cookie ){
 			return false;
 		}
-		list($auth_token,$uid) = explode("#",$auth_cookie);
-		if( !$auth_token || !$uid ){
+		list($auth_token,$member_id) = explode("#",$auth_cookie);
+		if( !$auth_token || !$member_id ){
 			return false;
 		}
-		if( $uid && preg_match("/^\d+$/",$uid) ){
-			$user_info = User::findOne([ 'uid' => $uid,'status' => 1 ]);
-			if( !$user_info ){
+		if( $member_id && preg_match("/^\d+$/",$member_id) ){
+			$member_info = Member::findOne([ 'id' => $member_id,'status' => 1 ]);
+			if( !$member_info ){
 				$this->removeAuthToken();
 				return false;
 			}
-			if( $auth_token != $this->geneAuthToken( $user_info ) ){
+			if( $auth_token != $this->geneAuthToken( $member_info ) ){
 				$this->removeAuthToken();
 				return false;
 			}
-			$this->current_user = $user_info;
-			\Yii::$app->view->params['current_user'] = $user_info;
+			$this->current_user = $member_info;
+			\Yii::$app->view->params['current_user'] = $member_info;
 			return true;
 		}
 		return false;
@@ -65,8 +113,8 @@ class BaseController extends BaseWebController {
 		$this->removeCookie($this->auth_cookie_name);
 	}
 
-	public function geneAuthToken( $user_info ){
-		return md5( $this->salt."-{$user_info['id']}-{$user_info['mobile']}-{$user_info['salt']}");
+	public function geneAuthToken( $member_info ){
+		return md5( $this->salt."-{$member_info['id']}-{$member_info['mobile']}-{$member_info['salt']}");
 	}
 
 	protected function getBindUrl(){
