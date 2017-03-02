@@ -8,9 +8,11 @@ $config = [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'controllerNamespace' => 'app\commands',
+	"timezone"  =>  "Asia/Shanghai",
     'components' => [
         'cache' => [
             'class' => 'yii\caching\FileCache',
+			'cachePath' => '@runtime/cache',
         ],
         'log' => [
             'targets' => [

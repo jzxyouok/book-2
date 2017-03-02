@@ -12,7 +12,7 @@ class BaseController extends Controller {
 
 	public function __construct($id, $module, $config = []){
 		parent::__construct($id, $module, $config = []);
-		$this->layout = false;
+		$this->layout = "main";
 	}
 
 	public function beforeAction( $action ){

@@ -14,27 +14,25 @@ use yii\web\AssetBundle;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class WebAsset extends AssetBundle
+class MAsset extends AssetBundle
 {
     public $basePath = '@webroot';
     public $baseUrl = '@web';
-    public $css = [
-    ];
-    public $js = [
-    ];
+	public $css = [
+	];
+	public $js = [
+	];
 	public function registerAssetFiles( $view ){
 		//加一个版本号,目的 ： 是浏览器获取最新的css 和 js 文件
 		$release_version = defined("RELEASE_VERSION")?RELEASE_VERSION:time();
 		$this->css = [
-			UrlService::buildWwwUrl( "/css/web/bootstrap.min.css" ),
 			UrlService::buildWwwUrl( "/font-awesome/css/font-awesome.css"),
-			UrlService::buildWwwUrl( "/css/web/style.css",[ 'ver' => $release_version ] )
+			UrlService::buildWwwUrl( "/css/m/css_style.css"),
+			UrlService::buildWwwUrl( "/css/m/app.css",[ 'ver' => $release_version ] ),
 		];
 		$this->js = [
 			UrlService::buildWwwUrl( "/plugins/jquery-2.1.1.js"),
-			UrlService::buildWwwUrl( "/js/web/bootstrap.min.js"),
-			UrlService::buildWwwUrl( "/plugins/layer/layer.js"),
-			UrlService::buildWwwUrl( "/js/web/common.js",[ 'ver' => $release_version ] ),
+			UrlService::buildWwwUrl( "/js/m/TouchSlide.1.1.js")
 		];
 		parent::registerAssetFiles( $view );
 	}
