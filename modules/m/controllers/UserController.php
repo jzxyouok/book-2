@@ -49,27 +49,27 @@ class UserController extends BaseController {
 			return $this->renderJSON([], "请输入正确的手机验证码~~", -1);
 		}
 
-		$user_info = Member::find()->where([ 'mobile' => $mobile,'status' => 1 ])->one();
+		$member_info = Member::find()->where([ 'mobile' => $mobile,'status' => 1 ])->one();
 
-		if( !$user_info ){
+		if( !$member_info ){
 			$ret = MemberService::set( [ 'mobile' => $mobile,'passwd' => '' ] );
 			if( !$ret ){
 				return $this->renderJSON([],MemberService::getLastErrorMsg(),-1);
 			}
-			$user_info = Member::find()->where([ 'uid' => $ret,'status' => 1 ])->one();
+			$member_info = Member::find()->where([ 'id' => $ret,'status' => 1 ])->one();
 		}
 
-		if ( !$user_info || !$user_info['status']) {
+		if ( !$member_info || !$member_info['status']) {
 			return $this->renderJSON([], "您的账号已被禁止，请联系客服解决~~", -1);
 		}
 
 		if ($openid) {
 			//检查该手机号是否绑定过其他微信（一个手机号只能绑定一个微信,也只能绑定一个支付宝）
 			$client_type = ConstantService::$client_type_wechat;
-			$bind_info = OauthMemberBind::findOne([ 'member_id' => $user_info['id'], "openid" => $openid ,'type' => $client_type ]);
+			$bind_info = OauthMemberBind::findOne([ 'member_id' => $member_info['id'], "openid" => $openid ,'type' => $client_type ]);
 			if ( ! $bind_info) {
 				$model_bind  = new OauthMemberBind();
-				$model_bind->member_id   = $user_info['id'];
+				$model_bind->member_id   = $member_info['id'];
 				$model_bind->type = $client_type;
 				$model_bind->client_type = ConstantService::$client_type_mapping[ $client_type ];
 				$model_bind->openid = $openid ?: '';
@@ -83,11 +83,11 @@ class UserController extends BaseController {
 
 		//如果用户头像或者unionid没有，就获取//这个时候做登录特殊处理，例如更新用户名和头像等等新
 		$url = ( $referer && $referer != "/m/user/bind" )?$referer:UrlService::buildMUrl("/");
-		if( UtilService::isWechat() && ( $user_info->avatar == ConstantService::$default_avatar || $user_info->nickname == $user_info->mobile ) ){
+		if( UtilService::isWechat() && ( $member_info->avatar == ConstantService::$default_avatar || $member_info->nickname == $user_info->mobile ) ){
 			$url = $this->getAuthLoginUrl('snsapi_userinfo',$referer);
 		}
 
-		$this->setLoginStatus( $user_info );
+		$this->setLoginStatus( $member_info );
 		return $this->renderJSON([ 'url' => $url  ],"绑定成功~~");
 	}
 

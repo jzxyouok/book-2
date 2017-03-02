@@ -1,4 +1,20 @@
 
+.page_title {
+    background: #fff;
+    padding: 1rem 0;
+}
+
+.page_title span {
+    float: left;
+    width: 100%;
+    border-right: 1px solid #ccc;
+    text-align: center;
+}
+
+.page_title span:last-child {
+    border-right: 0;
+}
+
 .form_box{background:#fff; }
 .form_input_box{
     border:1px solid #e6e6e6;
@@ -11,21 +27,33 @@
 }
 
 .form_input_box.captcha_code,.form_input_box.phone_code {
-    padding-right: 7rem;
+    padding-right: 9rem;
+}
+
+.form_input_box.captcha_code img {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 9rem;
+    height: 100%;
+    border: 1px solid #e6e6e6;
+    border-radius: .2rem;
+    cursor: pointer;
+    box-sizing: border-box;
 }
 
 .form_input_box.phone_code .get_captcha{
     display:inline-block;
-    width: 6rem;
+    width: 9rem;
     height: 3rem;
     border: 0 none;
-    background: #f76985;
+    background: #f20c11;
     color: #fff;
     font-size: .8rem;
     border-radius: .2rem;
     position: absolute;
-    right: .53rem;
-    top: .53rem;
+    right: 0;
+    top: 0.8rem;
 }
 
 .form_input_box span{
@@ -42,4 +70,11 @@
     font-size:1.5rem;
     padding:1.3rem 0;
     color:#878787;
+}
+
+
+.disabled{
+    cursor: default;
+    background: #e8e8e8;
+    color: #c7c7c7;
 }

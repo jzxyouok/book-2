@@ -13,79 +13,56 @@ class BaseWebController extends Controller
         $this->getView()->title = $title;
     }
 
-    public function renderJSON($data=[], $msg ="ok", $code = 200)
-    {
-        header('Content-type: application/json');
-        echo json_encode([
-            "code" => $code,
-            "msg"   =>  $msg,
-            "data"  =>  $data,
-            "req_id" =>  $this->geneReqId(),
-        ]);
+	protected function geneReqId() {
+		return uniqid();
+	}
+
+	public function post($key, $default = "") {
+		return \Yii::$app->request->post($key, $default);
+	}
 
 
-        return Yii::$app->end();
-    }
-
-    protected function renderJSONP($data=[], $msg ="ok", $code = 200) {
-
-        $func = $this->get("jsonp","jsonp_func");
+	public function get($key, $default = "") {
+		return \Yii::$app->request->get($key, $default);
+	}
 
 
-        echo $func."(".json_encode([
-            "code" => $code,
-            "msg"   =>  $msg,
-            "data"  =>  $data,
-            "req_id" =>  $this->geneReqId(),
-        ]).")";
-
-        return Yii::$app->end();
-    }
-
-    protected function renderNotFound() {
-        $this->renderJSON([],$msg = "ObjectNotFound", -1);
-    }
-
-
-    protected function geneReqId() {
-        return uniqid();
-    }
-
-    public function post($key = null, $default = null) {
-        return Yii::$app->request->post($key, $default);
-    }
-
-
-    public function get($key = null, $default = null) {
-        return Yii::$app->request->get($key, $default);
-    }
-
-    protected function setCookie($name,$value,$expire = 0){
-        $cookies = Yii::$app->response->cookies;
-        $domain_cookies = \Yii::$app->params['domains']['cookie'];
-        $cookies->add(new \yii\web\Cookie([
-            'name' => $name,
-            'value' => $value,
-            'expire' => $expire? ( time() + $expire ):$expire,
-            'domain' => $domain_cookies
-        ]));
-    }
-
-    protected  function getCookie($name,$default_val=''){
-        $cookies = Yii::$app->request->cookies;
-        return $cookies->getValue($name, $default_val);
-    }
-
-
-    protected function removeCookie($name){
-		$domain_cookies = \Yii::$app->params['domains']['cookie'];
-		$cookie_target = new \yii\web\Cookie([
+	protected function setCookie($name,$value,$expire = 0){
+		$cookies = \Yii::$app->response->cookies;
+		$cookies->add( new \yii\web\Cookie([
 			'name' => $name,
-			'domain' => $domain_cookies
+			'value' => $value,
+			'expire' => $expire
+		]));
+	}
+
+	protected  function getCookie($name,$default_val=''){
+		$cookies = \Yii::$app->request->cookies;
+		return $cookies->getValue($name, $default_val);
+	}
+
+
+	protected function removeCookie($name){
+		$cookies = \Yii::$app->response->cookies;
+		$cookies->remove($name);
+	}
+
+	protected function renderJSON($data=[], $msg ="ok", $code = 200)
+	{
+		header('Content-type: application/json');
+		echo json_encode([
+			"code" => $code,
+			"msg"   =>  $msg,
+			"data"  =>  $data,
+			"req_id" =>  $this->geneReqId(),
 		]);
-		$cookies = Yii::$app->response->cookies;
-        $cookies->remove( $cookie_target );
-    }
+
+		return \Yii::$app->end();
+	}
+
+	protected  function renderJS($msg,$url = "/"){
+		return $this->renderPartial("@app/views/common/js", ['msg' => $msg, 'location' => $url]);
+	}
 
     protected function isAjax()
     {

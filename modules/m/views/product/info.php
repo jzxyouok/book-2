@@ -1,33 +1,8 @@
 <?php
 use \app\common\services\UrlService;
-
+use \app\common\services\StaticService;
+StaticService::includeAppJsStatic( "/js/m/product/index.js",\app\assets\MAsset::className() );
 ?>
-<!doctype html>
-<html class="no-js">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="">
-    <meta name="keywords" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>商品详情页</title>
-    <!-- Set render engine for 360 browser -->
-    <meta name="renderer" content="webkit">
-    <!-- No Baidu Siteapp-->
-    <meta http-equiv="Cache-Control" content="no-siteapp"/>
-    <!--<meta name="format-detection" content="telephone = no" />-->
-    <!-- Add to homescreen for Chrome on Android -->
-    <meta name="mobile-web-app-capable" content="yes">
-    <!-- Add to homescreen for Safari on iOS -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="apple-mobile-web-app-title" content="商品详情页"/>
-    <meta name="msapplication-TileColor" content="#090a0a">
-    <link rel="stylesheet" href="/css/m/css_style.css">
-    <script type="text/javascript" src="/js/m/zepto.min.js"></script>
-    <script type="text/javascript" src="/js/m/TouchSlide.1.1.js"></script>
-</head>
-<body class="grayBy">
 <div class="pro_tab clearfix">
     <span>图片详情</span>
 </div>
@@ -76,36 +51,3 @@ use \app\common\services\UrlService;
     <input type="button" value="立即订购" class="order_now_btn"/>
     <input type="button" value="加入购物车" class="add_cart_btn"/>
 </div>
-</body>
-</html>
-<script type="text/javascript">
-    $(document).ready(function () {
-        TouchSlide({
-            slideCell: "#slideBox",
-            titCell: ".hd ul", //开启自动分页 autoPage:true ，此时设置 titCell 为导航元素包裹层
-            mainCell: ".bd ul",
-            effect: "left",
-            autoPage: true,//自动分页
-            autoPlay: false //自动播放
-        });
-        //加减效果 start
-        $(".quantity-form .icon_lower").click(function () {
-            var num = parseInt($(this).next(".input_quantity").val());
-            if (num > 1) {
-                $(this).next(".input_quantity").val(num - 1);
-            }
-        });
-        $(".quantity-form .icon_plus").click(function () {
-            var num = parseInt($(this).prev(".input_quantity").val());
-            var max = parseInt($(this).prev(".input_quantity").attr("max"));
-            if (num < max) {
-                $(this).prev(".input_quantity").val(num + 1);
-            }
-        });
-        //加减效果 end
-        $(".pro_vlist span").click(function () {
-            $(this).parent().find("span").removeClass("aon");
-            $(this).addClass("aon");
-        });
-    });
-</script>

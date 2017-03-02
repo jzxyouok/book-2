@@ -1,7 +1,7 @@
 <?php
 /** 验证码类* */
 
-namespace common\service\captcha;
+namespace app\common\services\captcha;
 
 
 class ValidateCode {

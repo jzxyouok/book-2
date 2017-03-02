@@ -1,12 +1,14 @@
 <?php
 
 namespace app\modules\m\controllers\common;
+use app\common\components\BaseWebController;
 use app\common\services\UrlService;
-use yii\web\Controller;
-class BaseController extends Controller {
 
-	public $enableCsrfValidation = false;
+class BaseController extends BaseWebController {
+
 	protected  $auth_cookie_name = "mooc_book_member";
+	protected  $auth_cookie_current_openid = "sass_idc_m_openid";
+	protected  $auth_cookie_current_unionid = "sass_idc_m_unionid";
 	protected  $salt = "dm3HsNYz3Uyddd46Rjg";
 	protected $current_user = null;
 
@@ -49,7 +51,7 @@ class BaseController extends Controller {
 
 	public function setLoginStatus( $user_info ){
 		$auth_token = $this->geneAuthToken( $user_info );
-		$this->setCookie($this->auth_cookie_name,$auth_token."#".$user_info['uid']);
+		$this->setCookie($this->auth_cookie_name,$auth_token."#".$user_info['id']);
 	}
 
 	protected  function removeAuthToken(){
@@ -71,57 +73,5 @@ class BaseController extends Controller {
 		return $url;
 	}
 
-
-
-	protected function geneReqId() {
-		return uniqid();
-	}
-
-	public function post($key, $default = "") {
-		return \Yii::$app->request->post($key, $default);
-	}
-
-
-	public function get($key, $default = "") {
-		return \Yii::$app->request->get($key, $default);
-	}
-
-
-	protected function setCookie($name,$value,$expire = 0){
-		$cookies = \Yii::$app->response->cookies;
-		$cookies->add( new \yii\web\Cookie([
-			'name' => $name,
-			'value' => $value,
-			'expire' => $expire
-		]));
-	}
-
-	protected  function getCookie($name,$default_val=''){
-		$cookies = \Yii::$app->request->cookies;
-		return $cookies->getValue($name, $default_val);
-	}
-
-
-	protected function removeCookie($name){
-		$cookies = \Yii::$app->response->cookies;
-		$cookies->remove($name);
-	}
-
-	protected function renderJSON($data=[], $msg ="ok", $code = 200)
-	{
-		header('Content-type: application/json');
-		echo json_encode([
-			"code" => $code,
-			"msg"   =>  $msg,
-			"data"  =>  $data,
-			"req_id" =>  $this->geneReqId(),
-		]);
-
-		return \Yii::$app->end();
-	}
-
-	protected  function renderJS($msg,$url = "/"){
-		return $this->renderPartial("@app/views/common/js", ['msg' => $msg, 'location' => $url]);
-	}
 
 }

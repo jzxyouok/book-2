@@ -1,10 +1,10 @@
 <?php
 
-namespace common\services;
+namespace app\common\services;
 
 
-use common\components\HttpClient;
-use common\models\sms\SmsQueue;
+use app\common\components\HttpClient;
+use app\models\sms\SmsQueue;
 
 
 class SmsService {

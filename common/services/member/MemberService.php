@@ -27,7 +27,7 @@ class MemberService extends BaseService {
 		if( !$model->save(0) ){
 			return self::_err( '系统繁忙请稍后再试~~' );
 		}
-		return $model->uid;
+		return $model->id;
 	}
 
 	public static function OauthBind(){

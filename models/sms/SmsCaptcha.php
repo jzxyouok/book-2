@@ -39,7 +39,7 @@ class SmsCaptcha extends \yii\db\ActiveRecord
 
 		if( !$this->allow_send_captcha($mobile,$ip) )
 		{
-			\common\service\SmsService::Log("Custom CAPTCHA not allowed {$mobile} {$ip}");
+			\app\common\services\SmsService::Log("Custom CAPTCHA not allowed {$mobile} {$ip}");
 			return false;
 		}
 		$this->mobile = $mobile;
@@ -49,7 +49,7 @@ class SmsCaptcha extends \yii\db\ActiveRecord
 		$this->ip = $ip;
 		$this->status = 0;
 		$content = str_replace("xxxx",$this->captcha,$content);
-		\common\service\SmsService::send($mobile, $content,$channel,$ip,$sign);
+		\app\common\services\SmsService::send($mobile, $content,$channel,$ip,$sign);
 
 		return $this->save(0);
 	}

@@ -1,12 +1,11 @@
 <?php
 
 namespace app\modules\web\controllers\common;
+use app\common\components\BaseWebController;
 use app\common\services\UrlService;
-use app\models\log\AppLog;
 use app\models\User;
 use app\common\services\applog\ApplogService;
-use yii\web\Controller;
-class BaseController extends Controller {
+class BaseController extends BaseWebController {
 	protected $page_size = 50;
 	public $enableCsrfValidation = false;
 	protected  $auth_cookie_name = "mooc_book";
@@ -86,57 +85,6 @@ class BaseController extends Controller {
 
 	public function getUid(){
 		return $this->current_user?$this->current_user['uid']:0;
-	}
-
-	protected function geneReqId() {
-		return uniqid();
-	}
-
-	public function post($key, $default = "") {
-		return \Yii::$app->request->post($key, $default);
-	}
-
-
-	public function get($key, $default = "") {
-		return \Yii::$app->request->get($key, $default);
-	}
-
-
-	protected function setCookie($name,$value,$expire = 0){
-		$cookies = \Yii::$app->response->cookies;
-		$cookies->add( new \yii\web\Cookie([
-			'name' => $name,
-			'value' => $value,
-			'expire' => $expire
-		]));
-	}
-
-	protected  function getCookie($name,$default_val=''){
-		$cookies = \Yii::$app->request->cookies;
-		return $cookies->getValue($name, $default_val);
-	}
-
-
-	protected function removeCookie($name){
-		$cookies = \Yii::$app->response->cookies;
-		$cookies->remove($name);
-	}
-
-	protected function renderJSON($data=[], $msg ="ok", $code = 200)
-	{
-		header('Content-type: application/json');
-		echo json_encode([
-			"code" => $code,
-			"msg"   =>  $msg,
-			"data"  =>  $data,
-			"req_id" =>  $this->geneReqId(),
-		]);
-
-		return \Yii::$app->end();
-	}
-
-	protected  function renderJS($msg,$url = "/"){
-		return $this->renderPartial("@app/views/common/js",['msg' => $msg,'location' => $url ]);
 	}
 
 }

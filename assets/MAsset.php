@@ -32,7 +32,8 @@ class MAsset extends AssetBundle
 		];
 		$this->js = [
 			UrlService::buildWwwUrl( "/plugins/jquery-2.1.1.js"),
-			UrlService::buildWwwUrl( "/js/m/TouchSlide.1.1.js")
+			UrlService::buildWwwUrl( "/js/m/TouchSlide.1.1.js"),
+			UrlService::buildWwwUrl( "/js/m/common.js")
 		];
 		parent::registerAssetFiles( $view );
 	}
