@@ -9,6 +9,3 @@ $(document).ready(function () {
         autoPlay: true //自动播放
     });
 });
-function search() {
-    window.location.href = "search.html";
-}
