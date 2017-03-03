@@ -38,7 +38,7 @@ StaticService::includeAppJsStatic( "/js/m/product/index.js",\app\assets\MAsset::
 	<?=nl2br($info['summary']);?>
 </div>
 <div class="pro_fixed clearfix">
-    <a href="<?= UrlService::buildMUrl("/"); ?>"><i class="sto_icon"></i><span>店铺</span></a>
+    <a href="<?= UrlService::buildMUrl("/"); ?>"><i class="sto_icon"></i><span>首页</span></a>
     <a href="javascript:"><i class="keep_icon"></i><span>收藏</span></a>
     <input type="button" value="立即订购" class="order_now_btn"/>
     <input type="button" value="加入购物车" class="add_cart_btn"/>

@@ -10,32 +10,23 @@ StaticService::includeAppJsStatic( "/js/m/default/index.js",\app\assets\MAsset::
 </div>
 
 
-
+<?php if( $image_list ):?>
 <div id="slideBox" class="slideBox">
     <div class="bd">
         <ul>
-            <li><img src="/images/m/temp/ban1.jpg" /></li>
-            <li><img src="/images/m/temp/ban2.jpg" /></li>
-            <li><img src="/images/m/temp/ban3.jpg" /></li>
+            <?php foreach( $image_list as $_image_info ):?>
+            <li><img style="max-height: 250px;" src="<?=UrlService::buildPicUrl("brand",$_image_info["image_key"]);?>" /></li>
+            <?php endforeach;?>
         </ul>
     </div>
     <div class="hd"><ul></ul></div>
 </div>
-
-<div class="shop_placard">
-    <i class="placard_icon"></i>
-    <span>最新公告</span>
-    <p>&nbsp;</p>
+<?php endif;?>
+<div class="fastway_list_box">
+    <ul class="fastway_list">
+        <li><a href="<?=UrlService::buildNull();?>" style="padding-left: 0.1rem;"><span>品牌名称：<?=UtilService::encode( $info['name'] );?></span></a></li>
+        <li><a href="<?=UrlService::buildNull();?>" style="padding-left: 0.1rem;"><span>联系电话：<?=UtilService::encode( $info['mobile'] );?></span></a></li>
+        <li><a href="<?=UrlService::buildNull();?>" style="padding-left: 0.1rem;"><span>联系地址：<?=UtilService::encode( $info['address'] );?></span></a></li>
+        <li><a href="<?=UrlService::buildNull();?>" style="padding-left: 0.1rem;"><span>品牌介绍：<?=UtilService::encode( $info['description'] );?></span></a></li>
+    </ul>
 </div>
-<ul class="shop_placard_list">
-    <li>
-        <a href="#">
-            <h2>优惠大酬宾了...</h2>
-        </a>
-    </li>
-    <li>
-        <a href="#">
-            <h2>优惠大酬宾了...</h2>
-        </a>
-    </li>
-</ul>

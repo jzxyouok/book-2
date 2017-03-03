@@ -32,4 +32,10 @@ class UrlService {
 		$upload_config = \Yii::$app->params['upload'];
 		return $domain_config['www'].$upload_config[ $bucket ]."/".$file_key;
 	}
+
+	public static function buildBlogUrl( $path,$params = [] ){
+		$domain_config = \Yii::$app->params['domain'];
+		$path = Url::toRoute(array_merge([ $path ],$params));
+		return $domain_config['blog'].$path;
+	}
 }

@@ -3,9 +3,32 @@
 var common_ops = {
     init:function(){
         this.eventBind();
+        this.setIconLight();
     },
     eventBind:function(){
 
+    },
+    setIconLight:function(){
+        var pathname = window.location.pathname;
+        var nav_name = null;
+
+        if(  pathname.indexOf("/m/default") > -1 || pathname == "/m" || pathname == "/m/" ){
+            nav_name = "default";
+        }
+
+        if(  pathname.indexOf("/m/product") > -1  ){
+            nav_name = "product";
+        }
+
+        if(  pathname.indexOf("/m/user") > -1  ){
+            nav_name = "brand";
+        }
+
+        if( nav_name == null ){
+            return;
+        }
+
+        $(".footer_fixed ."+nav_name).addClass("aon");
     },
     buildMUrl:function( path ,params){
         var url =   "/m" + path;
