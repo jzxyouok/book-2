@@ -617,14 +617,14 @@ input[type='checkbox']:checked + label:after, input[type='checkbox']:checked + l
 
 
 .pro_fixed{background:#fff;width:100%; left:0; bottom:0; position:fixed; z-index:100; border-top:1px solid #e6e6e6;}
-.pro_fixed a{display:block;float:left;width:20%;text-align:center;padding:3.5rem  0 0.5rem  0; position:relative;}
+.pro_fixed a{display:block;float:left;width:15%;text-align:center;padding:3.5rem  0 0.5rem  0; position:relative;}
 .pro_fixed a span{display:block; text-align:center;font-size:1.4rem;}
 .pro_fixed a i{display:block; position:absolute; left:50%;top:1rem;}
 .sto_icon{width:2.3rem;height:2em;margin-left:-1.2rem; background:url(../../images/m/dianpu@3x.png) no-repeat left top;background-size:contain;}
 .custo_icon{width:2.1rem;height:2em;margin-left:-1rem; background:url(../../images/m/kefu@3x.png) no-repeat left top;background-size:contain;}
 .keep_icon{width:2rem;height:2em;margin-left:-1rem; background:url(../../images/m/shoucang@3x.png) no-repeat left top;background-size:contain;}
-.pro_fixed .order_now_btn{background:#f20c11;width:30%; border:0;color:#fff;text-align:center;height:101%;position:absolute;right:0;top:-1px;font-size:1.6rem;}
-.pro_fixed .add_cart_btn{background:#f2a90c;width:30%; border:0;color:#fff;text-align:center;height:101%;position:absolute;right:25%;top:-1px;font-size:1.6rem;}
+.pro_fixed .order_now_btn{background:#f20c11;width:35%; border:0;color:#fff;text-align:center;height:101%;position:absolute;right:0;top:-1px;font-size:1.6rem;}
+.pro_fixed .add_cart_btn{background:#f2a90c;width:35%; border:0;color:#fff;text-align:center;height:101%;position:absolute;right:35%;top:-1px;font-size:1.6rem;}
 
 
 
