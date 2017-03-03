@@ -27,7 +27,20 @@ class ProductController extends BaseController {
 	}
 
 	public function actionInfo(){
-		return $this->render("info");
+		$id = intval( $this->get("id",0) );
+		$reback_url = UrlService::buildMUrl("/product/index");
+		if( !$id ){
+			return $this->redirect( $reback_url );
+		}
+
+		$info = Book::findOne([ 'id' => $id ]);
+		if( !$info ){
+			return $this->redirect( $reback_url );
+		}
+
+		return $this->render("info",[
+			'info' => $info
+		]);
 	}
 
 	public function actionCart(){

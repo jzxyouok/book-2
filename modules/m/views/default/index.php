@@ -1,11 +1,12 @@
 <?php
 use \app\common\services\UrlService;
 use \app\common\services\StaticService;
+use \app\common\services\UtilService;
 StaticService::includeAppJsStatic( "/js/m/default/index.js",\app\assets\MAsset::className() );
 ?>
 <div class="shop_header">
     <i class="shop_icon"></i>
-    <strong>春暖花开女装批发店</strong>
+    <strong><?=UtilService::encode($info['name']);?></strong>
 </div>
 
 

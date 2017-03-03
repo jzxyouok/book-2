@@ -1,5 +1,6 @@
 <?php
 use \app\common\services\UrlService;
+use \app\common\services\UtilService;
 use \app\common\services\StaticService;
 StaticService::includeAppJsStatic( "/js/m/product/index.js",\app\assets\MAsset::className() );
 ?>
@@ -10,25 +11,19 @@ StaticService::includeAppJsStatic( "/js/m/product/index.js",\app\assets\MAsset::
     <div id="slideBox" class="slideBox">
         <div class="bd">
             <ul>
-                <li><img src="/images/m/temp/p2.jpg"/></li>
-                <li><img src="/images/m/temp/p3.jpg"/></li>
-                <li><img src="/images/m/temp/p4.jpg"/></li>
-                <li><img src="/images/m/temp/p5.jpg"/></li>
+                <li><img src="<?=UrlService::buildPicUrl("book",$info['main_image'] );?>"/></li>
             </ul>
         </div>
-        <div class="hd">
-            <ul></ul>
-            <span class="pageState"></span></div>
     </div>
 </div>
 <div class="pro_header">
     <div class="pro_tips">
-        <h2>韩版冬季长款徽章系收腰修身显瘦高领连衣裙</h2>
-        <h3><b>¥188</b><font>3件</font>起批</h3>
+        <h2><?=UtilService::encode( $info['name'] );?></h2>
+        <h3><b>¥<?=UtilService::encode( $info['price'] );?></b></h3>
     </div>
     <span class="share_span"><i class="share_icon"></i><b>分享商品</b></span>
 </div>
-<div class="pro_express">快递：6.00<span>杭州</span><b>月度热销55</b></div>
+<div class="pro_express">月销量：600<b>累计评价：100</b></div>
 <div class="pro_virtue">
     <div class="pro_vlist">
         <b>数量</b>
@@ -40,10 +35,7 @@ StaticService::includeAppJsStatic( "/js/m/product/index.js",\app\assets\MAsset::
     </div>
 </div>
 <div class="pro_warp">
-    <p>三只松鼠_小贱牛板筋120gx2袋休闲零食特产麻辣/烧烤味 烧烤味</p>
-    <img src="/images/m/temp/p2.jpg"/>
-    <img src="/images/m/temp/p3.jpg"/>
-    <img src="/images/m/temp/p4.jpg"/>
+	<?=nl2br($info['summary']);?>
 </div>
 <div class="pro_fixed clearfix">
     <a href="<?= UrlService::buildMUrl("/"); ?>"><i class="sto_icon"></i><span>店铺</span></a>
