@@ -59,7 +59,7 @@ class MsgController extends BaseController{
 
 		switch($res['type']){
 			case "rich":
-				$plain_data = $this->richTpl($from_username,$from_username,$res['data']);
+				$plain_data = $this->richTpl($from_username,$to_username,$res['data']);
 				break;
 			default:
 				$plain_data = $this->textTpl($from_username,$to_username,$res['data']);
