@@ -16,6 +16,10 @@ use Yii;
  * @property integer $unit
  * @property string $tags
  * @property integer $status
+ * @property integer $month_count
+ * @property integer $total_count
+ * @property integer $view_count
+ * @property integer $comment_count
  * @property string $updated_time
  * @property string $created_time
  */
@@ -35,7 +39,7 @@ class Book extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['cat_id', 'unit', 'status'], 'integer'],
+            [['cat_id', 'unit', 'status', 'month_count', 'total_count', 'view_count', 'comment_count'], 'integer'],
             [['price'], 'number'],
             [['updated_time', 'created_time'], 'safe'],
             [['name', 'main_image'], 'string', 'max' => 100],
@@ -59,6 +63,10 @@ class Book extends \yii\db\ActiveRecord
             'unit' => 'Unit',
             'tags' => 'Tags',
             'status' => 'Status',
+            'month_count' => 'Month Count',
+            'total_count' => 'Total Count',
+            'view_count' => 'View Count',
+            'comment_count' => 'Comment Count',
             'updated_time' => 'Updated Time',
             'created_time' => 'Created Time',
         ];

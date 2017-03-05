@@ -29,7 +29,9 @@ class BaseController extends BaseWebController {
 	 * 如果在H5浏览器,可以不用登录
 	 */
 	public $special_AllowAction = [
-		'm/default/index'
+		'm/default/index',
+		'm/product/index',
+		'm/product/info'
 	];
 
 	public function __construct($id, $module, $config = []){
@@ -52,7 +54,7 @@ class BaseController extends BaseWebController {
 
 		if( !$login_status ){
 			if( \Yii::$app->request->isAjax ){
-				$this->renderJSON([],"未登录,系统将引导您重新登录!!",-302);
+				$this->renderJSON([],"未登录,系统将引导您重新登录~~",-302);
 			}else{
 				$redirect_url = $this->getBindUrl();
 				if( UtilService::isWechat() ){

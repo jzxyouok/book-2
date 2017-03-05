@@ -46,6 +46,13 @@ var common_ops = {
         var upload_config = eval( '(' + $(".hidden_layout_warp input[name=upload_config]").val() +')' );
         var domain = "http://" + window.location.hostname;
         return domain + upload_config[ bucket ] + "/" + img_key;
+    },
+    notlogin:function( referer ){
+        if ( ! referer) {
+            alert('授权过期,系统将引导您重新授权');
+            referer = location.pathname + location.search;
+        }
+        window.location.href = this.buildMUrl("/user/bind",{ referer:referer });
     }
 };
 

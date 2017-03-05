@@ -7,6 +7,8 @@ use app\common\components\BaseWebController;
 use app\common\services\captcha\ValidateCode;
 use app\common\services\UtilService;
 use app\models\sms\SmsCaptcha;
+use dosamigos\qrcode\lib\Enum;
+use dosamigos\qrcode\QrCode;
 
 class DefaultController extends BaseWebController {
 	public function actionIndex(){
@@ -62,7 +64,10 @@ class DefaultController extends BaseWebController {
 		return $this->renderJSON([],"unknown",-1);
 	}
 
-	public function actionError(){
-
+	public function actionQrcode(){
+		$qr_code_url = $this->get("qr_code_url","");
+		header('Content-type: image/png');
+		QrCode::png($qr_code_url,false,Enum::QR_ECLEVEL_H,5,0,false);
+		exit();
 	}
 }

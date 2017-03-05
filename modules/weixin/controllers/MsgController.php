@@ -3,6 +3,7 @@ namespace app\modules\weixin\controllers;
 
 use app\common\services\SearchService;
 use app\common\services\UrlService;
+use app\common\services\weixin\MessageService;
 use app\common\services\weixin\MsgCryptService;
 use app\models\book\Book;
 
@@ -36,6 +37,8 @@ class MsgController extends BaseController{
 		}
 
 		$this->record_log( '[decode_xml]:'.$decode_xml );
+
+		MessageService::add( $decode_xml );
 
 		$xml_obj = simplexml_load_string($decode_xml, 'SimpleXMLElement', LIBXML_NOCDATA);
 
@@ -86,6 +89,7 @@ class MsgController extends BaseController{
 		$event = $dataObj->Event;
 		switch($event){
 			case "subscribe":
+
 				$resData = $this->subscribeTips();
 				break;
 			case "CLICK"://自定义菜单点击类型是CLICK的，可以回复指定内容

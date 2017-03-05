@@ -1,12 +1,12 @@
 <?php
 
 
-namespace common\service\weixin;
+namespace app\common\services\weixin;
 
+use app\common\components\HttpClient;
+use app\common\services\applog\ApplogService;
 use Yii;
 use yii\log\FileTarget;
-use common\components\HttpClient;
-use common\service\applog\ApplogService;
 
 class PayApiService {
 	private $params = [];
@@ -41,7 +41,7 @@ class PayApiService {
 			}else{
 				$backtrace = json_encode( debug_backtrace( DEBUG_BACKTRACE_IGNORE_ARGS ) );
 				$error_msg = "[wechat unifiedorder] debug:{$backtrace},xml_data:{$xml_data},return:".json_encode($wx_order);
-				ApplogService::add(Yii::$app->id, $error_msg );
+				ApplogService::addErrorLog( Yii::$app->id, $error_msg );
 				return false;
 			}
 		}

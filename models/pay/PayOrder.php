@@ -21,6 +21,8 @@ use Yii;
  * @property string $pay_sn
  * @property string $note
  * @property integer $status
+ * @property integer $express_status
+ * @property integer $express_address_id
  * @property string $pay_time
  * @property string $updated_time
  * @property string $created_time
@@ -41,7 +43,7 @@ class PayOrder extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['member_id', 'target_type', 'pay_type', 'pay_source', 'status'], 'integer'],
+            [['member_id', 'target_type', 'pay_type', 'pay_source', 'status', 'express_status', 'express_address_id'], 'integer'],
             [['total_price', 'discount', 'pay_price', 'pay_in_money', 'ratio'], 'number'],
             [['note'], 'required'],
             [['note'], 'string'],
@@ -72,6 +74,8 @@ class PayOrder extends \yii\db\ActiveRecord
             'pay_sn' => 'Pay Sn',
             'note' => 'Note',
             'status' => 'Status',
+            'express_status' => 'Express Status',
+            'express_address_id' => 'Express Address ID',
             'pay_time' => 'Pay Time',
             'updated_time' => 'Updated Time',
             'created_time' => 'Created Time',

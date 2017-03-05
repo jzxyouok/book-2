@@ -15,7 +15,9 @@ use app\modules\m\controllers\common\BaseController;
 class UserController extends BaseController {
 
     public function actionIndex(){
-        return $this->render('index');
+        return $this->render('index',[
+        	'current_user' => $this->current_user
+		]);
     }
 
     public function actionBind(){

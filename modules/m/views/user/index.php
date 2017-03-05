@@ -1,9 +1,10 @@
 <?php
 use \app\common\services\UrlService;
+use \app\common\services\UtilService;
 ?>
 <div class="mem_info">
-	<span class="m_pic"><img src="/images/m/temp/mpic1.jpg" /></span>
-	<p>用户名</p>
+	<span class="m_pic"><img src="<?=UrlService::buildPicUrl( "avatar",$current_user['avatar'] );?>" /></span>
+	<p><?=UtilService::encode( $current_user['nickname'] );?></p>
 </div>
 <div class="mtab_list_box">
 	<ul class="mtab_list clearfix">
