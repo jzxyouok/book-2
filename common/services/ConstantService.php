@@ -28,4 +28,16 @@ class ConstantService {
 		0 => '已删除'
 	];
 
+	public static $sex_mapping = [
+		1 => '男',
+		2 => '女',
+		0 => '未填写'
+	];
+
+	public static $pay_status_mapping = [
+		1 => '已支付',
+		-8 => '待支付',
+		0 => '失效'
+	];
+
 }
