@@ -3,7 +3,7 @@ use \app\common\services\UrlService;
 use \app\common\services\UtilService;
 use \app\common\services\ConstantService;
 ?>
-<?php echo Yii::$app->view->renderFile("@app/modules/web/views/common/tab_account.php",[ 'current' => 'index' ]);?>
+<?php echo Yii::$app->view->renderFile("@app/modules/web/views/common/tab_member.php",[ 'current' => 'index' ]);?>
 <div class="row m-t">
 	<div class="col-lg-12">
         <div class="row">

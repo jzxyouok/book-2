@@ -48,6 +48,7 @@ StaticService::includeAppJsStatic( "/js/web/member/index.js",\app\assets\WebAsse
                 <th>姓名</th>
                 <th>手机</th>
                 <th>性别</th>
+                <th>状态</th>
                 <th>操作</th>
             </tr>
             </thead>
@@ -58,7 +59,8 @@ StaticService::includeAppJsStatic( "/js/web/member/index.js",\app\assets\WebAsse
                         <td><img alt="image" class="img-circle" src="<?= $_item['avatar'] ;?>" style="width: 40px;height: 40px;"></td>
                         <td><?= $_item['nickname'];?></td>
                         <td><?= $_item['mobile'] ;?></td>
-                        <td><?= $_item['sex'] ;?></td>
+                        <td><?= $_item['sex_desc'] ;?></td>
+                        <td><?= $_item['status_desc'] ;?></td>
                         <td>
                             <a  href="<?=UrlService::buildWebUrl("/member/info",[ 'id' => $_item['id'] ] );?>">
                                 <i class="fa fa-eye fa-lg"></i>

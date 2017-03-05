@@ -58,9 +58,10 @@ class MemberController extends BaseController{
 					'id' => $_item['id'],
 					'nickname' => UtilService::encode( $_item['nickname'] ),
 					'mobile' => UtilService::encode( $_item['mobile'] ),
-					'sex' => ConstantService::$sex_mapping[ $_item['sex'] ],
+					'sex_desc' => ConstantService::$sex_mapping[ $_item['sex'] ],
 					'avatar' => UrlService::buildPicUrl( "avatar",$_item['avatar'] ),
-					'status' => UtilService::encode( $_item['status'] ),
+					'status_desc' => ConstantService::$status_mapping[ $_item['status'] ],
+					'status' => $_item['status'],
 				];
 			}
 		}
@@ -135,6 +136,7 @@ class MemberController extends BaseController{
 		}else{
 			$model_member = new Member();
 			$model_member->status = 1;
+			$model_member->avatar = ConstantService::$default_avatar;
 			$model_member->created_time = $date_now;
 		}
 
@@ -153,16 +155,16 @@ class MemberController extends BaseController{
 		$id = $this->post('id',[]);
 		$act = trim($this->post('act',''));
 		if( !$id ){
-			return $this->renderJSON([],"请选择要操作的账号~~",-1);
+			return $this->renderJSON([],"请选择要操作的会员账号号~~",-1);
 		}
 
 		if( !in_array( $act,['remove','recover' ])){
 			return $this->renderJSON([],"操作有误，请重试~~",-1);
 		}
 
-		$info = Book::find()->where([ 'id' => $id ])->one();
+		$info = Member::find()->where([ 'id' => $id ])->one();
 		if( !$info ){
-			return $this->renderJSON([],"指定书籍不存在~~",-1);
+			return $this->renderJSON([],"指定会员账号不存在~~",-1);
 		}
 
 		switch ( $act ){
@@ -176,138 +178,6 @@ class MemberController extends BaseController{
 		$info->updated_time = date("Y-m-d H:i:s");
 		$info->update( 0 );
 		return $this->renderJSON( [],"操作成功~~" );
-	}
-
-	public function actionCat(){
-		$status = intval( $this->get("status",ConstantService::$status_default ) );
-		$query = BookCat::find();
-
-		if( $status > ConstantService::$status_default ){
-			$query->where([ 'status' => $status ]);
-		}
-
-		$list = $query->orderBy([ 'weight' => SORT_DESC ,'id' => SORT_DESC ])->all( );
-
-		return $this->render('cat',[
-			'list' => $list,
-			'status_mapping' => ConstantService::$status_mapping,
-			'search_conditions' => [
-				'status' => $status
-			]
-		]);
-	}
-
-	public function actionCat_set(){
-		if( \Yii::$app->request->isGet ){
-			$id = intval( $this->get("id",0) );
-			$info = [];
-			if( $id ){
-				$info = BookCat::find()->where([ 'id' => $id ])->one();
-			}
-
-			return $this->render("cat_set",[
-				'info' => $info
-			]);
-		}
-
-		$id = intval( $this->post("id",0) );
-		$weight = intval( $this->post("weight",1) );
-		$name = trim( $this->post("name","") );
-		$date_now = date("Y-m-d H:i:s");
-
-		if( mb_strlen( $name,"utf-8" ) < 1 ){
-			return $this->renderJSON( [] , "请输入符合规范的分类名称~~" ,-1);
-		}
-
-		$has_in = BookCat::find()->where([ 'name' => $name ])->andWhere([ '!=','id',$id ])->count();
-		if( $has_in ){
-			return $this->renderJSON( [] , "该分类名称已存在，请换一个试试~~" ,-1);
-		}
-
-		$cat_info = BookCat::find()->where([ 'id' => $id ])->one();
-		if( $cat_info ){
-			$model_book_cat = $cat_info;
-		}else{
-			$model_book_cat = new BookCat();
-			$model_book_cat->created_time = $date_now;
-		}
-
-		$model_book_cat->name = $name;
-		$model_book_cat->weight = $weight;
-		$model_book_cat->updated_time = $date_now;
-		$model_book_cat->save( 0 );
-
-		return $this->renderJSON( [],"操作成功~~" );
-	}
-
-	public function actionCat_ops(){
-		if( !\Yii::$app->request->isPost ){
-			return $this->renderJSON( [],ConstantService::$default_syserror,-1 );
-		}
-
-		$id = $this->post('id',[]);
-		$act = trim($this->post('act',''));
-		if( !$id ){
-			return $this->renderJSON([],"请选择要操作的账号~~",-1);
-		}
-
-		if( !in_array( $act,['remove','recover' ])){
-			return $this->renderJSON([],"操作有误，请重试~~",-1);
-		}
-
-		$info = BookCat::find()->where([ 'id' => $id ])->one();
-		if( !$info ){
-			return $this->renderJSON([],"指定分类不存在~~",-1);
-		}
-
-		switch ( $act ){
-			case "remove":
-				$info->status = 0;
-				break;
-			case "recover":
-				$info->status = 1;
-				break;
-		}
-		$info->updated_time = date("Y-m-d H:i:s");
-		$info->update( 0 );
-		return $this->renderJSON( [],"操作成功~~" );
-	}
-
-	public function actionImages(){
-		$p = intval( $this->get("p",1) );
-		$p = ( $p > 0 )?$p:1;
-
-		$bucket = "book";
-		$query = Images::find()->where([ 'bucket' => $bucket ]);
-
-		$offset = ($p - 1) * $this->page_size;
-		$total_res_count = $query->count();
-
-		$pages = UtilService::ipagination([
-			'total_count' => $total_res_count,
-			'page_size' => $this->page_size,
-			'page' => $p,
-			'display' => 10
-		]);
-
-
-		$list = $query->orderBy([ 'id' => SORT_DESC ])
-			->offset($offset)
-			->limit($this->page_size)
-			->all( );
-
-		$data = [];
-		if( $list ){
-			foreach ( $list as $_item ){
-				$data[] = [
-					'url' => UrlService::buildPicUrl( $bucket,$_item['file_key'] )
-				];
-			}
-		}
-		return $this->render("images",[
-			'list' => $data,
-			'pages' => $pages
-		]);
 	}
 
 }
