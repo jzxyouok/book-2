@@ -6,6 +6,7 @@ namespace app\common\services;
 use app\common\services\BaseService;
 use app\common\services\ConstantService;
 use app\models\pay\PayOrder;
+use app\models\pay\PayOrderCallbackData;
 use app\models\pay\PayOrderItem;
 use \Exception;
 
@@ -159,6 +160,7 @@ class PayOrderService extends  BaseService {
 		if(!$pay_order){
 			return self::_err("找不到订单号为".$pay_order_id."的订单！");
 		}
+
 
 		$callback_data = PayOrderCallbackData::findOne(['pay_order_id' => $pay_order_id]);
 		if(!$callback_data){

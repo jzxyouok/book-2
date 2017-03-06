@@ -222,7 +222,7 @@ class ProductController extends BaseController {
 			'pay_type' => 1,
 			'pay_source' => 2,
 			'target_type' => $target_type,
-			'note' => '购买商品',
+			'note' => '购买书籍',
 			'status' => -8
 		];
 
