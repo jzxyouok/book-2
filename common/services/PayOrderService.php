@@ -132,7 +132,7 @@ class PayOrderService extends  BaseService {
 
 		//需要做一个队列数据库了
 		QueueListService::addQueue( "pay_notice",[
-			'uid' => $pay_order_info['uid'],
+			'member_id' => $pay_order_info['member_id'],
 			'pay_order_id' => $pay_order_info['id'],
 		] );
 
