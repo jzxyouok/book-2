@@ -6,8 +6,11 @@ use app\common\services\ConstantService;
 use app\common\services\member\MemberService;
 use app\common\services\UrlService;
 use app\common\services\UtilService;
+use app\models\book\Book;
 use app\models\member\Member;
 use app\models\oauth\OauthMemberBind;
+use app\models\pay\PayOrder;
+use app\models\pay\PayOrderItem;
 use app\models\sms\SmsCaptcha;
 use app\modules\m\controllers\common\BaseController;
 
@@ -94,7 +97,47 @@ class UserController extends BaseController {
 	}
 
 	public function actionOrder(){
-		return $this->render('order');
+    	$pay_order_list = PayOrder::find()->where([ 'member_id' => $this->current_user['id'] ])
+			->orderBy([ 'id' => SORT_DESC ])->asArray()->all();
+
+    	$list = [];
+    	if( $pay_order_list ) {
+			$pay_order_items_list = PayOrderItem::find()->where(['member_id' => $this->current_user['id'], 'pay_order_id' => array_column($pay_order_list, 'id')])->asArray()->all();
+
+			$book_mapping = Book::find()->where(['id' => array_column($pay_order_items_list, 'target_id')])->indexBy('id')->all();
+
+			$pay_order_items_mapping = [];
+			foreach ($pay_order_items_list as $_pay_order_item) {
+				$tmp_book_info = $book_mapping[$_pay_order_item['target_id']];
+				if (!isset($pay_order_items_mapping[$_pay_order_item['pay_order_id']])) {
+					$pay_order_items_mapping[$_pay_order_item['pay_order_id']] = [];
+				}
+				$pay_order_items_mapping[$_pay_order_item['pay_order_id']][] = [
+					'pay_price'       => $_pay_order_item['price'],
+					'book_name'       => UtilService::encode($tmp_book_info['name']),
+					'book_main_image' => UrlService::buildPicUrl("book", $tmp_book_info['main_image']),
+				];
+			}
+
+			foreach ($pay_order_list as $_pay_order_info) {
+				$list[] = [
+					'id' => $_pay_order_info['id'],
+					'sn' => date("YmdHi", strtotime($_pay_order_info['created_time'])) . $_pay_order_info['id'],
+					'created_time' => date("Y-m-d H:i", strtotime($_pay_order_info['created_time'])),
+					'pay_order_id' => $_pay_order_info['id'],
+					'pay_price'    => $_pay_order_info['pay_price'],
+					'items' => $pay_order_items_mapping[$_pay_order_info['id']],
+					'status' => $_pay_order_info[ 'status' ],
+					'status_desc' => ConstantService::$pay_status_mapping[ $_pay_order_info[ 'status' ] ],
+					'pay_url' => UrlService::buildMUrl("/pay/buy/?pay_order_id={$_pay_order_info['id']}")
+				];
+
+			}
+		}
+
+		return $this->render('order',[
+			'list' => $list
+		]);
 	}
 
 	public function actionFav(){

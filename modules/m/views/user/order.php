@@ -3,75 +3,36 @@ use \app\common\services\UrlService;
 use \app\common\services\StaticService;
 StaticService::includeAppJsStatic( "/js/m/user/order.js",\app\assets\MAsset::className() );
 ?>
+<?php if( $list ):?>
+    <?php foreach( $list as $_item ):?>
 <div class="order_box">
 	<div class="order_header">
-		<h2>订单编号: 5566778899</h2>
-		<p>2016.11.6 23:30</p>
+		<h2>订单编号: <?=$_item['sn'];?></h2>
+		<p>下单时间：<?=$_item['created_time'];?> 状态：<?=$_item['status_desc'];?></p>
 		<span class="up_icon"></span>
 	</div>
 	<ul class="order_list">
+        <?php foreach( $_item['items'] as $_item_info ):?>
 		<li>
-			<a href="proinfo.html">
-				<i class="pic"><img src="/images/m/temp/p2.jpg" /></i>
-				<h2>韩版冬季中长款显瘦高领针织连衣裙长裙 </h2>
-				<h3>M<span>黑色</span></h3>
-				<h4>x 1</h4>
-				<b>¥ 188.00</b>
+			<a href="<?=UrlService::buildMUrl("/pay/buy",[ 'pay_order_id' => $_item['id']  ]);?>">
+				<i class="pic">
+                    <img src="<?=$_item_info['book_main_image'];?>" />
+                </i>
+				<h2><?=$_item_info['book_name'];?> </h2>
+				<h3>&nbsp;</h3>
+				<h4>&nbsp;</h4>
+				<b>¥ <?=$_item_info['pay_price'];?></b>
 			</a>
 		</li>
-		<li>
-			<a href="proinfo.html">
-				<i class="pic"><img src="/images/m/temp/p2.jpg" /></i>
-				<h2>韩版冬季中长款显瘦高领针织连衣裙长裙 </h2>
-				<h3>M<span>黑色</span></h3>
-				<h4>x 1</h4>
-				<b>¥ 188.00</b>
-			</a>
-		</li>
-		<li>
-			<a href="proinfo.html">
-				<i class="pic"><img src="/images/m/temp/p2.jpg" /></i>
-				<h2>韩版冬季中长款显瘦高领针织连衣裙长裙 </h2>
-				<h3>M<span>黑色</span></h3>
-				<h4>x 1</h4>
-				<b>¥ 188.00</b>
-			</a>
-		</li>
+		<?php endforeach;?>
 	</ul>
 </div>
-<div class="order_box">
-	<div class="order_header">
-		<h2>订单编号: 55667763663</h2>
-		<p>2016.11.16 23:50</p>
-		<span class="up_icon"></span>
-	</div>
-	<ul class="order_list">
-		<li>
-			<a href="proinfo.html">
-				<i class="pic"><img src="/images/m/temp/p2.jpg" /></i>
-				<h2>韩版冬季中长款显瘦高领针织连衣裙长裙 </h2>
-				<h3>M<span>黑色</span></h3>
-				<h4>x 1</h4>
-				<b>¥ 188.00</b>
-			</a>
-		</li>
-		<li>
-			<a href="proinfo.html">
-				<i class="pic"><img src="/images/m/temp/p2.jpg" /></i>
-				<h2>韩版冬季中长款显瘦高领针织连衣裙长裙 </h2>
-				<h3>M<span>黑色</span></h3>
-				<h4>x 1</h4>
-				<b>¥ 188.00</b>
-			</a>
-		</li>
-		<li>
-			<a href="proinfo.html">
-				<i class="pic"><img src="/images/m/temp/p2.jpg" /></i>
-				<h2>韩版冬季中长款显瘦高领针织连衣裙长裙 </h2>
-				<h3>M<span>黑色</span></h3>
-				<h4>x 1</h4>
-				<b>¥ 188.00</b>
-			</a>
-		</li>
-	</ul>
-</div>
+        <?php if( $_item['status'] == -8 ):?>
+        <div class="op_box">
+            <a style="width: 100%;"  class="red_btn" href="<?=$_item["pay_url"];?>" />微信支付</a>
+        </div>
+        <?php endif;?>
+        <?php endforeach;?>
+<?php else:?>
+    悲剧啦，连个订单都咩有了~~
+<?php endif;?>
