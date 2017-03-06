@@ -61,7 +61,7 @@ class PayController extends BaseController {
 		$wx_target->setParameter("appid",$config_weixin['appid']);
 		$wx_target->setParameter("mch_id",$config_weixin['pay']['mch_id']);
 		$wx_target->setParameter("openid",$openid);
-		$wx_target->setParameter("body","域名备案");//商品描述
+		$wx_target->setParameter("body",$pay_order_info['note']);//商品描述
 		$wx_target->setParameter("out_trade_no",$pay_order_info['order_sn'] );//商户订单号
 		$wx_target->setParameter("total_fee",$pay_order_info['pay_price'] * 100 );//总金额
 		$wx_target->setParameter("notify_url",UrlService::buildMUrl( $notify_url ) );//通知地址

@@ -29,7 +29,7 @@ var pay_buy_ops = {
                             signType: data.signType,
                             paySign: data.paySign,
                             success: function () {
-                                window.location.href = common_ops.buildMUrl("/beian/index");
+                                window.location.href = common_ops.buildMUrl("/user/index");
                             },
                             cancel: function(){
                                 alert("取消了支付~~");
