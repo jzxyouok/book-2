@@ -233,6 +233,6 @@ class ProductController extends BaseController {
 			return $this->renderJSON([],"提交失败，请重新提交".PayOrderService::getLastErrorMsg(),-1 );
 		}
 
-		return $this->renderJSON([ 'url' => UrlService::buildMUrl("/pay/buy",[ 'pay_order_id' => $ret['id'] ]) ],'下单成功,前去支付~~' );
+		return $this->renderJSON([ 'url' => UrlService::buildMUrl("/pay/buy/?pay_order_id={$ret['id']}") ],'下单成功,前去支付~~' );
 	}
 }
