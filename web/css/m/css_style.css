@@ -400,7 +400,7 @@ input[type='checkbox']:checked + label:after, input[type='checkbox']:checked + l
 .addr_op .default_set.aon .check_icon{background:url(../../images/m/gougougou@3x.png) no-repeat left center  #f20c11;background-size:contain;  border:1px solid #f20c11;}
 
 /***/
-.op_box{padding:2rem 2rem 4rem 2rem; text-align:center;}
+.op_box{padding:2rem 2rem 2rem 2rem; text-align:center;}
 .red_btn{display:inline-block; background:#f20c11;border:0; color:#fff;font-size:1.8rem;padding:1rem 3rem; line-height:24px; border-radius:8px;-webkit-border-radius:8px;}
 
 /******/

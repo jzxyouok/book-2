@@ -29,7 +29,7 @@ StaticService::includeAppJsStatic( "/js/m/product/info.js",\app\assets\MAsset::c
         <b>数量</b>
         <div class="quantity-form">
             <a class="icon_lower"></a>
-            <input type="text" name="quantity" class="input_quantity" value="1" readonly="readonly" max="<?=$info["unit"];?>"/>
+            <input type="text" name="quantity" class="input_quantity" value="1" readonly="readonly" max="<?=$info["stock"];?>"/>
             <a class="icon_plus"></a>
         </div>
     </div>
@@ -40,7 +40,7 @@ StaticService::includeAppJsStatic( "/js/m/product/info.js",\app\assets\MAsset::c
 <div class="pro_fixed clearfix">
     <a href="<?= UrlService::buildMUrl("/"); ?>"><i class="sto_icon"></i><span>首页</span></a>
     <?php if( $has_faved ):?>
-        <a class="fav" href="<?= UrlService::buildNull( ); ?>" data="<?=$info['id'];?>"><i class="keep_icon"></i><span>已收藏</span></a>
+        <a class="fav has_faved" href="<?= UrlService::buildNull( ); ?>"><i class="keep_icon"></i><span>已收藏</span></a>
     <?php else:?>
         <a class="fav" href="<?= UrlService::buildNull( ); ?>" data="<?=$info['id'];?>"><i class="keep_icon"></i><span>收藏</span></a>
     <?php endif;?>

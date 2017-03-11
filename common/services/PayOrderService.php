@@ -4,7 +4,9 @@ namespace app\common\services;
 
 
 use app\common\services\BaseService;
+use app\common\services\book\BookService;
 use app\common\services\ConstantService;
+use app\models\book\Book;
 use app\models\pay\PayOrder;
 use app\models\pay\PayOrderCallbackData;
 use app\models\pay\PayOrderItem;
@@ -37,6 +39,16 @@ class PayOrderService extends  BaseService {
 		$connection =  PayOrder::getDb();
 		$transaction = $connection->beginTransaction();
 		try{
+			//为了防止并发 库存出问题了，我们坐下select for update ,这里可以给大家演示下
+			$tmp_book_table_name = Book::tableName();
+			$tmp_book_ids = array_column( $items,'target_id' );
+			$tmp_sql = "SELECT id,stock FROM {$tmp_book_table_name} WHERE id in (".implode(",",$tmp_book_ids).") FOR UPDATE";
+			$tmp_book_list = $connection->createCommand($tmp_sql)->queryAll();
+			$tmp_book_unit_mapping = [];
+			foreach( $tmp_book_list as $_book_info ){
+				$tmp_book_unit_mapping[ $_book_info['id'] ] = $_book_info['stock'];
+			}
+
 			$model_pay_order = new PayOrder();
 			$model_pay_order->order_sn = self::generate_order_sn();
 			$model_pay_order->member_id = $member_id;
@@ -58,6 +70,16 @@ class PayOrderService extends  BaseService {
 			}
 
 			foreach($items as $_item){
+
+				$tmp_left_stock = $tmp_book_unit_mapping[ $_item['target_id'] ];
+				if( $tmp_left_stock < $_item['quantity'] ){
+					throw new Exception("购买书籍库存不够,目前剩余库存：{$tmp_left_stock},你购买:{$_item['quantity']}~~");
+				}
+
+				if( !Book::updateAll( [ 'stock' => $tmp_left_stock - $_item['quantity'] ],[ 'id' => $_item['target_id'] ] ) ){
+					throw new Exception("下单失败请重新下单~~");
+				}
+
 				$new_item = new PayOrderItem();
 				$new_item->pay_order_id = $model_pay_order->id;
 				$new_item->member_id = $member_id;
@@ -77,6 +99,8 @@ class PayOrderService extends  BaseService {
 				if( !$new_item->save(0) ){
 					throw new Exception("创建订单失败~~");
 				}
+
+				BookService::setStockChangeLog( $_item['target_id'],-$_item['quantity'],"在线购买" );
 
 			}
 

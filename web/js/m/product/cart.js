@@ -11,7 +11,6 @@ var product_cart_ops = {
                 $(this).next(".input_quantity").val(num - 1);
                 that.setItem( $(this).attr("data-book_id"), $(this).next(".input_quantity").val() )
             }
-
         });
 
         $(".quantity-form .icon_plus").click(function () {

@@ -22,12 +22,16 @@ use \app\common\services\UrlService;
                 <a href="<?=UrlService::buildMUrl("/product/info",[ 'id' => $_item['id'] ]);?>">
                     <i><img src="<?=$_item['main_image_url'];?>"  style="width: 100%;height: 200px;"/></i>
                     <span><?=$_item['name'];?></span>
-                    <b><label>月度热销500</label>¥<?=$_item['price'];?></b>
+                    <?php if( $_item['month_count'] ):?>
+                    <b><label>月度热销<?=$_item['month_count'];?></label>¥<?=$_item['price'];?></b>
+                    <?php endif;?>
                 </a>
             </li>
             <?php endforeach;?>
     </ul>
     <?php else:?>
-
+        <div class="no-data">
+            暂无图书
+        </div>
     <?php endif;?>
 </div>

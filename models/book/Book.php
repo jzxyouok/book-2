@@ -13,7 +13,7 @@ use Yii;
  * @property string $price
  * @property string $main_image
  * @property string $summary
- * @property integer $unit
+ * @property integer $stock
  * @property string $tags
  * @property integer $status
  * @property integer $month_count
@@ -39,7 +39,7 @@ class Book extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['cat_id', 'unit', 'status', 'month_count', 'total_count', 'view_count', 'comment_count'], 'integer'],
+            [['cat_id', 'stock', 'status', 'month_count', 'total_count', 'view_count', 'comment_count'], 'integer'],
             [['price'], 'number'],
             [['updated_time', 'created_time'], 'safe'],
             [['name', 'main_image'], 'string', 'max' => 100],
@@ -60,7 +60,7 @@ class Book extends \yii\db\ActiveRecord
             'price' => 'Price',
             'main_image' => 'Main Image',
             'summary' => 'Summary',
-            'unit' => 'Unit',
+            'stock' => 'Stock',
             'tags' => 'Tags',
             'status' => 'Status',
             'month_count' => 'Month Count',

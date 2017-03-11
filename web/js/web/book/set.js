@@ -64,8 +64,8 @@ var book_set_ops = {
 
             var summary  = $.trim( that.ue.getContent() );
 
-            var unit_target = $(".wrap_book_set input[name=unit]");
-            var unit = unit_target.val();
+            var stock_target = $(".wrap_book_set input[name=stock]");
+            var stock = stock_target.val();
 
             var tags_target = $(".wrap_book_set input[name=tags]");
             var tags = $.trim( tags_target.val() );
@@ -95,8 +95,8 @@ var book_set_ops = {
                 return;
             }
 
-            if( parseInt( unit ) < 1 ){
-                common_ops.tip( "请输入符合规范的库存量~~" ,unit_target );
+            if( parseInt( stock ) < 1 ){
+                common_ops.tip( "请输入符合规范的库存量~~" ,stock_target );
                 return;
             }
 
@@ -113,7 +113,7 @@ var book_set_ops = {
                 price:price,
                 main_image:$(".wrap_book_set .pic-each .del_image").attr("data"),
                 summary:summary,
-                unit:unit,
+                stock:stock,
                 tags:tags,
                 id:$(".wrap_book_set input[name=id]").val()
             };

@@ -7,8 +7,8 @@ use app\common\services\PayOrderService;
 use app\common\services\UrlService;
 use app\common\services\UtilService;
 use app\models\book\Book;
-use app\models\member\Fav;
 use app\models\member\MemberCart;
+use app\models\member\MemberFav;
 use app\modules\m\controllers\common\BaseController;
 
 class ProductController extends BaseController {
@@ -23,6 +23,7 @@ class ProductController extends BaseController {
 					'name' => UtilService::encode( $_item['name'] ),
 					'price' => UtilService::encode( $_item['price'] ),
 					'main_image_url' => UrlService::buildPicUrl("book",$_item['main_image'] ),
+					'month_count' => $_item['month_count']
 				];
 			}
 		}
@@ -45,7 +46,7 @@ class ProductController extends BaseController {
 
 		$has_faved = false;
 		if(  $this->current_user ){
-			$has_faved = Fav::find()->where([ 'member_id' => $this->current_user['id'],'book_id' => $id ])->count();
+			$has_faved = MemberFav::find()->where([ 'member_id' => $this->current_user['id'],'book_id' => $id ])->count();
 		}
 
 
@@ -60,7 +61,7 @@ class ProductController extends BaseController {
 			$list = MemberCart::find()->where([ 'member_id' => $this->current_user['id'] ])->orderBy([ 'id' => SORT_DESC ])->all();
 			$data = [];
 			if( $list ){
-				$book_mapping = DataHelper::getDicByRelateID( $list ,Book::className(),"book_id","id",[ 'name','price','main_image','unit' ] );
+				$book_mapping = DataHelper::getDicByRelateID( $list ,Book::className(),"book_id","id",[ 'name','price','main_image','stock' ] );
 				foreach( $list as $_item ){
 					$tmp_book_info = $book_mapping[ $_item['book_id'] ];
 					$data[] = [
@@ -68,7 +69,7 @@ class ProductController extends BaseController {
 						'quantity' => $_item['quantity'],
 						'book_id' => $_item['book_id'],
 						'book_price' => $tmp_book_info['price'],
-						'book_unit' => $tmp_book_info['unit'],
+						'book_stock' => $tmp_book_info['stock'],
 						'book_name' => UtilService::encode( $tmp_book_info['name'] ),
 						'book_main_image' => UrlService::buildPicUrl( "book",$tmp_book_info['main_image'] )
 					];
@@ -125,22 +126,43 @@ class ProductController extends BaseController {
 	}
 
 	public function actionFav(){
+		$act = trim( $this->post("act","") );
+		$id = intval( $this->post("id",0) );
 		$book_id = intval( $this->post("book_id",0) );
+
+		if( !in_array( $act,[ "del","set" ] ) ){
+			return $this->renderJSON( [],ConstantService::$default_syserror,-1 );
+		}
+
+		if( $act == "del" ){
+			if( !$id ){
+				return $this->renderJSON( [],ConstantService::$default_syserror,-1 );
+			}
+
+			$fav_info = MemberFav::find()->where([ 'member_id' => $this->current_user['id'],'id' => $id ])->one();
+			if( $fav_info ){
+				$fav_info->delete();
+			}
+
+			return $this->renderJSON( [],"操作成功~~" );
+		}
+
+
 		if( !$book_id ){
 			return $this->renderJSON( [],ConstantService::$default_syserror,-1 );
 		}
 
-		$has_faved = Fav::find()->where([ 'member_id' => $this->current_user['id'],'book_id' => $book_id ])->count();
+		$has_faved = MemberFav::find()->where([ 'member_id' => $this->current_user['id'],'book_id' => $book_id ])->count();
 		if( $has_faved ){
 			return $this->renderJSON( [],"已收藏~~",-1 );
 		}
 
-		$model_fav = new Fav();
+		$model_fav = new MemberFav();
 		$model_fav->member_id = $this->current_user['id'];
 		$model_fav->book_id = $book_id;
 		$model_fav->created_time = date("Y-m-d H:i:s");
 		$model_fav->save( 0 );
-		return $this->renderJSON( [],"操作成功~~" );
+		return $this->renderJSON( [],"收藏成功~~" );
 	}
 
 	public function actionOrder(){
@@ -230,7 +252,7 @@ class ProductController extends BaseController {
 		$ret = PayOrderService::createPayOrder( $this->current_user['id'],$items,$params );
 
 		if( !$ret ){
-			return $this->renderJSON([],"提交失败，请重新提交".PayOrderService::getLastErrorMsg(),-1 );
+			return $this->renderJSON([],"提交失败，失败原因：".PayOrderService::getLastErrorMsg(),-1 );
 		}
 
 		return $this->renderJSON([ 'url' => UrlService::buildMUrl("/pay/buy/?pay_order_id={$ret['id']}") ],'下单成功,前去支付~~' );

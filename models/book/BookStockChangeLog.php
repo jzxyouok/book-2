@@ -1,25 +1,27 @@
 <?php
 
-namespace app\models\member;
+namespace app\models\book;
 
 use Yii;
 
 /**
- * This is the model class for table "fav".
+ * This is the model class for table "book_stock_change_log".
  *
  * @property integer $id
- * @property integer $member_id
  * @property integer $book_id
+ * @property integer $unit
+ * @property integer $total_stock
+ * @property string $note
  * @property string $created_time
  */
-class Fav extends \yii\db\ActiveRecord
+class BookStockChangeLog extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'fav';
+        return 'book_stock_change_log';
     }
 
     /**
@@ -28,8 +30,10 @@ class Fav extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['member_id', 'book_id'], 'integer'],
+            [['book_id'], 'required'],
+            [['book_id', 'unit', 'total_stock'], 'integer'],
             [['created_time'], 'safe'],
+            [['note'], 'string', 'max' => 100],
         ];
     }
 
@@ -40,8 +44,10 @@ class Fav extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'member_id' => 'Member ID',
             'book_id' => 'Book ID',
+            'unit' => 'Unit',
+            'total_stock' => 'Total Stock',
+            'note' => 'Note',
             'created_time' => 'Created Time',
         ];
     }

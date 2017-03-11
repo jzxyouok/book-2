@@ -27,9 +27,6 @@ class SmsService {
 
 
 	public static function doSend($mobile, $content,$channel = 'default',$ip='',$sign='') {
-		if( in_array($ip,['223.73.110.248' ] ) ) {
-			return false;
-		}
 
 		if( !self::recent_history_check($ip) ) {
 			return false;
@@ -40,22 +37,12 @@ class SmsService {
 			return false;
 		}
 
-		$sign = $sign ? $sign : '企业管家';
+		$sign = $sign ? $sign : '默认签名';
 		$sms_config = \Yii::$app->params['sms'];
 		$ret = "success";
 		switch( $channel ) {
-			case "default":
+			case "default"://对接不同的短信供应商平台
 			default:
-				$data = [
-					'userid'    =>  $sms_config[ $channel ]['userid'],
-					"account"   =>  $sms_config[ $channel ]['account'],
-					"password"  =>  $sms_config[ $channel ]['password'],
-					"mobile"    =>  $mobile,//发信发送的目的号码.多个号码之间用半角逗号隔开
-					"content"   =>  $content."【{$sign}】",
-					"action"    =>  "send"
-				];
-				$ret = HttpClient::post("http://114.55.149.72:8888/sms.aspx",$data);
-
 				break;
 		}
 

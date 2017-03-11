@@ -67,7 +67,7 @@ StaticService::includeAppJsStatic( "/js/web/book/index.js",\app\assets\WebAsset:
                         <td><?= $_item['name'];?></td>
                         <td><?= $_item['cat_name'] ;?></td>
                         <td><?= $_item['price'] ;?></td>
-                        <td><?= $_item['unit'] ;?></td>
+                        <td><?= $_item['stock'] ;?></td>
                         <td><?= $_item['tags'];?></td>
                         <td>
                             <a  href="<?=UrlService::buildWebUrl("/book/info",[ 'id' => $_item['id'] ] );?>">

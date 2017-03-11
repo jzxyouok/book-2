@@ -27,12 +27,15 @@ StaticService::includeAppJsStatic( "/js/m/user/order.js",\app\assets\MAsset::cla
 		<?php endforeach;?>
 	</ul>
 </div>
-        <?php if( $_item['status'] == -8 ):?>
-        <div class="op_box">
-            <a style="width: 100%;"  class="red_btn" href="<?=$_item["pay_url"];?>" />微信支付</a>
-        </div>
-        <?php endif;?>
-        <?php endforeach;?>
+    <?php if( $_item['status'] == -8 ):?>
+    <div class="op_box" style="margin: 2rem 0 2rem 0;">
+        <a style="width: 50%;display: block;float: left;text-align: left;" class="close" data="<?=$_item['id'];?>" href="<?=UrlService::buildNull();?>" />取消订单</a>
+        <a style="width: 50%;display: block;float: right;text-align: right;"   href="<?=$_item["pay_url"];?>" />微信支付</a>
+    </div>
+    <?php else:?>
+    <div style="padding-bottom: 2rem;">&nbsp;</div>
+    <?php endif;?>
+<?php endforeach;?>
 <?php else:?>
     悲剧啦，连个订单都咩有了~~
 <?php endif;?>

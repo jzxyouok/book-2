@@ -8,7 +8,9 @@ StaticService::includeAppJsStatic( "/js/m/product/cart.js",\app\assets\MAsset::c
 	<ul class="order_pro_list">
         <?php foreach( $list as $_item ):?>
 		<li>
-			<i><input id='check-1' type="checkbox" name='check-1' /><label for="check-1">&nbsp;</label></i>
+			<i><input id='cart_<?=$_item['id'];?>' type="checkbox" name='cart' />
+                <label for="cart_<?=$_item['id'];?>">&nbsp;</label>
+            </i>
 			<a href="<?=UrlService::buildMUrl("/product/info",[ 'id' => $_item['book_id'] ]);?>" class="pic" >
                 <img src="<?=$_item["book_main_image"];?>" style="height: 100px;width: 100px;"/>
             </a>
@@ -18,7 +20,7 @@ StaticService::includeAppJsStatic( "/js/m/product/cart.js",\app\assets\MAsset::c
 				<span class="delC_icon" data="<?=$_item['id'];?>" data-book_id="<?=$_item['book_id'];?>"></span>
 				<div class="quantity-form">
 					<a class="icon_lower" data-book_id="<?=$_item['book_id'];?>" ></a>
-					<input type="text" name="quantity" class="input_quantity" value="<?=$_item['quantity'];?>" readonly="readonly" max="<?=$_item['book_unit'];?>" />
+					<input type="text" name="quantity" class="input_quantity" value="<?=$_item['quantity'];?>" readonly="readonly" max="<?=$_item['book_stock'];?>" />
 					<a class="icon_plus" data-book_id="<?=$_item['book_id'];?>"></a>
 				</div>
 			</div>

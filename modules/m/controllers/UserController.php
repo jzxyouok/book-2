@@ -3,11 +3,13 @@
 namespace app\modules\m\controllers;
 
 use app\common\services\ConstantService;
+use app\common\services\DataHelper;
 use app\common\services\member\MemberService;
 use app\common\services\UrlService;
 use app\common\services\UtilService;
 use app\models\book\Book;
 use app\models\member\Member;
+use app\models\member\MemberFav;
 use app\models\oauth\OauthMemberBind;
 use app\models\pay\PayOrder;
 use app\models\pay\PayOrderItem;
@@ -141,7 +143,24 @@ class UserController extends BaseController {
 	}
 
 	public function actionFav(){
-		return $this->render('fav');
+		$list = MemberFav::find()->where([ 'member_id' => $this->current_user['id'] ])->orderBy([ 'id' => SORT_DESC ])->all();
+		$data = [];
+		if( $list ){
+			$book_mapping = DataHelper::getDicByRelateID( $list ,Book::className(),"book_id","id",[ 'name','price','main_image','stock' ] );
+			foreach( $list as $_item ){
+				$tmp_book_info = $book_mapping[ $_item['book_id'] ];
+				$data[] = [
+					'id' => $_item['id'],
+					'book_id' => $_item['book_id'],
+					'book_price' => $tmp_book_info['price'],
+					'book_name' => UtilService::encode( $tmp_book_info['name'] ),
+					'book_main_image' => UrlService::buildPicUrl( "book",$tmp_book_info['main_image'] )
+				];
+			}
+		}
+		return $this->render("fav",[
+			'list' => $data
+		]);
 	}
 
 	public function actionComment(){

@@ -5,11 +5,17 @@ var product_info_ops = {
     },
     eventBind:function(){
         $(".fav").click( function(){
+
+            if( $(this).hasClass("has_faved") ){
+                return false;
+            }
+
             $.ajax({
                 url:common_ops.buildMUrl("/product/fav"),
                 type:'POST',
                 data:{
-                    book_id:$(this).attr("data")
+                    book_id:$(this).attr("data"),
+                    act:'set'
                 },
                 dataType:'json',
                 success:function( res ){
@@ -42,7 +48,7 @@ var product_info_ops = {
         });
 
         $(".order_now_btn").click( function(){
-            window.location.href = common_ops.buildMUrl("/product/order",{ 'id':$(this).attr("data") } )
+            window.location.href = common_ops.buildMUrl("/product/order",{ 'id':$(this).attr("data"), quantity:$(".quantity-form input[name=quantity]").val() } )
         });
 
         //加减效果 start

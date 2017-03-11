@@ -83,7 +83,7 @@ StaticService::includeAppJsStatic( "/js/web/book/set.js",\app\assets\WebAsset::c
                                 <i class="fa fa-minus"></i>
                             </a>
                         </div>
-                        <input type="text" name="unit" class="form-control" value="<?=$info?$info['unit']:1;?>">
+                        <input type="text" name="stock" class="form-control" value="<?=$info?$info['stock']:1;?>">
                         <div class="input-group-addon hidden">
                             <a href="<?=UrlService::buildNull();?>">
                                 <i class="fa fa-plus"></i>

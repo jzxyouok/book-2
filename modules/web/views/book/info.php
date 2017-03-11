@@ -28,7 +28,7 @@ use \app\common\services\ConstantService;
 			<div class="col-lg-12">
 				<p class="m-t">图书名称：<?=UtilService::encode( $info['name'] ) ;?></p>
 				<p>图书售价：<?=UtilService::encode( $info['price'] ) ;?></p>
-				<p>库存总量：<?=UtilService::encode( $info['unit'] ) ;?></p>
+				<p>库存总量：<?=UtilService::encode( $info['stock'] ) ;?></p>
 				<p>图书标签：<?=UtilService::encode( $info['tags'] ) ;?></p>
 				<p>封面图：<img src="<?=UrlService::buildPicUrl("book",$info['main_image']);?>" style="width: 50px;height: 50px;"/> </p>
 				<p>图书描述：<?=$info['summary'] ;?></p>

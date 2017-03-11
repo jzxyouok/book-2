@@ -4,8 +4,9 @@ namespace app\commands\queue;
 
 
 
+
+use app\common\services\SmsService;
 use app\models\sms\SmsQueue;
-use common\services\SmsService;
 
 class SmsController extends  \app\commands\BaseController {
 	/**

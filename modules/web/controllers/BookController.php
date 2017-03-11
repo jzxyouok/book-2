@@ -2,6 +2,7 @@
 
 namespace app\modules\web\controllers;
 
+use app\common\services\book\BookService;
 use app\common\services\ConstantService;
 use app\common\services\DataHelper;
 use app\common\services\UrlService;
@@ -62,7 +63,7 @@ class BookController extends BaseController{
 					'id' => $_item['id'],
 					'name' => UtilService::encode( $_item['name'] ),
 					'price' => UtilService::encode( $_item['price'] ),
-					'unit' => UtilService::encode( $_item['unit'] ),
+					'stock' => UtilService::encode( $_item['stock'] ),
 					'tags' => UtilService::encode( $_item['tags'] ),
 					'status' => UtilService::encode( $_item['status'] ),
 					'cat_name' => $tmp_cat_info?UtilService::encode( $tmp_cat_info['name'] ):''
@@ -122,7 +123,7 @@ class BookController extends BaseController{
 		$price = floatval( $this->post("price",0) );
 		$main_image = trim( $this->post("main_image","") );
 		$summary = trim( $this->post("summary","") );
-		$unit = intval( $this->post("unit",0) );
+		$stock = intval( $this->post("stock",0) );
 		$tags = trim( $this->post("tags","") );
 		$date_now = date("Y-m-d H:i:s");
 
@@ -146,7 +147,7 @@ class BookController extends BaseController{
 			return $this->renderJSON([],"请输入图书描述，并不能少于10个字符~~",-1);
 		}
 
-		if( $unit < 1 ){
+		if( $stock < 1 ){
 			return $this->renderJSON([],"请输入符合规范的库存量~~",-1);
 		}
 
@@ -167,15 +168,19 @@ class BookController extends BaseController{
 			$model_book->created_time = $date_now;
 		}
 
+		$before_stock = $model_book->stock;
+
 		$model_book->cat_id = $cat_id;
 		$model_book->name = $name;
 		$model_book->price = $price;
 		$model_book->main_image = $main_image;
 		$model_book->summary = $summary;
-		$model_book->unit = $unit;
+		$model_book->stock = $stock;
 		$model_book->tags = $tags;
 		$model_book->updated_time = $date_now;
-		$model_book->save( 0 );
+		if( $model_book->save( 0 ) ){
+			BookService::setStockChangeLog( $model_book->id,( $model_book->stock - $before_stock ) );
+		}
 		return $this->renderJSON([],"操作成功~~");
 	}
 
