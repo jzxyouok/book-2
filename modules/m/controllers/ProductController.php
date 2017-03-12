@@ -7,6 +7,8 @@ use app\common\services\PayOrderService;
 use app\common\services\UrlService;
 use app\common\services\UtilService;
 use app\models\book\Book;
+use app\models\City;
+use app\models\member\MemberAddress;
 use app\models\member\MemberCart;
 use app\models\member\MemberFav;
 use app\modules\m\controllers\common\BaseController;
@@ -182,7 +184,7 @@ class ProductController extends BaseController {
 						'price' => $book_info['price'],
 						'main_image' =>  UrlService::buildPicUrl( "book",$book_info['main_image'])
 					];
-					$total_pay_money += $book_info['price'];
+					$total_pay_money += $book_info['price'] * $quantity;
 				}
 			}else{//从购物车中获取商品信息
 				$cart_list = MemberCart::find()->where([ 'member_id' => $this->current_user['id'] ])->all();
@@ -202,16 +204,48 @@ class ProductController extends BaseController {
 				}
 			}
 
+
+			$address_list = MemberAddress::find()->where([ 'member_id' => $this->current_user['id'],'status' => 1 ])
+				->orderBy([ 'is_default' => SORT_DESC,'id' => SORT_DESC ])->asArray()->all();
+			$data_address = [];
+			if( $address_list ){
+				$area_mapping = DataHelper::getDicByRelateID( $address_list,City::className(),"area_id","id",[ 'province','city','area' ] );
+				foreach( $address_list as $_item){
+					$tmp_area_info = $area_mapping[ $_item['area_id'] ];
+					$tmp_area = $tmp_area_info['province'].$tmp_area_info['city'];
+					if( $_item['province_id'] != $_item['city_id'] ){
+						$tmp_area .= $tmp_area_info['area'];
+					}
+
+					$data_address[] = [
+						'id' => $_item['id'],
+						'is_default' => $_item['is_default'],
+						'nickname' => UtilService::encode( $_item['nickname'] ),
+						'mobile' => UtilService::encode( $_item['mobile'] ),
+						'address' => $tmp_area.UtilService::encode( $_item['address'] ),
+					];
+				}
+			}
+
 			return $this->render("order",[
 				'product_list' => $product_list,
-				'total_pay_money' => sprintf("%.2f",$total_pay_money)
+				'total_pay_money' => sprintf("%.2f",$total_pay_money),
+				'address_list' => $data_address
 			]);
 		}
 
 		$product_items = $this->post("product_items",[]);
+		$address_id = intval( $this->post("address_id",0 ) );
+
+		if( !$address_id ){
+			return $this->renderJSON([],"请选择收货地址~~",-1);
+		}
+
 		if( !$product_items ){
 			return $this->renderJSON([],"请选择商品之后在提交~~",-1);
 		}
+
+
 
 		$book_ids = [];
 		foreach( $product_items as $_item ) {
@@ -245,7 +279,8 @@ class ProductController extends BaseController {
 			'pay_source' => 2,
 			'target_type' => $target_type,
 			'note' => '购买书籍',
-			'status' => -8
+			'status' => -8,
+			'express_address_id' => $address_id
 		];
 
 

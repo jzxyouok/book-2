@@ -10,7 +10,19 @@ StaticService::includeAppJsStatic( "/js/m/product/order.js",\app\assets\MAsset::
     <div class="order_header">
         <h2>确认收货地址</h2>
     </div>
+    <?php if( $address_list ):?>
+    <ul class="address_list">
+        <?php foreach( $address_list as $_idx => $_address_info  ):?>
+        <li style="padding: 5px 5px;">
+            <label>
+                <input style="display: inline;" type="radio" name="address_id" value="<?=$_address_info['id'];?>" <?php if($_address_info['is_default'] || $_idx == 0 ):?> checked <?php endif;?>  >
+				<?=$_address_info['address'];?>（<?=$_address_info['nickname'];?>收）<?=$_address_info['mobile'];?>
+            </label>
 
+        </li>
+        <?php endforeach;?>
+    </ul>
+    <?php endif;?>
 
 	<div class="order_header">
 		<h2>确认订单信息</h2>
@@ -23,8 +35,8 @@ StaticService::includeAppJsStatic( "/js/m/product/order.js",\app\assets\MAsset::
 				<i class="pic">
 					<img src="<?=$_item["main_image"];?>" style="width: 100px;height: 100px;"/>
 				</i>
-				<h2><?=$_item['name'];?> </h2>
-				<h4>x <?=$_item['quantity'];?></h4>
+				<h2><?=$_item['name'];?> x <?=$_item['quantity'];?></h2>
+				<h4>&nbsp;</h4>
 				<b>¥ <?=$_item['price'];?></b>
 			</a>
 		</li>

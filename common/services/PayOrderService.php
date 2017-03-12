@@ -164,6 +164,39 @@ class PayOrderService extends  BaseService {
 
 	}
 
+	public static function closeOrder( $pay_order_id = 0 ){
+		$date_now = date("Y-m-d H:i:s");
+		$pay_order_info = PayOrder::find()->where([ 'id' => $pay_order_id,'status' => -8 ])->one();
+		if( !$pay_order_info ){
+			return self::_err("指定订单不存在");
+		}
+
+		$pay_order_items = PayOrderItem::findAll( [ 'pay_order_id' => $pay_order_id ] );
+
+		if( $pay_order_items ){
+			foreach( $pay_order_items as $_order_item_info ){
+
+				switch ( $_order_item_info['target_type'] ){
+					case 1:
+						$tmp_book_info = Book::find()->where([ 'id' => $_order_item_info['target_id'] ])->one();
+						if( $tmp_book_info ){
+							$tmp_book_info->stock += $_order_item_info['quantity'];
+							$tmp_book_info->updated_time = $date_now;
+							$tmp_book_info->update( 0 );
+							BookService::setStockChangeLog( $_order_item_info['target_id'],$_order_item_info['quantity'],"订单过期释放库存" );
+						}
+						break;
+				}
+
+
+			}
+		}
+
+		$pay_order_info->status = 0;
+		$pay_order_info->updated_time = $date_now;
+		return $pay_order_info->update(0);
+	}
+
 	public static function generate_order_sn(){
 		do{
 			$sn = md5(microtime(1).rand(0,9999999).'!@%egg#$');

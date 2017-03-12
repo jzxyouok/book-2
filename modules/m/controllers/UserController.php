@@ -8,13 +8,16 @@ use app\common\services\member\MemberService;
 use app\common\services\UrlService;
 use app\common\services\UtilService;
 use app\models\book\Book;
+use app\models\City;
 use app\models\member\Member;
+use app\models\member\MemberAddress;
 use app\models\member\MemberFav;
 use app\models\oauth\OauthMemberBind;
 use app\models\pay\PayOrder;
 use app\models\pay\PayOrderItem;
 use app\models\sms\SmsCaptcha;
 use app\modules\m\controllers\common\BaseController;
+use app\common\services\AreaService;
 
 
 class UserController extends BaseController {
@@ -168,11 +171,138 @@ class UserController extends BaseController {
 	}
 
 	public function actionAddress(){
-		return $this->render('address');
+
+		$list = MemberAddress::find()->where([ 'member_id' => $this->current_user['id'],'status' => 1 ])
+			->orderBy([ 'is_default' => SORT_DESC,'id' => SORT_DESC ])->asArray()->all();
+		$data = [];
+		if( $list ){
+			$area_mapping = DataHelper::getDicByRelateID( $list,City::className(),"area_id","id",[ 'province','city','area' ] );
+			foreach( $list as $_item){
+				$tmp_area_info = $area_mapping[ $_item['area_id'] ];
+				$tmp_area = $tmp_area_info['province'].$tmp_area_info['city'];
+				if( $_item['province_id'] != $_item['city_id'] ){
+					$tmp_area .= $tmp_area_info['area'];
+				}
+
+				$data[] = [
+					'id' => $_item['id'],
+					'is_default' => $_item['is_default'],
+					'nickname' => UtilService::encode( $_item['nickname'] ),
+					'mobile' => UtilService::encode( $_item['mobile'] ),
+					'address' => $tmp_area.UtilService::encode( $_item['address'] ),
+				];
+			}
+		}
+		return $this->render('address',[
+			'list' => $data
+		]);
 	}
 
 	public function actionAddress_set(){
-		return $this->render('address_set');
+		if( \Yii::$app->request->isGet ){
+			$id = intval( $this->get("id",0) );
+			$info = [];
+			if( $id ){
+				$info = MemberAddress::find()->where([ 'id' => $id,'member_id' => $this->current_user['id'] ])->one();
+			}
+			return $this->render('address_set',[
+				"province_mapping" => AreaService::getProvinceMapping(),
+				'info' => $info
+			]);
+		}
+
+		$id = intval( $this->post("id",0) );
+		$nickname = trim( $this->post("nickname","") );
+		$mobile = trim( $this->post("mobile","") );
+		$province_id = intval( $this->post("province_id",0) );
+		$city_id = intval( $this->post("city_id",0) );
+		$area_id = intval( $this->post("area_id",0) );
+		$address = trim( $this->post("address","" ) );
+		$date_now = date("Y-m-d H:i:s");
+
+		if( mb_strlen( $nickname,"utf-8" ) < 1 ){
+			return $this->renderJSON([],"请输入符合规范的收货人姓名~~",-1);
+		}
+
+		if( !preg_match("/^[1-9]\d{10}$/",$mobile) ){
+			return $this->renderJSON([],"请输入符合规范的收货人手机号码~~",-1);
+		}
+
+		if( $province_id < 1 ){
+			return $this->renderJSON([],"请选择省~~",-1);
+		}
+
+		if( $city_id < 1 ){
+			return $this->renderJSON([],"请选择市~~",-1);
+		}
+
+		if( $area_id < 1 ){
+			return $this->renderJSON([],"请选择区~~",-1);
+		}
+
+		if( mb_strlen( $address,"utf-8" ) < 3 ){
+			return $this->renderJSON([],"请输入符合规范的收货人详细地址~~",-1);
+		}
+
+		$info = [];
+		if( $id ){
+			$info = MemberAddress::find()->where([ 'id' => $id,'member_id' => $this->current_user['id'] ])->one();
+		}
+
+		if( $info ){
+			$model_address = $info;
+		}else{
+			$model_address = new MemberAddress();
+			$model_address->member_id = $this->current_user['id'];
+			$model_address->status = 1;
+			$model_address->created_time = $date_now;
+		}
+
+		$model_address->nickname = $nickname;
+		$model_address->mobile = $mobile;
+		$model_address->province_id = $province_id;
+		$model_address->city_id = $city_id;
+		$model_address->area_id = $area_id;
+		$model_address->address = $address;
+		$model_address->updated_time = $date_now;
+		$model_address->save( 0 );
+
+		return $this->renderJSON([],"操作成功");
+	}
+
+	public function actionAddress_ops(){
+		$act = trim( $this->post("act","") );
+		$id = intval( $this->post("id",0) );
+
+		if( !in_array( $act,[ "del","set_default" ] ) ){
+			return $this->renderJSON( [],ConstantService::$default_syserror,-1 );
+		}
+
+		if( !$id ){
+			return $this->renderJSON( [],ConstantService::$default_syserror,-1 );
+		}
+
+		$info = MemberAddress::find()->where([ 'member_id' => $this->current_user['id'],'id' => $id ])->one();
+		switch ( $act ){
+			case "del":
+				$info->is_default = 0;
+				$info->status = 0;
+				break;
+			case "set_default":
+				$info->is_default = 1;
+				break;
+		}
+
+		$info->updated_time = date("Y-m-d H:i:s");
+		$info->update( 0 );
+
+		if( $act == "set_default" ){
+			MemberAddress::updateAll(
+				[ 'is_default' => 0  ],
+				[ 'AND',[ 'member_id' => $this->current_user['id'],'status' => 1 ] ,[ '!=','id',$id ] ]
+			);
+		}
+		return $this->renderJSON( [],"操作成功~~" );
 	}
 
 }

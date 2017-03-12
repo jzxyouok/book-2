@@ -8,7 +8,8 @@ StaticService::includeAppJsStatic( "/js/m/product/cart.js",\app\assets\MAsset::c
 	<ul class="order_pro_list">
         <?php foreach( $list as $_item ):?>
 		<li>
-			<i><input id='cart_<?=$_item['id'];?>' type="checkbox" name='cart' />
+			<i>
+                <input id='cart_<?=$_item['id'];?>' type="checkbox" name='cart' data-price="<?=$_item["book_price"];?>" />
                 <label for="cart_<?=$_item['id'];?>">&nbsp;</label>
             </i>
 			<a href="<?=UrlService::buildMUrl("/product/info",[ 'id' => $_item['book_id'] ]);?>" class="pic" >
@@ -28,11 +29,16 @@ StaticService::includeAppJsStatic( "/js/m/product/cart.js",\app\assets\MAsset::c
         <?php endforeach;?>
 	</ul>
     <?php else:?>
+    <div class="no-data">
         好可怜，购物车空空的
+    </div>
     <?php endif;?>
 </div>
 <div class="cart_fixed">
-	<a href="#" class="billing_btn">结算</a>
-	<span><input id='check-0' type="checkbox" name='check-1'  /><label for="check-0">全选</label></span>
-	<b>合计：<strong>¥</strong><font id="price">--</font></b>
+	<a href="<?=UrlService::buildNull();?>" class="billing_btn">结算</a>
+	<span>
+        <input id='check-0' type="checkbox" name='cart'  />
+        <label for="check-0">全选</label>
+    </span>
+	<b>合计：<strong>¥</strong><font id="price">0.00</font></b>
 </div>

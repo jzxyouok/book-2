@@ -4,8 +4,8 @@ var user_order_ops = {
         this.eventBind();
     },
     eventBind:function(){
-        $(".order_box").click(function () {
-            $(this).find(".order_list").toggle();
+        $(".order_header").click(function () {
+            $(this).next().toggle();
         });
 
         $(".close").click( function() {

@@ -2,6 +2,7 @@
 
 namespace app\modules\m\controllers;
 use app\common\services\ConstantService;
+use app\common\services\PayOrderService;
 use app\models\pay\PayOrder;
 use app\modules\m\controllers\common\BaseController;
 
@@ -32,9 +33,7 @@ class OrderController extends BaseController {
 		switch ( $act ){
 			case "close":
 				if( $pay_order_info['status'] == -8  ){
-					$pay_order_info->status = 0;
-					$pay_order_info->updated_time = $date_now;
-					$pay_order_info->update( 0 );
+					PayOrderService::closeOrder( $pay_order_info['id'] );
 				}
 				break;
 		}

@@ -33,7 +33,7 @@ StaticService::includeAppJsStatic( "/js/m/user/order.js",\app\assets\MAsset::cla
         <a style="width: 50%;display: block;float: right;text-align: right;"   href="<?=$_item["pay_url"];?>" />微信支付</a>
     </div>
     <?php else:?>
-    <div style="padding-bottom: 2rem;">&nbsp;</div>
+    <div style="padding-bottom: 1rem;">&nbsp;</div>
     <?php endif;?>
 <?php endforeach;?>
 <?php else:?>

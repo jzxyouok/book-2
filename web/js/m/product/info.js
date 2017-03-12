@@ -33,6 +33,7 @@ var product_info_ops = {
                 url:common_ops.buildMUrl("/product/cart"),
                 type:'POST',
                 data:{
+                    act:'set',
                     book_id:$(this).attr("data"),
                     quantity:$(".quantity-form input[name=quantity]").val()
                 },

@@ -11,6 +11,7 @@ var product_cart_ops = {
                 $(this).next(".input_quantity").val(num - 1);
                 that.setItem( $(this).attr("data-book_id"), $(this).next(".input_quantity").val() )
             }
+            that.cal_price();
         });
 
         $(".quantity-form .icon_plus").click(function () {
@@ -20,6 +21,7 @@ var product_cart_ops = {
                 $(this).prev(".input_quantity").val(num + 1);
                 that.setItem( $(this).attr("data-book_id"), $(this).prev(".input_quantity").val() )
             }
+            that.cal_price();
 
         });
 
@@ -27,11 +29,23 @@ var product_cart_ops = {
         $(".cart_fixed input[type='checkbox']").click(function () {
             var name = $(this).attr("name");
             $(".order_pro_box input[name='" + name + "']").prop('checked', $(this).prop('checked'));
+            that.cal_price();
+        });
+
+        $(".order_pro_list li input[name=cart]").click( function(){
+
+            if( $(".order_pro_list li input[name=cart]:checked").size() == $(".order_pro_list li input[name=cart]").size() ){
+                $(".cart_fixed input[type='checkbox']").prop("checked",true);
+            }else{
+                $(".cart_fixed input[type='checkbox']").prop("checked",false);
+            }
+
+            that.cal_price();
         });
 
         //删除
         $(".delC_icon").click(function () {
-            $(this).parent().parent().remove();
+
             $.ajax({
                 url:common_ops.buildMUrl("/product/cart"),
                 type:'POST',
@@ -44,9 +58,10 @@ var product_cart_ops = {
                     if( res.code != 200 ){
                         alert( res.msg );
                     }
-
                 }
             });
+            $(this).parent().parent().remove();
+            that.cal_price();
         });
     },
     setItem:function( book_id,quantity ){
@@ -66,6 +81,15 @@ var product_cart_ops = {
 
             }
         });
+    },
+    cal_price:function(){
+        var pay_price = 0;
+        $(".order_pro_list li input[name=cart]:checked").each( function(){
+            var tmp_price = parseFloat( $(this).attr("data-price") );
+            var tmp_quantity = $(this).parents("li").find(".input_quantity").val();
+            pay_price += tmp_price * parseInt( tmp_quantity );
+        });
+        $(".cart_fixed #price").html( pay_price.toFixed(2) );
     }
 };
 

@@ -21,7 +21,7 @@ var common_ops = {
         }
 
         if(  pathname.indexOf("/m/user") > -1  ){
-            nav_name = "brand";
+            nav_name = "user";
         }
 
         if( nav_name == null ){
@@ -32,6 +32,18 @@ var common_ops = {
     },
     buildMUrl:function( path ,params){
         var url =   "/m" + path;
+        var _paramUrl = '';
+        if( params ){
+            _paramUrl = Object.keys(params).map(function(k) {
+                return [encodeURIComponent(k), encodeURIComponent(params[k])].join("=");
+            }).join('&');
+            _paramUrl = "?"+_paramUrl;
+        }
+        return url + _paramUrl
+
+    },
+    buildWwwUrl:function( path ,params){
+        var url =    path;
         var _paramUrl = '';
         if( params ){
             _paramUrl = Object.keys(params).map(function(k) {

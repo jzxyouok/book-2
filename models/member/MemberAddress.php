@@ -9,6 +9,8 @@ use Yii;
  *
  * @property integer $id
  * @property integer $member_id
+ * @property string $nickname
+ * @property string $mobile
  * @property integer $province_id
  * @property integer $city_id
  * @property integer $area_id
@@ -36,6 +38,8 @@ class MemberAddress extends \yii\db\ActiveRecord
         return [
             [['member_id', 'province_id', 'city_id', 'area_id', 'is_default', 'status'], 'integer'],
             [['updated_time', 'created_time'], 'safe'],
+            [['nickname'], 'string', 'max' => 20],
+            [['mobile'], 'string', 'max' => 11],
             [['address'], 'string', 'max' => 100],
         ];
     }
@@ -48,6 +52,8 @@ class MemberAddress extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'member_id' => 'Member ID',
+            'nickname' => 'Nickname',
+            'mobile' => 'Mobile',
             'province_id' => 'Province ID',
             'city_id' => 'City ID',
             'area_id' => 'Area ID',
