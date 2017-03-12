@@ -52,5 +52,8 @@ StaticService::includeAppJsStatic( "/js/m/user/order.js",\app\assets\MAsset::cla
 
 <?php endforeach;?>
 <?php else:?>
-    悲剧啦，连个订单都咩有了~~
+    <div class="no-data">
+        悲剧啦，连个订单都咩有了~~
+    </div>
+
 <?php endif;?>
