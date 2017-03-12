@@ -9,6 +9,11 @@ var user_order_ops = {
         });
 
         $(".close").click( function() {
+
+            if( !confirm("确认取消订单？") ){
+                return;
+            }
+
             var btn_target = $(this);
             if( btn_target.hasClass("disabled") ){
                 alert("正在处理!!请不要重复提交");
