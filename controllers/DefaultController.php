@@ -80,6 +80,6 @@ class DefaultController extends BaseWebController {
 	}
 
 	public function actionTest(){
-		PayOrderService::orderSuccess( 30 );
+		//PayOrderService::orderSuccess( 30 );
 	}
 }
