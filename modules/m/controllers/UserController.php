@@ -11,6 +11,7 @@ use app\models\book\Book;
 use app\models\City;
 use app\models\member\Member;
 use app\models\member\MemberAddress;
+use app\models\member\MemberComments;
 use app\models\member\MemberFav;
 use app\models\oauth\OauthMemberBind;
 use app\models\pay\PayOrder;
@@ -127,12 +128,15 @@ class UserController extends BaseController {
 			foreach ($pay_order_list as $_pay_order_info) {
 				$list[] = [
 					'id' => $_pay_order_info['id'],
-					'sn' => date("YmdHi", strtotime($_pay_order_info['created_time'])) . $_pay_order_info['id'],
+					'sn' => date("Ymd", strtotime($_pay_order_info['created_time'])) . $_pay_order_info['id'],
 					'created_time' => date("Y-m-d H:i", strtotime($_pay_order_info['created_time'])),
 					'pay_order_id' => $_pay_order_info['id'],
 					'pay_price'    => $_pay_order_info['pay_price'],
 					'items' => $pay_order_items_mapping[$_pay_order_info['id']],
 					'status' => $_pay_order_info[ 'status' ],
+					'express_status' => $_pay_order_info[ 'express_status' ],
+					'express_info' => $_pay_order_info[ 'express_info' ],
+					'express_status_desc' => ConstantService::$express_status_mapping_for_member[ $_pay_order_info[ 'express_status' ] ],
 					'status_desc' => ConstantService::$pay_status_mapping[ $_pay_order_info[ 'status' ] ],
 					'pay_url' => UrlService::buildMUrl("/pay/buy/?pay_order_id={$_pay_order_info['id']}")
 				];
@@ -164,10 +168,6 @@ class UserController extends BaseController {
 		return $this->render("fav",[
 			'list' => $data
 		]);
-	}
-
-	public function actionComment(){
-		return $this->render('comment');
 	}
 
 	public function actionAddress(){
@@ -303,6 +303,68 @@ class UserController extends BaseController {
 			);
 		}
 		return $this->renderJSON( [],"操作成功~~" );
+	}
+
+	public function actionComment(){
+		$list = MemberComments::find()->where([ 'member_id' => $this->current_user['id'] ])
+			->orderBy([ 'id' => SORT_DESC ])->asArray()->all();
+
+		return $this->render('comment',[
+			'list' => $list
+		]);
+	}
+
+	public function actionComment_set(){
+		if( \Yii::$app->request->isGet ){
+			$pay_order_id = intval( $this->get("pay_order_id",0) );
+			$pay_order_info = PayOrder::findOne([ 'id' => $pay_order_id,'status' => 1,'express_status' => 1 ]);
+			$reback_url = UrlService::buildMUrl("/user/index");
+			if( !$pay_order_info ){
+				return $this->redirect( $reback_url );
+			}
+
+			if(  $pay_order_info['comment_status'] ){
+				return $this->renderJS( "您已经评论过啦，不能重复评论~~",$reback_url );
+			}
+
+			return $this->render('comment_set',[
+				'pay_order_info' => $pay_order_info
+			]);
+		}
+
+		$pay_order_id = intval( $this->post("pay_order_id",0) );
+		$score = intval( $this->post("score",0) );
+		$content = trim( $this->post('content','') );
+		$date_now  = date("Y-m-d H:i:s");
+
+		if( $score <= 0 ){
+			return $this->renderJSON([],"请打分~~",-1);
+		}
+
+		if( mb_strlen( $content,"utf-8" ) < 3 ){
+			return $this->renderJSON([],"请输入符合要求的评论内容~~",-1);
+		}
+
+		$pay_order_info = PayOrder::findOne([ 'id' => $pay_order_id,'status' => 1,'express_status' => 1 ]);
+		if( !$pay_order_info ){
+			return $this->renderJSON( [],ConstantService::$default_syserror,-1 );
+		}
+
+		if(  $pay_order_info['comment_status'] ){
+			return $this->renderJSON( [],"您已经评论过啦，不能重复评论~~",-1 );
+		}
+
+		$model_comment = new MemberComments();
+		$model_comment->member_id = $this->current_user['id'];
+		$model_comment->pay_order_id = $pay_order_id;
+		$model_comment->score = $score * 2;
+		$model_comment->content = $content;
+		$model_comment->created_time = $date_now;
+		$model_comment->save( 0 );
+
+		$pay_order_info->comment_status = 1;
+		$pay_order_info->update( 0 );
+		return $this->renderJSON([],"评论成功~~");
 	}
 
 }

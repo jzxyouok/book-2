@@ -7,11 +7,7 @@ StaticService::includeAppJsStatic( "/js/m/product/cart.js",\app\assets\MAsset::c
     <?php if( $list ):?>
 	<ul class="order_pro_list">
         <?php foreach( $list as $_item ):?>
-		<li>
-			<i>
-                <input id='cart_<?=$_item['id'];?>' type="checkbox" name='cart' data-price="<?=$_item["book_price"];?>" />
-                <label for="cart_<?=$_item['id'];?>">&nbsp;</label>
-            </i>
+		<li data-price="<?=$_item["book_price"];?>">
 			<a href="<?=UrlService::buildMUrl("/product/info",[ 'id' => $_item['book_id'] ]);?>" class="pic" >
                 <img src="<?=$_item["book_main_image"];?>" style="height: 100px;width: 100px;"/>
             </a>
@@ -35,10 +31,6 @@ StaticService::includeAppJsStatic( "/js/m/product/cart.js",\app\assets\MAsset::c
     <?php endif;?>
 </div>
 <div class="cart_fixed">
-	<a href="<?=UrlService::buildNull();?>" class="billing_btn">结算</a>
-	<span>
-        <input id='check-0' type="checkbox" name='cart'  />
-        <label for="check-0">全选</label>
-    </span>
+	<a href="<?=UrlService::buildMUrl("/product/order",[ 'sc' => 'cart' ]);?>" class="billing_btn">结算</a>
 	<b>合计：<strong>¥</strong><font id="price">0.00</font></b>
 </div>

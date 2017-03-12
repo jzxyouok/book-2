@@ -59,8 +59,8 @@ class PayOrderService extends  BaseService {
 			$model_pay_order->discount = $discount;
 			$model_pay_order->pay_price = $pay_price;
 			$model_pay_order->note = isset($params['note'])?$params['note']:'';
-			$model_pay_order->status = isset($params['status'])?$params['status']:0;
-			$model_pay_order->express_status = isset($params['express_status'])?$params['express_status']:0;
+			$model_pay_order->status = isset($params['status'])?$params['status']:-8;
+			$model_pay_order->express_status = isset($params['express_status'])?$params['express_status']:-8;
 			$model_pay_order->express_address_id = isset($params['express_address_id'])?$params['express_address_id']:0;
 			$model_pay_order->pay_time = ConstantService::$default_time_stamps;
 			$model_pay_order->updated_time = $date_now;

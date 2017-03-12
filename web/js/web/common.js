@@ -98,6 +98,10 @@ var common_ops = {
             nav_name = "finance";
         }
 
+        if(  pathname.indexOf("/web/qrcode") > -1  ){
+            nav_name = "market";
+        }
+
         if(  pathname.indexOf("/web/stat") > -1  ){
             nav_name = "stat";
         }

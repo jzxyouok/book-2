@@ -10,6 +10,7 @@ use app\models\book\Book;
 use app\models\book\BookCat;
 use app\models\Images;
 use app\models\member\Member;
+use app\models\member\MemberComments;
 use app\models\pay\PayOrder;
 use app\modules\web\controllers\common\BaseController;
 
@@ -91,11 +92,13 @@ class MemberController extends BaseController{
 		}
 
 		$pay_order_list = PayOrder::find()->where([ 'member_id' => $id,'status' => [ -8,1 ] ])->orderBy([ 'id' => SORT_DESC ])->all();
+		$comments_list = MemberComments::find()->where([ 'member_id' => $id ])->orderBy([ 'id' => SORT_DESC ])->all();
 
 
 		return $this->render("info",[
 			"info" => $info,
-			"pay_order_list" => $pay_order_list
+			"pay_order_list" => $pay_order_list,
+			'comments_list' => $comments_list
 		]);
 	}
 

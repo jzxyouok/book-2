@@ -48,5 +48,6 @@ StaticService::includeAppJsStatic( "/js/m/product/order.js",\app\assets\MAsset::
 	</div>
 </div>
 <div class="op_box">
+    <input type="hidden" name="sc" value="<?=$sc;?>">
 	<input style="width: 100%;" type="button" value="确定下单" class="red_btn do_order"  />
 </div>

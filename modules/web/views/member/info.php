@@ -10,7 +10,7 @@ use \app\common\services\ConstantService;
             <div class="col-lg-12">
                 <div class="m-b-md">
 					<?php if( $info && $info['status']):?>
-                    <a class="btn btn-outline pull-right" href="<?=UrlService::buildWebUrl("/member/set",[ 'id' => $info['id'] ]);?>">编辑</a>
+                    <a class="btn btn-outline btn-primary pull-right" href="<?=UrlService::buildWebUrl("/member/set",[ 'id' => $info['id'] ]);?>">编辑</a>
 					<?php endif;?>
                     <h2>会员信息</h2>
                 </div>
@@ -87,17 +87,27 @@ use \app\common\services\ConstantService;
                                     <thead>
                                     <tr>
                                         <th>评论时间</th>
+                                        <th>评分</th>
                                         <th>评论内容</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <tr>
+                                        <?php if( $comments_list ):?>
+                                            <?php foreach( $comments_list as $_item_comment ):?>
                                         <td>
-                                            xxx
+                                            <?=$_item_comment['created_time'];?>
                                         </td>
+                                                <td>
+													<?=$_item_comment['score'];?>
+                                                </td>
                                         <td>
-                                            xxxx
+											<?=UtilService::encode( $_item_comment['content'] );?>
                                         </td>
+                                                <?php endforeach;?>
+                                        <?php else:?>
+                                    <tr><td colspan="3">暂无评论</td></tr>
+                                        <?php endif;?>
                                     </tr>
                                     </tbody>
                                 </table>

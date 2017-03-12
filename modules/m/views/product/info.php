@@ -19,7 +19,7 @@ StaticService::includeAppJsStatic( "/js/m/product/info.js",\app\assets\MAsset::c
 <div class="pro_header">
     <div class="pro_tips">
         <h2><?=UtilService::encode( $info['name'] );?></h2>
-        <h3><b>¥<?=UtilService::encode( $info['price'] );?></b></h3>
+        <h3><b>¥<?=UtilService::encode( $info['price'] );?></b><font>库存量：<?=$info['stock'];?></font></h3>
     </div>
     <span class="share_span"><i class="share_icon"></i><b>分享商品</b></span>
 </div>
@@ -46,4 +46,5 @@ StaticService::includeAppJsStatic( "/js/m/product/info.js",\app\assets\MAsset::c
     <?php endif;?>
     <input type="button" value="立即订购" class="order_now_btn" data="<?=$info['id'];?>"/>
     <input type="button" value="加入购物车" class="add_cart_btn" data="<?=$info['id'];?>"/>
+    <input type="hidden" name="id" value="<?=$info['id'];?>">
 </div>

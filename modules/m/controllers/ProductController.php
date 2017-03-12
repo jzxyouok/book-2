@@ -15,8 +15,30 @@ use app\modules\m\controllers\common\BaseController;
 
 class ProductController extends BaseController {
 	public function actionIndex(){
+		$kw = trim( $this->get("kw","") );
+		$sort_field = trim( $this->get("sort_field","default") );
+		$sort = trim( $this->get("sort","") );
+		$sort = in_array(  $sort,['asc','desc'] )?$sort:'desc';
+
 		$query = Book::find()->where([ 'status' => 1 ]);
-		$list = $query->orderBy([ 'id' => SORT_DESC ])->all();
+		if( $kw ){
+			$where_name = [ 'LIKE','name','%-'.strtr($kw,['%'=>'\%', '_'=>'\_', '\\'=>'\\\\']).'-%', false ];
+			$where_tags = [ 'LIKE','tags','%'.strtr($kw,['%'=>'\%', '_'=>'\_', '\\'=>'\\\\']).'%', false ];
+			$query->andWhere([ 'OR',$where_name,$where_tags ]);
+		}
+
+		switch ( $sort_field ){
+			case "view_count":
+			case "month_count":
+			case "price":
+				$query->orderBy( [  $sort_field => ( $sort == "asc")?SORT_ASC:SORT_DESC,'id' => SORT_DESC ] );
+				break;
+			default:
+				$query->orderBy([ 'id' => SORT_DESC ]);
+				break;
+		}
+
+		$list = $query->all();
 		$data = [];
 		if( $list ){
 			foreach( $list as $_item ){
@@ -29,8 +51,16 @@ class ProductController extends BaseController {
 				];
 			}
 		}
+
+		$search_conditions = [
+			'kw' => $kw,
+			'sort_field' => $sort_field,
+			'sort' => $sort
+		];
+
 		return $this->render("index",[
-			'list' => $data
+			'list' => $data,
+			'search_conditions' => $search_conditions
 		]);
 	}
 
@@ -171,6 +201,7 @@ class ProductController extends BaseController {
 		if( \Yii::$app->request->isGet ){
 			$book_id = intval( $this->get("id",0) );
 			$quantity = intval( $this->get("quantity",1) );
+			$sc = $this->get("sc","product");//sc source 来源
 			$pay_order_id = intval( $this->get("pay_order_id",0) );
 			$product_list = [];
 			$total_pay_money = 0;
@@ -189,17 +220,17 @@ class ProductController extends BaseController {
 			}else{//从购物车中获取商品信息
 				$cart_list = MemberCart::find()->where([ 'member_id' => $this->current_user['id'] ])->all();
 				if( $cart_list ){
-					$book_mapping = DataHelper::getDicByRelateID( $cart_list ,Book::className(),"book_id","id",[ 'name','price','main_image','unit' ] );
+					$book_mapping = DataHelper::getDicByRelateID( $cart_list ,Book::className(),"book_id","id",[ 'name','price','main_image','stock' ] );
 					foreach( $cart_list as $_item ){
 						$tmp_book_info = $book_mapping[ $_item['book_id'] ];
 						$product_list[] = [
-							'id' => $tmp_book_info['id'],
+							'id' => $_item['book_id'],
 							'name' => UtilService::encode( $tmp_book_info['name'] ),
 							'quantity' => $_item['quantity'],
 							'price' => $tmp_book_info['price'],
 							'main_image' => UrlService::buildPicUrl( "book",$tmp_book_info['main_image'] )
 						];
-						$total_pay_money += $tmp_book_info['price'];
+						$total_pay_money += $tmp_book_info['price'] * $_item['quantity'];
 					}
 				}
 			}
@@ -230,10 +261,12 @@ class ProductController extends BaseController {
 			return $this->render("order",[
 				'product_list' => $product_list,
 				'total_pay_money' => sprintf("%.2f",$total_pay_money),
-				'address_list' => $data_address
+				'address_list' => $data_address,
+				'sc' => $sc
 			]);
 		}
 
+		$sc = trim( $this->post("sc","") );
 		$product_items = $this->post("product_items",[]);
 		$address_id = intval( $this->post("address_id",0 ) );
 
@@ -290,6 +323,21 @@ class ProductController extends BaseController {
 			return $this->renderJSON([],"提交失败，失败原因：".PayOrderService::getLastErrorMsg(),-1 );
 		}
 
+		if( $sc == "cart" ){//如果从购物车创建订单，需要清空购物车了
+			MemberCart::deleteAll([ 'member_id' => $this->current_user['id'] ]);
+		}
+
 		return $this->renderJSON([ 'url' => UrlService::buildMUrl("/pay/buy/?pay_order_id={$ret['id']}") ],'下单成功,前去支付~~' );
+	}
+
+	public function actionOps(){
+		$act = trim( $this->post("act","") );
+		$book_id = intval( $this->post("book_id",0) );
+		$book_info = Book::findOne([ 'id' => $book_id ]);
+		if( !$book_info ){
+			return $this->renderJSON( [],ConstantService::$default_syserror,-1 );
+		}
+		$book_info->view_count += 1;
+		$book_info->update( 0 );
 	}
 }

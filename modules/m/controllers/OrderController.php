@@ -17,7 +17,7 @@ class OrderController extends BaseController {
 		$id = intval( $this->post("id",0) );
 		$date_now = date("Y-m-d H:i:s");
 
-		if( !in_array( $act,[ "close" ]) ){
+		if( !in_array( $act,[ "close","confirm_express" ]) ){
 			return $this->renderJSON([],ConstantService::$default_syserror,-1);
 		}
 
@@ -35,6 +35,11 @@ class OrderController extends BaseController {
 				if( $pay_order_info['status'] == -8  ){
 					PayOrderService::closeOrder( $pay_order_info['id'] );
 				}
+				break;
+			case "confirm_express":
+				$pay_order_info->express_status = 1;
+				$pay_order_info->updated_time = $date_now;
+				$pay_order_info->update( 0 );
 				break;
 		}
 

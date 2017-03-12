@@ -2,6 +2,7 @@
 var product_info_ops = {
     init:function(){
         this.eventBind();
+        this.updateViewCount();
     },
     eventBind:function(){
         $(".fav").click( function(){
@@ -68,6 +69,24 @@ var product_info_ops = {
         });
         //加减效果 end
 
+    },
+    updateViewCount:function(){
+        $.ajax({
+            url:common_ops.buildMUrl("/product/ops"),
+            type:'POST',
+            data:{
+                act:'view_count',
+                book_id:$(".pro_fixed input[name=id]").val()
+            },
+            dataType:'json',
+            success:function( res ){
+                if( res.code == -302 ){
+                    common_ops.notlogin( );
+                    return;
+                }
+                alert( res.msg );
+            }
+        });
     }
 };
 

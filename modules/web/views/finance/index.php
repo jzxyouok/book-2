@@ -31,6 +31,7 @@ StaticService::includeAppJsStatic( "/js/web/finance/index.js",\app\assets\WebAss
 				<th>支付时间</th>
 				<th>状态</th>
 				<th>创建时间</th>
+				<th>操作</th>
 			</tr>
 			</thead>
 			<tbody>
@@ -51,10 +52,15 @@ StaticService::includeAppJsStatic( "/js/web/finance/index.js",\app\assets\WebAss
 						</td>
 						<td><?= $_item['status_desc'];?></td>
 						<td><?= $_item['created_time'];?></td>
+						<td>
+                            <a  href="<?=UrlService::buildWebUrl("/finance/pay_info",[ 'id' => $_item['id'] ] );?>">
+                                <i class="fa fa-eye fa-lg"></i>
+                            </a>
+                        </td>
 					</tr>
 				<?php endforeach;?>
 			<?php else:?>
-				<tr><td colspan="6">暂无数据</td></tr>
+				<tr><td colspan="7">暂无数据</td></tr>
 			<?php endif;?>
 			</tbody>
 		</table>

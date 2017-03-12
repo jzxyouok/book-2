@@ -30,7 +30,8 @@ var product_order_ops = {
                 type:'POST',
                 data:{
                     product_items:data,
-                    address_id:address_id
+                    address_id:address_id,
+                    sc:$(".op_box input[name=sc]").val()
                 },
                 dataType:'json',
                 success:function( res ){

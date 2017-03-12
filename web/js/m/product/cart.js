@@ -2,6 +2,7 @@
 var product_cart_ops = {
     init:function(){
         this.eventBind();
+        this.cal_price();
     },
     eventBind:function(){
         var that = this;
@@ -25,23 +26,6 @@ var product_cart_ops = {
 
         });
 
-        //全选效果
-        $(".cart_fixed input[type='checkbox']").click(function () {
-            var name = $(this).attr("name");
-            $(".order_pro_box input[name='" + name + "']").prop('checked', $(this).prop('checked'));
-            that.cal_price();
-        });
-
-        $(".order_pro_list li input[name=cart]").click( function(){
-
-            if( $(".order_pro_list li input[name=cart]:checked").size() == $(".order_pro_list li input[name=cart]").size() ){
-                $(".cart_fixed input[type='checkbox']").prop("checked",true);
-            }else{
-                $(".cart_fixed input[type='checkbox']").prop("checked",false);
-            }
-
-            that.cal_price();
-        });
 
         //删除
         $(".delC_icon").click(function () {
@@ -84,9 +68,9 @@ var product_cart_ops = {
     },
     cal_price:function(){
         var pay_price = 0;
-        $(".order_pro_list li input[name=cart]:checked").each( function(){
+        $(".order_pro_list li").each( function(){
             var tmp_price = parseFloat( $(this).attr("data-price") );
-            var tmp_quantity = $(this).parents("li").find(".input_quantity").val();
+            var tmp_quantity = $(this).find(".input_quantity").val();
             pay_price += tmp_price * parseInt( tmp_quantity );
         });
         $(".cart_fixed #price").html( pay_price.toFixed(2) );
