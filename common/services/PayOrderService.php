@@ -140,7 +140,7 @@ class PayOrderService extends  BaseService {
 			foreach($items as $_item){
 				switch( $_item->target_type ){
 					case 1://书籍购买
-
+						BookService::confirmOrderItem( $_item['id'] );
 						break;
 					case 2:
 						break;

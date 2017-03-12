@@ -5,6 +5,7 @@ namespace app\controllers;
 
 use app\common\components\BaseWebController;
 use app\common\services\captcha\ValidateCode;
+use app\common\services\PayOrderService;
 use app\common\services\UtilService;
 use app\models\sms\SmsCaptcha;
 use app\common\services\AreaService;
@@ -76,5 +77,9 @@ class DefaultController extends BaseWebController {
 		$province_id = $this->get('id',0);
 		$tree_info = AreaService::getProvinceCityTree($province_id);
 		return $this->renderJSON( $tree_info );
+	}
+
+	public function actionTest(){
+		PayOrderService::orderSuccess( 30 );
 	}
 }
