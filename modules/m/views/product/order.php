@@ -10,19 +10,23 @@ StaticService::includeAppJsStatic( "/js/m/product/order.js",\app\assets\MAsset::
     <div class="order_header">
         <h2>确认收货地址</h2>
     </div>
-    <?php if( $address_list ):?>
-    <ul class="address_list">
-        <?php foreach( $address_list as $_idx => $_address_info  ):?>
-        <li style="padding: 5px 5px;">
-            <label>
-                <input style="display: inline;" type="radio" name="address_id" value="<?=$_address_info['id'];?>" <?php if($_address_info['is_default'] || $_idx == 0 ):?> checked <?php endif;?>  >
-				<?=$_address_info['address'];?>（<?=$_address_info['nickname'];?>收）<?=$_address_info['mobile'];?>
-            </label>
 
-        </li>
-        <?php endforeach;?>
+    <ul class="address_list">
+		<?php if( $address_list ):?>
+            <?php foreach( $address_list as $_idx => $_address_info  ):?>
+            <li style="padding: 5px 5px;">
+                <label>
+                    <input style="display: inline;" type="radio" name="address_id" value="<?=$_address_info['id'];?>" <?php if($_address_info['is_default'] || $_idx == 0 ):?> checked <?php endif;?>  >
+                    <?=$_address_info['address'];?>（<?=$_address_info['nickname'];?>收）<?=$_address_info['mobile'];?>
+                </label>
+
+            </li>
+            <?php endforeach;?>
+		<?php else:?>
+            <li style="padding: 5px 5px;"> <a href="<?=UrlService::buildMUrl('/user/address_set');?>">快去添加收货地址啦~~</a></li>
+		<?php endif;?>
     </ul>
-    <?php endif;?>
+
 
 	<div class="order_header">
 		<h2>确认订单信息</h2>
