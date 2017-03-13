@@ -21,6 +21,10 @@ class DashboardController extends BaseController{
 			'order' => [
 				'today' => 0,
 				'month' => 0
+			],
+			'shared' => [
+				'today' => 0,
+				'month' => 0
 			]
 		];
 
@@ -37,11 +41,13 @@ class DashboardController extends BaseController{
 				$data['member']['month_new'] += $_item['total_new_member_count'];
 				$data['member']['total'] = $_item['total_member_count'];
 				$data['order']['month'] += $_item['total_order_count'];
+				$data['shared']['month'] += $_item['total_shared_count'];
 
 				if( $_item['date'] == $date_to ){
 					$data['finance']['today'] = $_item['total_pay_money'];
 					$data['member']['today_new'] = $_item['total_new_member_count'];
 					$data['order']['today'] = $_item['total_order_count'];
+					$data['shared']['today'] = $_item['total_shared_count'];
 				}
 			}
 		}

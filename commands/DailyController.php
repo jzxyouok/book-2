@@ -9,6 +9,7 @@ use app\models\member\Member;
 use app\models\pay\PayOrder;
 use app\models\pay\PayOrderItem;
 use app\models\stat\StatDailySite;
+use app\models\WxShareHistory;
 use Yii;
 
 class DailyController extends BaseController {
@@ -33,7 +34,7 @@ class DailyController extends BaseController {
 		$total_member_count = Member::find()->where([ '<=','created_time',$time_end ])->count();
 		$total_new_member_count = Member::find()->where([ 'between','created_time',$time_start,$time_end ])->count();
 		$total_order_count = PayOrder::find()->where([ 'status' => 1 ])->andWhere([  'between','created_time',$time_start,$time_end ])->count();
-
+		$total_shared_count = WxShareHistory::find()->where( [ 'between','created_time',$time_start,$time_end  ] )->count();
 
 		$stat_site_info = StatDailySite::findOne([ 'date' => $date ]);
 		if( $stat_site_info ){
@@ -48,6 +49,7 @@ class DailyController extends BaseController {
 		$model_stat_site->total_member_count = $total_member_count?$total_member_count:0;
 		$model_stat_site->total_new_member_count = $total_new_member_count?$total_new_member_count:0;
 		$model_stat_site->total_order_count = $total_order_count?$total_order_count:0;
+		$model_stat_site->total_shared_count = $total_shared_count?$total_shared_count:0;
 		$model_stat_site->updated_time = $date_now;
 		$model_stat_site->save( 0 );
 		$this->echoLog( "it's over ~~" );

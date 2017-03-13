@@ -25,7 +25,7 @@ var weixin_jssdk_ops = {
                            'onMenuShareTimeline','onMenuShareAppMessage','chooseWXPay'
                         ]
                     });
-                    
+
                     var res_data = data;
                     wx.ready( function(){
                         var share_info = eval('(' + $("#share_info").val() + ')');

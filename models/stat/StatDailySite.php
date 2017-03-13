@@ -13,6 +13,7 @@ use Yii;
  * @property integer $total_member_count
  * @property integer $total_new_member_count
  * @property integer $total_order_count
+ * @property integer $total_shared_count
  * @property string $updated_time
  * @property string $created_time
  */
@@ -35,7 +36,7 @@ class StatDailySite extends \yii\db\ActiveRecord
             [['date'], 'required'],
             [['date', 'updated_time', 'created_time'], 'safe'],
             [['total_pay_money'], 'number'],
-            [['total_member_count', 'total_new_member_count', 'total_order_count'], 'integer'],
+            [['total_member_count', 'total_new_member_count', 'total_order_count', 'total_shared_count'], 'integer'],
         ];
     }
 
@@ -51,6 +52,7 @@ class StatDailySite extends \yii\db\ActiveRecord
             'total_member_count' => 'Total Member Count',
             'total_new_member_count' => 'Total New Member Count',
             'total_order_count' => 'Total Order Count',
+            'total_shared_count' => 'Total Shared Count',
             'updated_time' => 'Updated Time',
             'created_time' => 'Created Time',
         ];

@@ -50,6 +50,18 @@ StaticService::includeAppJsStatic( "/js/web/dashboard/index.js",\app\assets\WebA
                 </div>
             </div>
         </div>
+        <div class="col-lg-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span class="label label-primary pull-right">日统计</span>
+                    <h5>分享</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins"><?=$data['shared']['today'];?></h1>
+                    <small>近30日：<?=$data['shared']['month'];?></small>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="row">
         <div class="col-lg-6" id="member_order" style="height: 400px;border: 1px solid #e6e6e6;padding-top: 20px;">
