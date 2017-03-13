@@ -6,6 +6,7 @@ use app\models\book\BookSaleChangeLog;
 use app\models\member\Member;
 use app\models\pay\PayOrder;
 use app\models\stat\StatDailyBook;
+use app\models\stat\StatDailyMember;
 use app\models\stat\StatDailySite;
 use app\models\WxShareHistory;
 use Yii;
@@ -87,6 +88,50 @@ class DailyController extends BaseController {
 			$tmp_model_stat_book->total_pay_money = $_item['total_pay_money']?$_item['total_pay_money']:0;
 			$tmp_model_stat_book->updated_time = $date_now;
 			$tmp_model_stat_book->save( 0 );
+		}
+		return $this->echoLog( "it's over ~~" );
+	}
+
+	/**
+	 * 会员统计
+	 * php yii daily/member
+	 */
+	public function actionMember( $date = 'now' ){
+		$date = date('Y-m-d', strtotime($date) );
+		$date_now = date("Y-m-d H:i:s");
+		$time_start = $date.' 00:00:00';
+		$time_end = $date.' 23:59:59';
+		$this->echoLog( "ID_ACTION:".__CLASS__."_".__FUNCTION__.",date:{$date} " );
+
+		$member_list = Member::find()->asArray()->all();
+		if( !$member_list ){
+			return $this->echoLog("no member list");
+		}
+
+		foreach( $member_list as $_member_info ){
+
+			$tmp_stat_member = StatDailyMember::findOne([ 'date' => $date,'member_id' => $_member_info['id'] ]);
+			if( $tmp_stat_member ){
+				$tmp_model_stat_member = $tmp_stat_member;
+			}else{
+				$tmp_model_stat_member = new StatDailyMember();
+				$tmp_model_stat_member->date = $date;
+				$tmp_model_stat_member->member_id = $_member_info['id'];
+				$tmp_model_stat_member->created_time = $date_now;
+			}
+
+			$tmp_pay = PayOrder::find()
+				->where([ 'status' => 1,'member_id' => $_member_info['id'] ])
+				->andWhere([ 'between','created_time',$time_start,$time_end ])
+				->asArray()->sum( 'pay_price' );
+			$tmp_total_shared_count = WxShareHistory::find()
+				->where([ 'member_id' => $_member_info['id'] ])
+				->andWhere( [ 'between','created_time',$time_start,$time_end  ] )->count();
+
+			$tmp_model_stat_member->total_pay_money = $tmp_pay?$tmp_pay:0;
+			$tmp_model_stat_member->total_shared_count = $tmp_total_shared_count?$tmp_total_shared_count:0;
+			$tmp_model_stat_member->updated_time = $date_now;
+			$tmp_model_stat_member->save( 0 );
 		}
 		return $this->echoLog( "it's over ~~" );
 	}
