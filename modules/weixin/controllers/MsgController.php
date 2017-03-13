@@ -50,8 +50,12 @@ class MsgController extends BaseController{
 		$res = [ 'type'=>'text','data'=>$this->defaultTip() ];
 		switch ( $msg_type ){
 			case "text":
-				$kw = trim( $xml_obj->Content );
-				$res = $this->search( $kw );
+				if( $xml_obj->Content == "商城账号"){
+					$res = [ 'type'=>'text','data'=> '系统正在开发，请等系统正式上线再来获取' ];
+				}else{
+					$kw = trim( $xml_obj->Content );
+					$res = $this->search( $kw );
+				}
 				break;
 			case "event":
 				$res = $this->parseEvent( $xml_obj );

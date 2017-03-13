@@ -87,11 +87,18 @@ class UploadService extends  BaseService{
 		}
 
 		$data_content = file_get_contents( $url );
+
+		$upload_config = \Yii::$app->params['upload'];
+		if( !isset( $upload_config[ $bucket ] ) ){
+			return self::_err("指定的bucket不存在或者没有配置~~");
+		}
+
 		$hash_key = md5( $data_content );
 
-		$upload_dir_pic = UtilService::getRootPath()."/web/uploads/";
+		$upload_dir_path = UtilService::getRootPath()."/web".$upload_config[ $bucket ]."/";
 		$folder_name = date( "Ymd",strtotime($date_now) );
-		$upload_dir = $upload_dir_pic.$folder_name;
+		$upload_dir = $upload_dir_path.$folder_name;
+
 		if( !file_exists($upload_dir) ){
 			mkdir($upload_dir,0777);
 			chmod($upload_dir,0777);
@@ -99,9 +106,9 @@ class UploadService extends  BaseService{
 
 		$upload_file_name = "{$folder_name}/{$hash_key}.".$file_type;
 
-		file_put_contents($upload_dir_pic.$upload_file_name,$data_content );
+		file_put_contents( $upload_dir_path.$upload_file_name,$data_content );
 
-		return[
+		return [
 			'code' => 200,
 			'path' => $upload_file_name,
 		];

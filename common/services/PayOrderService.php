@@ -154,8 +154,8 @@ class PayOrderService extends  BaseService {
 			return self::_err( $e->getMessage() );
 		}
 
-		//需要做一个队列数据库了
-		QueueListService::addQueue( "pay_notice",[
+		//需要做一个队列数据库了,用队里处理销售月统计
+		QueueListService::addQueue( "pay",[
 			'member_id' => $pay_order_info['member_id'],
 			'pay_order_id' => $pay_order_info['id'],
 		] );

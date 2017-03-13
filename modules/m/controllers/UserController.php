@@ -5,6 +5,7 @@ namespace app\modules\m\controllers;
 use app\common\services\ConstantService;
 use app\common\services\DataHelper;
 use app\common\services\member\MemberService;
+use app\common\services\QueueListService;
 use app\common\services\UrlService;
 use app\common\services\UtilService;
 use app\models\book\Book;
@@ -16,6 +17,7 @@ use app\models\member\MemberFav;
 use app\models\oauth\OauthMemberBind;
 use app\models\pay\PayOrder;
 use app\models\pay\PayOrderItem;
+use app\models\QueueList;
 use app\models\sms\SmsCaptcha;
 use app\modules\m\controllers\common\BaseController;
 use app\common\services\AreaService;
@@ -89,12 +91,19 @@ class UserController extends BaseController {
 				$model_bind->updated_time = $date_now;
 				$model_bind->created_time = $date_now;
 				$model_bind->save(0);
+
+				//绑定之后要做的事情
+				QueueListService::addQueue( "bind",[
+					'member_id' => $member_info['id'],
+					'type' => 1,
+					'openid' => $model_bind->openid
+				] );
 			}
 		}
 
 		//如果用户头像或者unionid没有，就获取//这个时候做登录特殊处理，例如更新用户名和头像等等新
 		$url = ( $referer && $referer != "/m/user/bind" )?$referer:UrlService::buildMUrl("/");
-		if( UtilService::isWechat() && ( $member_info->avatar == ConstantService::$default_avatar || $member_info->nickname == $user_info->mobile ) ){
+		if( UtilService::isWechat() && ( $member_info->avatar == ConstantService::$default_avatar || $member_info->nickname == $member_info->mobile ) ){
 			$url = $this->getAuthLoginUrl('snsapi_userinfo',$referer);
 		}
 
