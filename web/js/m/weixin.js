@@ -22,42 +22,34 @@ var weixin_jssdk_ops = {
                         nonceStr: nonceStr,
                         signature: signature,
                         jsApiList: [
-                           'onMenuShareTimeline','onMenuShareAppMessage',
-                           'chooseWXPay','hideMenuItems',
-                           'getLocation'
+                           'onMenuShareTimeline','onMenuShareAppMessage','chooseWXPay'
                         ]
                     });
-
-
+                    
                     var res_data = data;
-                    wx.ready(function(){
-                        var share_info = eval('('+$("#share_info").val()+')');
+                    wx.ready( function(){
+                        var share_info = eval('(' + $("#share_info").val() + ')');
                         var share_url = location.href.split('#')[0];
                         var title = share_info.title?share_info.title:window.document.title;
                         var desc = share_info.desc?share_info.desc:window.document.title;
 
-                        share_url = decodeURIComponent(share_url);
-
-                        if( share_url.indexOf("is_shared=") == -1 ){
-                            if( share_url.indexOf("?") == -1 ){
-                                share_url = share_url + "?is_shared=1";
-                            }else{
-                                share_url = share_url + "&is_shared=1";
-                            }
-                        }
+                        share_url = decodeURIComponent( share_url );
 
                         title = decodeURIComponent(title);
                         desc = decodeURIComponent(desc);
 
-                        wx.onMenuShareTimeline({
+                        wx.onMenuShareTimeline( {
                             title: title,
-                            imgUrl: decodeURIComponent(share_info.img_url),
+                            imgUrl: decodeURIComponent( share_info.img_url ),
                             link: share_url,
                             success: function () {
+                                that.sharedSuccess();
                             },
                             cancel: function () {
+
                             }
-                        });
+                        } );
+
                         wx.onMenuShareAppMessage({
                             title: title,
                             desc: desc,
@@ -65,14 +57,14 @@ var weixin_jssdk_ops = {
                             imgUrl: decodeURIComponent(share_info.img_url),
                             type: 'link',
                             success: function () {
-
+                                that.sharedSuccess();
                             },
                             cancel: function () {
                             }
                         });
 
-                        //wx.showOptionMenu();
                     });
+
                     wx.error(function(res){
                         var msg = '';
                         for( var idx in res ){
@@ -102,41 +94,24 @@ var weixin_jssdk_ops = {
             wx.chooseWXPay(json_data);
         });
     },
-    hideMenu:function(){
-        wx.ready(function(){
-            wx.hideOptionMenu();
-        });
-    },
-    hideMenuItems:function(){
-        wx.ready(function(){
-            wx.hideAllNonBaseMenuItem();
-        });
-    },
-    getLocation:function(callback){
-        wx.getLocation({
-           success: function (res) {
-               var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
-               var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
-
-               callback(res.latitude, res.longitude);
-           },
-           fail:function(){
-               // errror
-               callback();
-           },
-           cancel:function(){
-               // cancel
-           }
-       });
-    },
     json2str:function json2str(o) {
         var arr = [];
         var fmt = function(s) {
             if (typeof s == 'object' && s != null) return json2str(s);
             return /^(string|number)$/.test(typeof s) ? "'" + s + "'" : s;
         };
-        for (var i in o) arr.push("'" + i + "':" + fmt(o[i]));
+        for (var i in o) arr.push("'" + i + "':" + fmt( o[i] ) );
         return '{' + arr.join(',') + '}';
+    },
+    sharedSuccess:function(){
+        $.ajax({
+            url:common_ops.buildMUrl("/default/shared"),
+            type:'POST',
+            dataType:'json',
+            data:{
+                url:window.location.href
+            }
+        });
     }
 };
 

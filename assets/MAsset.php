@@ -37,14 +37,14 @@ class MAsset extends AssetBundle
 				'https://res.wx.qq.com/open/js/jweixin-1.0.0.js',
 				UrlService::buildWwwUrl( "/plugins/jquery-2.1.1.js"),
 				UrlService::buildWwwUrl( "/js/m/TouchSlide.1.1.js"),
-				UrlService::buildWwwUrl( "/js/m/common.js"),
+				UrlService::buildWwwUrl( "/js/m/common.js",[ 'ver' => $release_version ] ),
 				UrlService::buildWwwUrl( "/js/m/weixin.js"),
 			];
 		}else{
 			$this->js = [
 				UrlService::buildWwwUrl( "/plugins/jquery-2.1.1.js"),
 				UrlService::buildWwwUrl( "/js/m/TouchSlide.1.1.js"),
-				UrlService::buildWwwUrl( "/js/m/common.js")
+				UrlService::buildWwwUrl( "/js/m/common.js",[ 'ver' => $release_version ] )
 			];
 		}
 
