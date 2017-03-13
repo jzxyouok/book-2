@@ -41,7 +41,7 @@ StaticService::includeAppJsStatic( "/js/m/user/order.js",\app\assets\MAsset::cla
         <div class="op_box" style="margin: 2rem 0 ;padding: 1rem 0 ;">
 			<?php if( $_item['express_status'] == -6 ):?>
                 <a style="width: 50%;display: block;float: right;text-align: right;" data="<?=$_item['id'];?>"  href="<?=UrlService::buildNull();?>"  class="confirm_express">确认收货</a>
-            <?php elseif( $_item['express_status'] == 1 ):?>
+            <?php elseif( $_item['express_status'] == 1 && !$_item['comment_status']):?>
                 <a style="width: 50%;display: block;float: right;text-align: right;"   href="<?=UrlService::buildMUrl("/user/comment_set",[ 'pay_order_id' => $_item['id'] ]);?>">我要评论</a>
 			<?php endif;?>
         </div>
