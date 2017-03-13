@@ -2,12 +2,10 @@
 
 namespace app\commands;
 
-use app\common\services\book\BookService;
-use app\common\services\PayOrderService;
-use app\models\book\Book;
+use app\models\book\BookSaleChangeLog;
 use app\models\member\Member;
 use app\models\pay\PayOrder;
-use app\models\pay\PayOrderItem;
+use app\models\stat\StatDailyBook;
 use app\models\stat\StatDailySite;
 use app\models\WxShareHistory;
 use Yii;
@@ -15,7 +13,7 @@ use Yii;
 class DailyController extends BaseController {
 
 	/*
-	 * 每日营收
+	 * 全站日统计
 	 * php yii daily/site
 	 * */
 	public function actionSite( $date = 'now' ){
@@ -53,6 +51,44 @@ class DailyController extends BaseController {
 		$model_stat_site->updated_time = $date_now;
 		$model_stat_site->save( 0 );
 		$this->echoLog( "it's over ~~" );
+	}
+
+
+	/**
+	 * 书籍售卖统计
+	 * php yii daily/book
+	 */
+	public function actionBook( $date = 'now' ){
+		$date = date('Y-m-d', strtotime($date) );
+		$date_now = date("Y-m-d H:i:s");
+		$time_start = $date.' 00:00:00';
+		$time_end = $date.' 23:59:59';
+		$this->echoLog( "ID_ACTION:".__CLASS__."_".__FUNCTION__.",date:{$date} " );
+
+		$stat_book_list = BookSaleChangeLog::find()->select( [ 'book_id','SUM(quantity) AS total_count','SUM(price) AS total_pay_money' ] )
+			->andWhere([  'between','created_time',$time_start,$time_end ])
+			->groupBy("book_id")->asArray()->all();
+		if( !$stat_book_list ){
+			return $this->echoLog("no data");
+		}
+
+		foreach( $stat_book_list as $_item ){
+			$tmp_stat_book_info = StatDailyBook::findOne([ 'date' => $date,'book_id' => $_item['book_id'] ]);
+			if( $tmp_stat_book_info ){
+				$tmp_model_stat_book = $tmp_stat_book_info;
+			}else{
+				$tmp_model_stat_book = new StatDailyBook();
+				$tmp_model_stat_book->date = $date;
+				$tmp_model_stat_book->book_id = $_item['book_id'];
+				$tmp_model_stat_book->created_time = $date_now;
+			}
+
+			$tmp_model_stat_book->total_count = $_item['total_count']?$_item['total_count']:0;
+			$tmp_model_stat_book->total_pay_money = $_item['total_pay_money']?$_item['total_pay_money']:0;
+			$tmp_model_stat_book->updated_time = $date_now;
+			$tmp_model_stat_book->save( 0 );
+		}
+		return $this->echoLog( "it's over ~~" );
 	}
 
 }
