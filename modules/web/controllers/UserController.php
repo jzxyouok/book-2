@@ -2,6 +2,7 @@
 namespace app\modules\web\controllers;
 
 
+use app\common\services\ConstantService;
 use app\common\services\UrlService;
 use app\models\User;
 use app\modules\web\controllers\common\BaseController;
@@ -35,6 +36,75 @@ class UserController extends  BaseController{
 
 		$this->setLoginStatus( $user_info );
 		return $this->redirect( UrlService::buildWebUrl("/default/index") );
+	}
+
+	public function actionEdit(){
+		if( \Yii::$app->request->isGet){
+			$this->layout  = "main";
+			return $this->render("edit",[
+				'info' => $this->current_user
+			]);
+		}
+
+		$nickname = trim($this->post('nickname',''));
+		$email = trim( $this->post('email','') );
+
+		if( mb_strlen( $nickname,"utf-8" ) < 1 ){
+			return $this->renderJSON( [],"请输入符合规范的姓名~~",-1 );
+		}
+
+		if( mb_strlen( $email,"utf-8" ) < 1 ){
+			return $this->renderJSON( [],"请输入符合规范的邮箱地址~~",-1 );
+		}
+
+		$user_info = $this->current_user;
+
+		$user_info->nickname = $nickname;
+		$user_info->email = $email;
+		$user_info->updated_time = date("Y-m-d H:i:s");
+		$user_info->update(0);
+
+		return $this->renderJSON([],"操作成功~~");
+	}
+
+	public function actionResetPwd(){
+
+		if( \Yii::$app->request->isGet){
+			return $this->render("reset_pwd",[
+				'info' => $this->current_user
+			]);
+		}
+
+		$old_password = trim($this->post('old_password',''));
+		$new_password = trim($this->post('new_password',''));
+		if(!$old_password){
+			return $this->renderJSON([],"请输入原密码！",-1);
+		}
+
+		if( mb_strlen($new_password,"utf-8") < 6 ){
+			return $this->renderJSON([],"请输入不少于6位的新密码！",-1);
+		}
+
+		if($old_password == $new_password){
+			return $this->renderJSON([],"请重新输入一个吧，新密码和原密码不能相同哦！",-1);
+		}
+
+		if( in_array( $new_password,ConstantService::$low_password ) ){
+			return $this->renderJSON([],"你的密码太弱啦，请换一个密码~~",-1);
+		}
+
+		$current_user = $this->current_user;
+		if (!$current_user->verifyPassword($old_password)) {
+			return $this->renderJSON([],"请检查原密码是否正确~~",-1);
+		}
+
+		$current_user->setPassword($new_password);
+		$current_user->updated_time = date("Y-m-d H:i:s");
+		$current_user->update(0);
+
+		$this->setLoginStatus( $current_user );
+
+		return $this->renderJSON([],"修改成功~~");
 	}
 
 	public function actionLogout(){

@@ -35,14 +35,14 @@ StaticService::includeAppJsStatic( "/js/web/account/set.js",\app\assets\WebAsset
 			<div class="form-group">
 				<label class="col-lg-2 control-label">登录名:</label>
 				<div class="col-lg-10">
-					<input type="text" name="login_name" class="form-control" placeholder="请输入登录名~~" value="<?=$info?$info['login_name']:'';?>">
+					<input type="text" name="login_name" class="form-control" autocomplete="off" placeholder="请输入登录名~~" value="<?=$info?$info['login_name']:'';?>">
 				</div>
 			</div>
 			<div class="hr-line-dashed"></div>
 			<div class="form-group">
 				<label class="col-lg-2 control-label">登录密码:</label>
 				<div class="col-lg-10">
-					<input type="password" name="login_pwd" class="form-control" placeholder="请输入登录密码~~" value="<?=$info?ConstantService::$default_password:'';?>">
+					<input type="password" name="login_pwd" class="form-control"  autocomplete="new-password" placeholder="请输入登录密码~~" value="<?=$info?ConstantService::$default_password:'';?>">
 				</div>
 			</div>
 			<div class="hr-line-dashed"></div>

@@ -71,7 +71,7 @@ $upload_config = Yii::$app->params['upload'];
                             欢迎使用编程浪子图书商城管理后台
                         </span>
 					</li>
-					<li>
+					<li class="hidden">
 						<a class="count-info" href="<?=UrlService::buildNull();?>">
 							<i class="fa fa-bell"></i>
                             <span class="label label-primary">8</span>
@@ -99,7 +99,7 @@ $upload_config = Yii::$app->params['upload'];
                             <li class="divider"></li>
                             <li>
                                 <div class="link-block text-center">
-                                    <a class="pull-left" href="<?=UrlService::buildWebUrl("/user/mod-pwd");?>">
+                                    <a class="pull-left" href="<?=UrlService::buildWebUrl("/user/reset-pwd");?>">
                                         <i class="fa fa-lock"></i> 修改密码
                                     </a>
                                     <a class="pull-right" href="<?=UrlService::buildWebUrl("/user/logout");?>">
