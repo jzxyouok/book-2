@@ -21,6 +21,7 @@ class BaseController extends BaseWebController {
 		'm/oauth/callback',
 		'm/user/bind',
 		'm/pay/callback',
+		'm/product/ops'
 	];
 
 	/**
