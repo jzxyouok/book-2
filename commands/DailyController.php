@@ -156,37 +156,6 @@ class DailyController extends BaseController {
 		return $this->echoLog( "it's over ~~" );
 	}
 
-	/*
-	 * 分享日统计
-	 * php yii daily/share
-	 * */
-
-	public function actionShare( $date = 'now' ){
-		$date = date('Y-m-d', strtotime($date) );
-		$date_now = date("Y-m-d H:i:s");
-		$time_start = $date.' 00:00:00';
-		$time_end = $date.' 23:59:59';
-		$this->echoLog( "ID_ACTION:".__CLASS__."_".__FUNCTION__.",date:{$date} " );
-
-		$tmp_stat_share = StatDailyShare::findOne([ 'date' => $date ]);
-		if( $tmp_stat_share ){
-			$tmp_model_stat_share = $tmp_stat_share;
-		}else{
-			$tmp_model_stat_share = new StatDailyShare();
-			$tmp_model_stat_share->date = $date;
-			$tmp_model_stat_share->created_time = $date_now;
-		}
-
-		$tmp_total_shared_count = WxShareHistory::find()->andWhere( [ 'between','created_time',$time_start,$time_end  ] )->count();
-		$tmp_model_stat_share->total_count = $tmp_total_shared_count?$tmp_total_shared_count:0;
-
-		//伪造数据
-		$tmp_model_stat_share->total_count = mt_rand(500,1000);
-
-		$tmp_model_stat_share->updated_time = $date_now;
-		$tmp_model_stat_share->save( 0 );
-		return $this->echoLog( "it's over ~~" );
-	}
 
 	public function actionTest(){
 		//$date_from = '2017-01-01';
@@ -197,7 +166,6 @@ class DailyController extends BaseController {
 			$this->geneSale( $i );
 			$this->actionBook( $i );
 			$this->actionMember( $i );
-			$this->actionShare( $i );
 		}
 	}
 

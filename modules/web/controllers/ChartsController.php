@@ -3,7 +3,6 @@
 namespace app\modules\web\controllers;
 
 use app\common\services\UrlService;
-use app\models\stat\StatDailyShare;
 use app\models\stat\StatDailySite;
 use app\modules\web\controllers\common\BaseController;
 
@@ -70,7 +69,7 @@ class ChartsController extends BaseController{
 		$date_from = $this->get("date_from",date("Y-m-d",strtotime("-30 days") ) );
 		$date_to = $this->get("date_to",date("Y-m-d" ) );
 
-		$query = StatDailyShare::find();
+		$query = StatDailySite::find();
 		$query->where([ '>=','date',$date_from ]);
 		$query->andWhere([ '<=','date',$date_to ]);
 		$list = $query->orderBy([ 'id' => SORT_ASC ])->all( );
@@ -86,7 +85,7 @@ class ChartsController extends BaseController{
 		if( $list ){
 			foreach(  $list as $_item ){
 				$data['categories'][] = $_item['date'];
-				$data['series'][0]['data'][] = $_item['total_count'];
+				$data['series'][0]['data'][] = $_item['total_shared_count'];
 			}
 		}
 		return $this->renderJSON( $data );

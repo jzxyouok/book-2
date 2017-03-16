@@ -9,7 +9,6 @@ use app\models\book\Book;
 use app\models\member\Member;
 use app\models\stat\StatDailyBook;
 use app\models\stat\StatDailyMember;
-use app\models\stat\StatDailyShare;
 use app\models\stat\StatDailySite;
 use app\modules\web\controllers\common\BaseController;
 
@@ -163,7 +162,7 @@ class StatController extends BaseController{
 		$p = ( $p > 0 )?$p:1;
 
 
-		$query = StatDailyShare::find();
+		$query = StatDailySite::find();
 		$query->where([ '>=','date',$date_from ]);
 		$query->andWhere([ '<=','date',$date_to ]);
 

@@ -51,7 +51,7 @@ StaticService::includeAppJsStatic( "/js/web/stat/share.js",\app\assets\WebAsset:
 				<?php foreach( $list as $_item ):?>
 					<tr>
 						<td><?=$_item['date'];?></td>
-						<td><?=$_item['total_count'];?></td>
+						<td><?=$_item['total_shared_count'];?></td>
 					</tr>
 				<?php endforeach;?>
 			<?php else:?>
