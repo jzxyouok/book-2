@@ -1,6 +1,6 @@
 <?php
 
-namespace common\service\weixin;
+namespace app\common\services\weixin;
 
 use app\common\services\UrlService;
 use app\common\services\weixin\RequestService;
@@ -30,12 +30,12 @@ class TemplateService
             return false;
         }
 
-		$template_id = "1671PUYF8cEzG30EvyhGZZzpYcyp97cf0BFMWdwmKzY";
+		$template_id = "imnz2eHo52-T1LJ3RkrrVL3tTLXc9kkggZOuUheZoOA";
         $pay_money = $pay_order_info["pay_price"];
 
         $data = [
             "first" => [
-                "value" => "您已成功支付{$pay_money}元",
+                "value" => "您的订单已支付成功。 点击查看订单详情",
                 "color" => "#173177"
             ],
 			"keyword1" =>[

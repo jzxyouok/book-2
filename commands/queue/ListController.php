@@ -5,6 +5,7 @@ namespace app\commands\queue;
 
 use app\commands\BaseController;
 use app\common\services\UploadService;
+use app\common\services\weixin\TemplateService;
 use app\models\market\MarketQrcode;
 use app\models\market\QrcodeScanHistory;
 use app\models\member\Member;
@@ -98,5 +99,20 @@ class ListController extends  BaseController {
 		$qrcode_info->total_reg_count += 1;
 		$qrcode_info->update( 0 );
 		return true;
+	}
+
+	private function handlePay( $item ){
+		$data = @json_decode( $item['data'],true );
+		if( !isset( $data['member_id'] ) || !isset( $data['pay_order_id']) ){
+			return false;
+		}
+
+
+		if( !$data['uid'] || !$data['pay_order_id'] ){
+			return false;
+		}
+		return true;
+		TemplateService::payNotice( $data['pay_order_id'] );
+
 	}
 }
