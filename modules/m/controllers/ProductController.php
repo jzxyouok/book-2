@@ -283,7 +283,7 @@ class ProductController extends BaseController {
 		$book_ids = [];
 		foreach( $product_items as $_item ) {
 			$tmp_item_info = explode("#", $_item);
-			$book_ids = $tmp_item_info[ 0 ];
+			$book_ids[] = $tmp_item_info[ 0 ];
 		}
 
 		$book_mapping = Book::find()->where([ 'id' => $book_ids ])->indexBy("id")->all();
