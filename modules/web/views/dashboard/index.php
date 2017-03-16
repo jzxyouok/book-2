@@ -64,10 +64,10 @@ StaticService::includeAppJsStatic( "/js/web/dashboard/index.js",\app\assets\WebA
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-6" id="member_order" style="height: 400px;border: 1px solid #e6e6e6;padding-top: 20px;">
+        <div class="col-lg-12" id="member_order" style="height: 400px;border: 1px solid #e6e6e6;padding-top: 20px;">
 
         </div>
-        <div class="col-lg-6" id="finance" style="height: 400px;border: 1px solid #e6e6e6;padding-top: 20px;">
+        <div class="col-lg-12" id="finance" style="height: 400px;border: 1px solid #e6e6e6;padding-top: 20px;">
 
         </div>
     </div>

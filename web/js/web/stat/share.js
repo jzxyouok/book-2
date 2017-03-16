@@ -1,5 +1,5 @@
 ;
-var stat_index_ops = {
+var stat_share_ops = {
     init:function(){
         this.eventBind();
         this.drawChart();
@@ -32,7 +32,7 @@ var stat_index_ops = {
     drawChart:function(){
         charts_ops.setOption();
         $.ajax({
-            url:common_ops.buildWebUrl("/charts/finance"),
+            url:common_ops.buildWebUrl("/charts/share"),
             dataType:'json',
             success:function( res ){
                 charts_ops.drawLine( $('#container'),res.data )
@@ -42,5 +42,5 @@ var stat_index_ops = {
 };
 
 $(document).ready( function(){
-    stat_index_ops.init();
+    stat_share_ops.init();
 });

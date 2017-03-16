@@ -9,9 +9,9 @@ $tab_list = [
 		'title' => '商品售卖',
 		'url' => '/stat/product'
 	],
-	'pay' => [
-		'title' => '会员消费',
-		'url' => '/stat/pay'
+	'member' => [
+		'title' => '会员消费统计',
+		'url' => '/stat/member'
 	],
 	'share' => [
 		'title' => '分享统计',

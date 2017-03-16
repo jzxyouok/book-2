@@ -2,11 +2,13 @@
 
 namespace app\commands;
 
+use app\models\book\Book;
 use app\models\book\BookSaleChangeLog;
 use app\models\member\Member;
 use app\models\pay\PayOrder;
 use app\models\stat\StatDailyBook;
 use app\models\stat\StatDailyMember;
+use app\models\stat\StatDailyShare;
 use app\models\stat\StatDailySite;
 use app\models\WxShareHistory;
 use Yii;
@@ -49,6 +51,14 @@ class DailyController extends BaseController {
 		$model_stat_site->total_new_member_count = $total_new_member_count?$total_new_member_count:0;
 		$model_stat_site->total_order_count = $total_order_count?$total_order_count:0;
 		$model_stat_site->total_shared_count = $total_shared_count?$total_shared_count:0;
+
+		//伪造数据
+		$model_stat_site->total_pay_money = mt_rand(1000,1010);
+		$model_stat_site->total_new_member_count = mt_rand(50,100);
+		$model_stat_site->total_member_count = $model_stat_site->total_member_count + $model_stat_site->total_new_member_count;
+		$model_stat_site->total_order_count = mt_rand(900,1000);
+		$model_stat_site->total_shared_count = mt_rand(1000,2000);
+
 		$model_stat_site->updated_time = $date_now;
 		$model_stat_site->save( 0 );
 		$this->echoLog( "it's over ~~" );
@@ -86,6 +96,11 @@ class DailyController extends BaseController {
 
 			$tmp_model_stat_book->total_count = $_item['total_count']?$_item['total_count']:0;
 			$tmp_model_stat_book->total_pay_money = $_item['total_pay_money']?$_item['total_pay_money']:0;
+
+			//伪造数据
+			$tmp_model_stat_book->total_count = mt_rand(1000,1010);
+			$tmp_model_stat_book->total_pay_money = mt_rand(50,100);
+
 			$tmp_model_stat_book->updated_time = $date_now;
 			$tmp_model_stat_book->save( 0 );
 		}
@@ -130,10 +145,74 @@ class DailyController extends BaseController {
 
 			$tmp_model_stat_member->total_pay_money = $tmp_pay?$tmp_pay:0;
 			$tmp_model_stat_member->total_shared_count = $tmp_total_shared_count?$tmp_total_shared_count:0;
+
+			//伪造数据
+			$tmp_model_stat_member->total_pay_money = mt_rand(1000,1010);
+			$tmp_model_stat_member->total_shared_count = mt_rand(50,100);
+
 			$tmp_model_stat_member->updated_time = $date_now;
 			$tmp_model_stat_member->save( 0 );
 		}
 		return $this->echoLog( "it's over ~~" );
 	}
 
+	/*
+	 * 分享日统计
+	 * php yii daily/share
+	 * */
+
+	public function actionShare( $date = 'now' ){
+		$date = date('Y-m-d', strtotime($date) );
+		$date_now = date("Y-m-d H:i:s");
+		$time_start = $date.' 00:00:00';
+		$time_end = $date.' 23:59:59';
+		$this->echoLog( "ID_ACTION:".__CLASS__."_".__FUNCTION__.",date:{$date} " );
+
+		$tmp_stat_share = StatDailyShare::findOne([ 'date' => $date ]);
+		if( $tmp_stat_share ){
+			$tmp_model_stat_share = $tmp_stat_share;
+		}else{
+			$tmp_model_stat_share = new StatDailyShare();
+			$tmp_model_stat_share->date = $date;
+			$tmp_model_stat_share->created_time = $date_now;
+		}
+
+		$tmp_total_shared_count = WxShareHistory::find()->andWhere( [ 'between','created_time',$time_start,$time_end  ] )->count();
+		$tmp_model_stat_share->total_count = $tmp_total_shared_count?$tmp_total_shared_count:0;
+
+		//伪造数据
+		$tmp_model_stat_share->total_count = mt_rand(500,1000);
+
+		$tmp_model_stat_share->updated_time = $date_now;
+		$tmp_model_stat_share->save( 0 );
+		return $this->echoLog( "it's over ~~" );
+	}
+
+	public function actionTest(){
+		//$date_from = '2017-01-01';
+		$date_from = date("Y-m-d");
+		$date_to = date("Y-m-d");
+		for( $i = $date_from; $i <= $date_to; $i = date("Y-m-d",strtotime( "+1 days",strtotime( $i ) ) ) ){
+			$this->actionSite( $i );
+			$this->geneSale( $i );
+			$this->actionBook( $i );
+			$this->actionMember( $i );
+			$this->actionShare( $i );
+		}
+	}
+
+
+	private function geneSale( $date = '' ){
+		$book_list = Book::find()->all();
+		foreach( $book_list as $_book_info  ){
+			$model = new BookSaleChangeLog();
+			$model->book_id = $_book_info['id'];
+			$model->quantity = mt_rand(1,10);
+			$model->price = $model->quantity * $_book_info['price'];
+			$model->member_id = 1;
+			$model->created_time = $date." ".date("H:i:s");
+			$model->save( 0 );
+		}
+
+	}
 }

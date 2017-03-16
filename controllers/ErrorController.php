@@ -37,7 +37,9 @@ class ErrorController extends BaseWebController {
 			ApplogService::addErrorLog(Yii::$app->id,$err_msg);
 		}
 
-		return 'ok';
+		return $this->render("error",[
+			"err_msg" => $err_msg
+		]);
 	}
 
 	public function actionCapture(){

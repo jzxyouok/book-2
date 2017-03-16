@@ -10,6 +10,9 @@ use app\modules\web\controllers\common\BaseController;
 class UserController extends  BaseController{
 	public function actionLogin(){
 		if( \Yii::$app->request->isGet ){
+			if( $this->checkLoginStatus() ){
+				return $this->redirect( UrlService::buildWebUrl("/") );
+			}
 			$this->layout = "user";
 			return $this->render("login");
 		}

@@ -1,6 +1,7 @@
 <?php
 use \app\common\services\UrlService;
 use \app\common\services\StaticService;
+use \app\common\services\UtilService;
 StaticService::includeAppJsStatic( "/plugins/highcharts/highcharts.js",\app\assets\WebAsset::className() );
 
 StaticService::includeAppCssStatic( "/plugins/datetimepicker/jquery.datetimepicker.min.css",\app\assets\WebAsset::className() );
@@ -9,14 +10,12 @@ StaticService::includeAppJsStatic( "/plugins/datetimepicker/jquery.datetimepicke
 
 
 StaticService::includeAppJsStatic( "/js/web/chart.js",\app\assets\WebAsset::className() );
-StaticService::includeAppJsStatic( "/js/web/stat/share.js",\app\assets\WebAsset::className() );
+StaticService::includeAppJsStatic( "/js/web/stat/product.js",\app\assets\WebAsset::className() );
 ?>
 
-<?php echo Yii::$app->view->renderFile("@app/modules/web/views/common/tab_stat.php",[ 'current' => 'share' ]);?>
-<div class="row m-t">
-	<div class="col-lg-12" id="container" style="height: 400px;">
+<?php echo Yii::$app->view->renderFile("@app/modules/web/views/common/tab_stat.php",[ 'current' => 'product' ]);?>
 
-	</div>
+<div class="row m-t">
 	<div class="col-lg-12 m-t">
 		<form class="form-inline" id="search_form_wrap">
 			<div class="row p-w-m">
@@ -43,7 +42,9 @@ StaticService::includeAppJsStatic( "/js/web/stat/share.js",\app\assets\WebAsset:
 			<thead>
 			<tr>
 				<th>日期</th>
-				<th>分享次数</th>
+				<th>图书名称</th>
+				<th>当日销售数量</th>
+				<th>当日销售总额</th>
 			</tr>
 			</thead>
 			<tbody>
@@ -51,17 +52,23 @@ StaticService::includeAppJsStatic( "/js/web/stat/share.js",\app\assets\WebAsset:
 				<?php foreach( $list as $_item ):?>
 					<tr>
 						<td><?=$_item['date'];?></td>
+						<td>
+							<?php if(  $_item['book_info'] ):?>
+								<a href="<?=UrlService::buildWebUrl("/book/info",[ 'id' => $_item['book_id'] ]);?>"><?=UtilService::encode( $_item['book_info']['name'] );?></a>
+							<?php endif;?>
+						</td>
 						<td><?=$_item['total_count'];?></td>
+						<td><?=$_item['total_pay_money'];?></td>
 					</tr>
 				<?php endforeach;?>
 			<?php else:?>
-				<tr> <td colspan="2">暂无数据</td> </tr>
+				<tr> <td colspan="5">暂无数据</td> </tr>
 			<?php endif;?>
 			</tbody>
 		</table>
 		<?php echo \Yii::$app->view->renderFile("@app/modules/web/views/common/pagination.php", [
 			'pages' => $pages,
-			'url' => '/stat/share',
+			'url' => '/stat/product',
 			'search_conditions' => $search_conditions,
 		]); ?>
 	</div>

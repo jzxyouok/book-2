@@ -4,6 +4,10 @@ $tab_list = [
 	'index' => [
 		'title' => '会员列表',
 		'url' => '/member/index'
+	],
+	'comment' => [
+		'title' => '会员评论',
+		'url' => '/member/comment'
 	]
 ];
 ?>

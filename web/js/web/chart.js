@@ -80,7 +80,7 @@ var charts_ops = {
     drawLine:function( target ,data ){//画直线
         var chart =  target.highcharts({
             chart: {
-                type: 'line'
+                type: 'spline'
             },
             xAxis: {
                 categories: data.categories

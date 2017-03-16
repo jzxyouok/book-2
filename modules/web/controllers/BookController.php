@@ -9,7 +9,10 @@ use app\common\services\UrlService;
 use app\common\services\UtilService;
 use app\models\book\Book;
 use app\models\book\BookCat;
+use app\models\book\BookSaleChangeLog;
+use app\models\book\BookStockChangeLog;
 use app\models\Images;
+use app\models\member\Member;
 use app\modules\web\controllers\common\BaseController;
 
 class BookController extends BaseController{
@@ -97,8 +100,31 @@ class BookController extends BaseController{
 			return $this->redirect( $reback_url );
 		}
 
+		//销售历史
+		$sale_change_log_list = BookSaleChangeLog::find()->where([ 'book_id' => $id ])->orderBy([ 'id' => SORT_DESC ])
+			->asArray()->all();
+		$data_sale_change_log = [];
+		if( $sale_change_log_list ){
+			$member_mapping = DataHelper::getDicByRelateID( $sale_change_log_list,Member::className(),"member_id","id",[ "nickname" ] );
+			foreach( $sale_change_log_list as $_sale_item ){
+				$tmp_member_info = isset( $member_mapping[ $_sale_item['member_id'] ] )?$member_mapping[ $_sale_item['member_id'] ]:[];
+				$data_sale_change_log[] = [
+					'quantity' => $_sale_item['quantity'],
+					'price' => $_sale_item['price'],
+					'member_info' => $tmp_member_info,
+					'created_time' => $_sale_item['created_time']
+				];
+			}
+		}
+
+		//库存变更历史
+		$stock_change_list = BookStockChangeLog::find()->where([ 'book_id' => $id ])
+			->orderBy([ 'id' => SORT_DESC ])->asArray()->all();
+
 		return $this->render("info",[
-			"info" => $info
+			"info" => $info,
+			'stock_change_list' => $stock_change_list,
+			'sale_change_log_list' => $data_sale_change_log
 		]);
 	}
 

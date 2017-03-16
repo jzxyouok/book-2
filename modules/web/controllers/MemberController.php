@@ -13,6 +13,7 @@ use app\models\member\Member;
 use app\models\member\MemberComments;
 use app\models\pay\PayOrder;
 use app\modules\web\controllers\common\BaseController;
+use Symfony\Component\VarDumper\Cloner\Data;
 
 class MemberController extends BaseController{
 
@@ -181,6 +182,44 @@ class MemberController extends BaseController{
 		$info->updated_time = date("Y-m-d H:i:s");
 		$info->update( 0 );
 		return $this->renderJSON( [],"操作成功~~" );
+	}
+
+	public function actionComment(){
+		$p = intval( $this->get("p",1) );
+		$p = ( $p > 0 )?$p:1;
+
+		$query = MemberComments::find();
+		$offset = ($p - 1) * $this->page_size;
+		$total_res_count = $query->count();
+
+		$pages = UtilService::ipagination([
+			'total_count' => $total_res_count,
+			'page_size' => $this->page_size,
+			'page' => $p,
+			'display' => 10
+		]);
+
+
+		$list = $query->orderBy([ 'id' => SORT_DESC ])
+			->offset($offset)
+			->limit($this->page_size)
+			->all( );
+		$data = [];
+		if( $list ){
+			$member_mapping = DataHelper::getDicByRelateID( $list ,Member::className(),"member_id","id",[ 'nickname','avatar','mobile' ] );
+			foreach( $list as $_item ){
+				$tmp_member_info = isset( $member_mapping[ $_item['member_id'] ] )?$member_mapping[ $_item['member_id'] ]:[];
+				$data[] = [
+					'content' => UtilService::encode( $_item['content'] ),
+					'score' => UtilService::encode( $_item['score'] ),
+					'member_info' => $tmp_member_info
+				];
+			}
+		}
+		return $this->render('comment',[
+			"pages" => $pages,
+			'list' => $data
+		]);
 	}
 
 }

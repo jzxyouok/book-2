@@ -18,7 +18,7 @@ StaticService::includeAppJsStatic( "/js/web/stat/index.js",\app\assets\WebAsset:
 
     </div>
     <div class="col-lg-12 m-t">
-        <div class="form-inline" id="search_form_wrap">
+        <form class="form-inline" id="search_form_wrap">
             <div class="row p-w-m">
                 <div class="form-group">
                     <div class="input-group">
@@ -34,11 +34,11 @@ StaticService::includeAppJsStatic( "/js/web/stat/index.js",\app\assets\WebAsset:
                     </div>
                 </div>
                 <div class="form-group">
-                    <a class="btn btn-w-m btn-outline btn-primary">搜索</a>
+                    <a class="btn btn-w-m btn-outline btn-primary search">搜索</a>
                 </div>
             </div>
             <hr/>
-        </div>
+        </form>
         <table class="table table-bordered m-t">
             <thead>
             <tr>
