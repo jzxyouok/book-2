@@ -336,7 +336,7 @@ class UserController extends BaseController {
 				return $this->redirect( $reback_url );
 			}
 
-			$pay_order_item_info  = PayOrderItem::findOne([ 'pay_order_id' => $pay_order_id ]);
+			$pay_order_item_info  = PayOrderItem::findOne([ 'pay_order_id' => $pay_order_id,'target_id' => $book_id ]);
 			if( !$pay_order_item_info ){
 				return $this->renderJSON( [],ConstantService::$default_syserror,-1 );
 			}
