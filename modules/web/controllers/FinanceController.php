@@ -5,6 +5,7 @@ namespace app\modules\web\controllers;
 use app\common\services\ConstantService;
 use app\common\services\DataHelper;
 use app\common\services\PayOrderService;
+use app\common\services\QueueListService;
 use app\common\services\UrlService;
 use app\common\services\UtilService;
 use app\models\book\Book;
@@ -15,6 +16,7 @@ use app\models\member\Member;
 use app\models\member\MemberAddress;
 use app\models\pay\PayOrder;
 use app\models\pay\PayOrderItem;
+use app\models\QueueList;
 use app\modules\web\controllers\common\BaseController;
 
 class FinanceController extends BaseController{
@@ -231,7 +233,13 @@ class FinanceController extends BaseController{
 		$pay_order_info->express_info = $express_info;
 		$pay_order_info->express_status = -6;
 		$pay_order_info->updated_time = date("Y-m-d H:i:s");
-		$pay_order_info->update( 0 );
+		if( $pay_order_info->update( 0 ) ){
+			//发货之后要发通知
+			QueueListService::addQueue( "express",[
+				'member_id' => $pay_order_info['member_id'],
+				'pay_order_id' => $id
+			] );
+		}
 		return $this->renderJSON([],"操作成功~~");
 	}
 

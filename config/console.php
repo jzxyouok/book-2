@@ -1,6 +1,8 @@
 <?php
-
-$params = require(__DIR__ . '/params.php');
+$params = yii\helpers\ArrayHelper::merge(
+	require(__DIR__ . '/params.php') ,
+	require(__DIR__ . '/params-local.php')
+);
 
 $db_config = yii\helpers\ArrayHelper::merge(
 	require(__DIR__ . '/db.php') ,
@@ -27,6 +29,20 @@ $config = [
             ],
         ],
         'db' => $db_config,
+		"urlManager" => [
+			'scriptUrl' => '',
+			'baseUrl' => '',
+			'enablePrettyUrl' => true,
+			'showScriptName' => false,
+			'enableStrictParsing' => false,
+			'rules' => [
+				'/<module:\w+>/<controller:\w+>/<action:\w+>' => '<module>/<controller>/<action>',
+				'/<controller:\w+>/<action:\w+>' => '<controller>/<action>',
+			]
+		],
+		'errorHandler' => [
+			'class' => 'app\commands\ErrorController'
+		],
     ],
     'params' => $params,
     /*

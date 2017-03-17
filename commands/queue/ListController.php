@@ -26,9 +26,7 @@ class ListController extends  BaseController {
 
 		foreach( $list as $_item ){
 			$this->echoLog("queue_id:{$_item['id']}");
-			$_item->status = 1;
-			$_item->updated_time = date("Y-m-d H:i:s");
-			$_item->update( 0 );
+
 			switch ( $_item['queue_name'] ){
 				case "member_avatar":
 					$this->handleMemberAvatar( $_item );
@@ -36,8 +34,17 @@ class ListController extends  BaseController {
 				case  "bind":
 					$this->handleBind( $_item );
 					break;
-
+				case  "pay":
+					$this->handlePay( $_item );
+					break;
+				case "express":
+					$this->handleExpress( $_item );
+					break;
 			}
+
+			$_item->status = 1;
+			$_item->updated_time = date("Y-m-d H:i:s");
+			$_item->update( 0 );
 		}
 
 		return $this->echoLog("it's over ~~");
@@ -68,6 +75,9 @@ class ListController extends  BaseController {
 		return true;
 	}
 
+	/**
+	 * 绑定微信相关通知
+	 */
 	private function handleBind( $item ){
 		$data = @json_decode( $item['data'],true );
 
@@ -98,9 +108,14 @@ class ListController extends  BaseController {
 
 		$qrcode_info->total_reg_count += 1;
 		$qrcode_info->update( 0 );
+
+		TemplateService::bindNotice( $data['member_id'] );
 		return true;
 	}
 
+	/**
+	 * 支付完成相关通知
+	 */
 	private function handlePay( $item ){
 		$data = @json_decode( $item['data'],true );
 		if( !isset( $data['member_id'] ) || !isset( $data['pay_order_id']) ){
@@ -108,11 +123,32 @@ class ListController extends  BaseController {
 		}
 
 
-		if( !$data['uid'] || !$data['pay_order_id'] ){
+		if( !$data['member_id'] || !$data['pay_order_id'] ){
 			return false;
 		}
-		return true;
-		TemplateService::payNotice( $data['pay_order_id'] );
 
+		TemplateService::payNotice( $data['pay_order_id'] );
+		return true;
+	}
+
+	/**
+	 * 确认发货通知
+	 */
+	private function handleExpress( $item ){
+		$data = @json_decode( $item['data'],true );
+		if( !isset( $data['member_id'] ) || !isset( $data['pay_order_id']) ){
+			return false;
+		}
+
+
+		if( !$data['member_id'] || !$data['pay_order_id'] ){
+			return false;
+		}
+
+		$ret = TemplateService::expressNotice( $data['pay_order_id'] );
+		if( !$ret ){
+			$this->echoLog( TemplateService::getLastErrorMsg() );
+		}
+		return $ret;
 	}
 }

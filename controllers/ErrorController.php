@@ -12,7 +12,7 @@ class ErrorController extends BaseWebController {
 
 	public function actionError(){
 		$error = Yii::$app->errorHandler->exception;
-
+		$err_msg = "";
 		if ($error) {
 			$code = $error->getCode();
 			$msg = $error->getMessage();
