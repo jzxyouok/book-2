@@ -380,6 +380,11 @@ class UserController extends BaseController {
 			return $this->renderJSON( [],"您已经评论过啦，不能重复评论~~",-1 );
 		}
 
+		$book_info = Book::findOne([ 'id' => $book_id ]);
+		if( !$book_info ){
+			return $this->renderJSON( [],ConstantService::$default_syserror,-1 );
+		}
+
 		$model_comment = new MemberComments();
 		$model_comment->member_id = $this->current_user['id'];
 		$model_comment->book_id = $book_id;
@@ -391,6 +396,11 @@ class UserController extends BaseController {
 
 		$pay_order_item_info->comment_status = 1;
 		$pay_order_item_info->update( 0 );
+
+		$book_info->comment_count += 1;
+		$book_info->update( 0 );
+
+
 		return $this->renderJSON([],"评论成功~~");
 	}
 

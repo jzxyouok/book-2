@@ -77,7 +77,7 @@ use \app\common\services\ConstantService;
                                             </tr>
 										<?php endforeach;?>
 									<?php else:?>
-                                        <tr><td colspan="4">暂无变更</td></tr>
+                                        <tr><td colspan="4">暂无销售记录</td></tr>
 									<?php endif;?>
                                     </tbody>
                                 </table>
