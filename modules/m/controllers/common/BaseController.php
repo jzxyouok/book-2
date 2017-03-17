@@ -48,6 +48,7 @@ class BaseController extends BaseWebController {
 
 	public function beforeAction( $action ){
 		$login_status = $this->checkLoginStatus();
+		$this->setMenu();
 
 		if ( in_array($action->getUniqueId(), $this->allowAllAction ) ) {
 			return true;
@@ -129,6 +130,17 @@ class BaseController extends BaseWebController {
 		$referer = $referer?$referer:$_SERVER['REQUEST_URI'];
 		$url = UrlService::buildMUrl("/oauth/login", [ "type" => $type,"referer" => $referer ]);
 		return $url;
+	}
+
+	protected function setMenu(){
+
+		$menu_hide = false;
+		$url = \Yii::$app->request->getPathInfo();
+		if( stripos($url,"product/info") !== false ){
+			$menu_hide = true;
+		}
+
+		\Yii::$app->view->params['menu_hide'] = $menu_hide;
 	}
 
 	public function goHome(){

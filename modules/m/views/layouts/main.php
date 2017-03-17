@@ -26,12 +26,14 @@ use \app\common\services\UtilService;
 	<?php endif;?>
     <p class="copyright">由<a href="<?=UrlService::buildWwwUrl('/');?>" target="_blank">编程浪子</a>提供技术支持</p>
 </div>
-
+<?php if( !\Yii::$app->view->params['menu_hide'] ):?>
 <div class="footer_fixed clearfix">
 	<span><a href="<?=UrlService::buildMUrl("/default/index");?>" class="default"><i class="home_icon"></i><b>首页</b></a></span>
 	<span><a href="<?=UrlService::buildMUrl("/product/index");?>" class="product"><i class="store_icon"></i><b>图书</b></a></span>
 	<span><a href="<?=UrlService::buildMUrl("/user/index");?>" class="user"><i class="member_icon"></i><b>我的</b></a></span>
 </div>
+<?php endif;?>
+
 <div class="layout_hide_wrap hidden">
     <input type="hidden" id="share_info" value='<?=Yii::$app->getView()->params['share_info'];?>'>
 </div>
