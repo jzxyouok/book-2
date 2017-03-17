@@ -32,8 +32,8 @@ StaticService::includeAppJsStatic( "/js/m/user/order.js",\app\assets\MAsset::cla
 				<h4>&nbsp;</h4>
 				<b>¥ <?=$_item_info['pay_price'];?></b>
 			</a>
-            <?php if( $_item['status'] == 1 && $_item['express_status'] == 1 && !$_item['comment_status'] ):?>
-            <a style="display: block;position: absolute;bottom: 1rem;right: 1rem;" class="button"   href="<?=UrlService::buildMUrl("/user/comment_set",[ 'pay_order_id' => $_item['id'] ]);?>">我要评论</a>
+            <?php if( $_item['status'] == 1 && $_item['express_status'] == 1 && !$_item_info['comment_status'] ):?>
+            <a style="display: block;position: absolute;bottom: 1rem;right: 1rem;" class="button"   href="<?=UrlService::buildMUrl("/user/comment_set",[ 'pay_order_id' => $_item['id'],'book_id' => $_item_info['book_id'] ]);?>">我要评论</a>
             <?php endif;?>
 		</li>
 		<?php endforeach;?>
@@ -55,5 +55,4 @@ StaticService::includeAppJsStatic( "/js/m/user/order.js",\app\assets\MAsset::cla
     <div class="no-data">
         悲剧啦，连个订单都咩有了~~
     </div>
-
 <?php endif;?>

@@ -9,6 +9,7 @@ use Yii;
  *
  * @property integer $id
  * @property integer $member_id
+ * @property integer $book_id
  * @property integer $pay_order_id
  * @property integer $score
  * @property string $content
@@ -30,7 +31,7 @@ class MemberComments extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['member_id', 'pay_order_id', 'score'], 'integer'],
+            [['member_id', 'book_id', 'pay_order_id', 'score'], 'integer'],
             [['created_time'], 'safe'],
             [['content'], 'string', 'max' => 200],
         ];
@@ -44,6 +45,7 @@ class MemberComments extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'member_id' => 'Member ID',
+            'book_id' => 'Book ID',
             'pay_order_id' => 'Pay Order ID',
             'score' => 'Score',
             'content' => 'Content',

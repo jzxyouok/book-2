@@ -17,6 +17,7 @@ use Yii;
  * @property integer $target_id
  * @property string $note
  * @property integer $status
+ * @property integer $comment_status
  * @property string $updated_time
  * @property string $created_time
  */
@@ -36,7 +37,7 @@ class PayOrderItem extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['pay_order_id', 'member_id', 'quantity', 'target_type', 'target_id', 'status'], 'integer'],
+            [['pay_order_id', 'member_id', 'quantity', 'target_type', 'target_id', 'status', 'comment_status'], 'integer'],
             [['price', 'discount'], 'number'],
             [['note'], 'required'],
             [['note'], 'string'],
@@ -60,6 +61,7 @@ class PayOrderItem extends \yii\db\ActiveRecord
             'target_id' => 'Target ID',
             'note' => 'Note',
             'status' => 'Status',
+            'comment_status' => 'Comment Status',
             'updated_time' => 'Updated Time',
             'created_time' => 'Created Time',
         ];

@@ -123,14 +123,16 @@ class UserController extends BaseController {
 
 			$pay_order_items_mapping = [];
 			foreach ($pay_order_items_list as $_pay_order_item) {
-				$tmp_book_info = $book_mapping[$_pay_order_item['target_id']];
-				if (!isset($pay_order_items_mapping[$_pay_order_item['pay_order_id']])) {
+				$tmp_book_info = $book_mapping[ $_pay_order_item['target_id'] ];
+				if (!isset( $pay_order_items_mapping[ $_pay_order_item['pay_order_id'] ] ) ) {
 					$pay_order_items_mapping[$_pay_order_item['pay_order_id']] = [];
 				}
 				$pay_order_items_mapping[$_pay_order_item['pay_order_id']][] = [
 					'pay_price'       => $_pay_order_item['price'],
 					'book_name'       => UtilService::encode($tmp_book_info['name']),
 					'book_main_image' => UrlService::buildPicUrl("book", $tmp_book_info['main_image']),
+					'book_id' => $_pay_order_item['target_id'],
+					'comment_status' => $_pay_order_item['comment_status']
 				];
 			}
 
@@ -327,22 +329,31 @@ class UserController extends BaseController {
 	public function actionComment_set(){
 		if( \Yii::$app->request->isGet ){
 			$pay_order_id = intval( $this->get("pay_order_id",0) );
+			$book_id = intval( $this->get("book_id",0) );
 			$pay_order_info = PayOrder::findOne([ 'id' => $pay_order_id,'status' => 1,'express_status' => 1 ]);
 			$reback_url = UrlService::buildMUrl("/user/index");
 			if( !$pay_order_info ){
 				return $this->redirect( $reback_url );
 			}
 
-			if(  $pay_order_info['comment_status'] ){
+			$pay_order_item_info  = PayOrderItem::findOne([ 'pay_order_id' => $pay_order_id ]);
+			if( !$pay_order_item_info ){
+				return $this->renderJSON( [],ConstantService::$default_syserror,-1 );
+			}
+
+			if(  $pay_order_item_info['comment_status'] ){
 				return $this->renderJS( "您已经评论过啦，不能重复评论~~",$reback_url );
 			}
 
+
 			return $this->render('comment_set',[
-				'pay_order_info' => $pay_order_info
+				'pay_order_info' => $pay_order_info,
+				'book_id' => $book_id
 			]);
 		}
 
 		$pay_order_id = intval( $this->post("pay_order_id",0) );
+		$book_id = intval( $this->post("book_id",0) );
 		$score = intval( $this->post("score",0) );
 		$content = trim( $this->post('content','') );
 		$date_now  = date("Y-m-d H:i:s");
@@ -360,20 +371,26 @@ class UserController extends BaseController {
 			return $this->renderJSON( [],ConstantService::$default_syserror,-1 );
 		}
 
-		if(  $pay_order_info['comment_status'] ){
+		$pay_order_item_info  = PayOrderItem::findOne([ 'pay_order_id' => $pay_order_id,'target_id' => $book_id ]);
+		if( !$pay_order_item_info ){
+			return $this->renderJSON( [],ConstantService::$default_syserror,-1 );
+		}
+
+		if(  $pay_order_item_info['comment_status'] ){
 			return $this->renderJSON( [],"您已经评论过啦，不能重复评论~~",-1 );
 		}
 
 		$model_comment = new MemberComments();
 		$model_comment->member_id = $this->current_user['id'];
+		$model_comment->book_id = $book_id;
 		$model_comment->pay_order_id = $pay_order_id;
 		$model_comment->score = $score * 2;
 		$model_comment->content = $content;
 		$model_comment->created_time = $date_now;
 		$model_comment->save( 0 );
 
-		$pay_order_info->comment_status = 1;
-		$pay_order_info->update( 0 );
+		$pay_order_item_info->comment_status = 1;
+		$pay_order_item_info->update( 0 );
 		return $this->renderJSON([],"评论成功~~");
 	}
 

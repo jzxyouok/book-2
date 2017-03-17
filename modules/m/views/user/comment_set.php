@@ -19,5 +19,6 @@ StaticService::includeAppJsStatic( "/js/m/user/comment_set.js",\app\assets\MAsse
 </div>
 <div class="op_box">
     <input type="hidden" name="pay_order_id" value="<?=$pay_order_info['id'];?>">
+    <input type="hidden" name="book_id" value="<?=$book_id;?>">
     <input  type="button" value="确定" class="red_btn save" style="width: 100%;" />
 </div>

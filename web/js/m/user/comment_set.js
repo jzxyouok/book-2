@@ -40,6 +40,7 @@ var user_comment_set_ops = {
                 type:'POST',
                 data: {
                     pay_order_id:$(".op_box input[name=pay_order_id]").val(),
+                    book_id:$(".op_box input[name=book_id]").val(),
                     score:score,
                     content:content
                 },

@@ -16,6 +16,7 @@ StaticService::includeAppJsStatic( "/js/web/member/index.js",\app\assets\WebAsse
                 <th>头像</th>
                 <th>姓名</th>
                 <th>手机</th>
+                <th>书籍名称</th>
                 <th>评论内容</th>
                 <th>打分</th>
             </tr>
@@ -39,6 +40,7 @@ StaticService::includeAppJsStatic( "/js/web/member/index.js",\app\assets\WebAsse
 								<?= UtilService::encode( $_item['member_info']['mobile'] );?>
 							<?php endif;?>
                         </td>
+                        <td><?= $_item['book_name'] ;?></td>
                         <td><?= $_item['content'] ;?></td>
                         <td><?= $_item['score'] ;?></td>
                     </tr>

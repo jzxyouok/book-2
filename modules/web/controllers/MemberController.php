@@ -207,12 +207,15 @@ class MemberController extends BaseController{
 		$data = [];
 		if( $list ){
 			$member_mapping = DataHelper::getDicByRelateID( $list ,Member::className(),"member_id","id",[ 'nickname','avatar','mobile' ] );
+			$book_mapping = DataHelper::getDicByRelateID( $list ,Book::className(),"book_id","id",[ 'name' ] );
 			foreach( $list as $_item ){
 				$tmp_member_info = isset( $member_mapping[ $_item['member_id'] ] )?$member_mapping[ $_item['member_id'] ]:[];
+				$tmp_book_info = isset( $book_mapping[ $_item['book_id'] ] )?$book_mapping[ $_item['book_id'] ]:[];
 				$data[] = [
 					'content' => UtilService::encode( $_item['content'] ),
 					'score' => UtilService::encode( $_item['score'] ),
-					'member_info' => $tmp_member_info
+					'member_info' => $tmp_member_info,
+					'book_name' => $tmp_book_info?UtilService::encode( $tmp_book_info['name'] ):''
 				];
 			}
 		}
