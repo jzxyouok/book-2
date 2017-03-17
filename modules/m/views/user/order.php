@@ -33,16 +33,16 @@ StaticService::includeAppJsStatic( "/js/m/user/order.js",\app\assets\MAsset::cla
 		<?php endforeach;?>
 	</ul>
 	<?php if( $_item['status'] == -8 ):?>
-        <div class="op_box" style="margin: 2rem 0;padding: 1rem 0 ;">
-            <a style="width: 50%;display: block;float: left;text-align: left;" class="close" data="<?=$_item['id'];?>" href="<?=UrlService::buildNull();?>">取消订单</a>
-            <a style="width: 50%;display: block;float: right;text-align: right;"   href="<?=$_item["pay_url"];?>">微信支付</a>
+        <div class="op_box">
+            <a style="display: block;float: left;" class="button close" data="<?=$_item['id'];?>" href="<?=UrlService::buildNull();?>">取消订单</a>
+            <a style="display: block;float: right;" class="button"  href="<?=$_item["pay_url"];?>">微信支付</a>
         </div>
 	<?php elseif( $_item['status'] == 1 ):?>
-        <div class="op_box" style="margin: 2rem 0 ;padding: 1rem 0 ;">
+        <div class="op_box">
 			<?php if( $_item['express_status'] == -6 ):?>
-                <a style="width: 50%;display: block;float: right;text-align: right;" data="<?=$_item['id'];?>"  href="<?=UrlService::buildNull();?>"  class="confirm_express">确认收货</a>
+                <a style="display: block;float: right;" data="<?=$_item['id'];?>"  href="<?=UrlService::buildNull();?>"  class="button confirm_express">确认收货</a>
             <?php elseif( $_item['express_status'] == 1 && !$_item['comment_status']):?>
-                <a style="width: 50%;display: block;float: right;text-align: right;"   href="<?=UrlService::buildMUrl("/user/comment_set",[ 'pay_order_id' => $_item['id'] ]);?>">我要评论</a>
+                <a style="display: block;float: right;" class="button"   href="<?=UrlService::buildMUrl("/user/comment_set",[ 'pay_order_id' => $_item['id'] ]);?>">我要评论</a>
 			<?php endif;?>
         </div>
 	<?php else:?>

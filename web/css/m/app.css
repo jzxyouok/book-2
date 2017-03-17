@@ -92,3 +92,24 @@
     text-align: center;
     margin-top:20px;
 }
+
+.button{
+    display: inline-block;
+    height: 32px;
+    line-height: 32px;
+    text-align: center;
+    font-size: 13px;
+    background: #05abef;
+    border: 0 none;
+    color: #fff;
+    border-radius: 3px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    width: 78px;
+    box-sizing: border-box;
+    padding: 2px 6px 3px;
+}
