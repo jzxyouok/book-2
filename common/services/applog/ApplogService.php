@@ -22,7 +22,7 @@ class ApplogService {
 
         $model_app_logs->ip = UtilService::getIP();
 
-        if(!empty($_SERVER['HTTP_USER_AGENT'])) {
+        if( !empty($_SERVER['HTTP_USER_AGENT']) ) {
             $model_app_logs ->ua = "[UA:{$_SERVER['HTTP_USER_AGENT']}]";
         }
 
