@@ -60,7 +60,7 @@ class FinanceController extends BaseController{
 			$pay_order_mapping = [];
 			foreach( $order_item_list as $_order_item_info ){
 				$tmp_book_info = $book_mapping[ $_order_item_info['target_id'] ];
-				if( isset( $pay_order_mapping[ $_order_item_info['pay_order_id'] ] ) ){
+				if( !isset( $pay_order_mapping[ $_order_item_info['pay_order_id'] ] ) ){
 					$pay_order_mapping[ $_order_item_info['pay_order_id'] ] = [];
 				}
 
